@@ -13,8 +13,8 @@
     body { background: #fff; color: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; touch-action: none; }
     .viewport { position: relative; width: 100%; height: 100%; overflow: hidden; }
     .background-layer { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 80vmin; height: 80vmin; background-image: url('assets/bottom-layer.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0; transition: opacity 1.2s ease-out; pointer-events: none; z-index: 0; }
-    body.state1 .background-layer { opacity: 0.08; }
-    body.state2 .background-layer { opacity: 0.15; }
+    body.state1 .background-layer { opacity: 0; }
+    body.state2 .background-layer { opacity: 0; }
     .blueprint-wrapper { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 100vw; height: 80vh; max-width: 1600px; }
     .blueprint-canvas { position: relative; width: 100%; height: 100%; }
     .logo-wrap { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(1.6); z-index: 50; cursor: pointer; transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -58,17 +58,21 @@
     .globe-container { width: 100%; max-width: 480px; }
     .globe-svg { width: 100%; height: 380px; cursor: grab; display: block; }
     .globe-svg:active { cursor: grabbing; }
-    .globe-svg .sphere { fill: #fafafa; stroke: #ddd; stroke-width: 0.5; }
-    .globe-svg .graticule { fill: none; stroke: #eee; stroke-width: 0.3; }
-    .globe-svg .country { fill: none; stroke: #999; stroke-width: 0.4; }
-    .globe-svg .pin-pulse { fill: #111; animation: pinPulse 1.6s ease-out infinite; }
+    .globe-svg .sphere { fill: #5a0a0a; stroke: #3a0505; stroke-width: 0.5; }
+    .globe-svg .graticule { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 0.3; }
+    .globe-svg .country { fill: #f5f0e8; stroke: #888; stroke-width: 0.4; }
+    .globe-svg .pin-pulse { fill: #fff; animation: pinPulse 1.6s ease-out infinite; }
     @keyframes pinPulse { 0% { r: 3; opacity: 1; } 100% { r: 14; opacity: 0; } }
-    .globe-svg .pin-dot { fill: #111; }
+    .globe-svg .pin-dot { fill: #fff; }
     .drop-info { margin-top: 20px; padding: 16px; background: #fafafa; border-left: 2px solid #111; text-align: left; font-size: 12px; line-height: 1.6; }
     .drop-info .drop-city { font-weight: 700; letter-spacing: 2px; margin-bottom: 4px; text-transform: uppercase; }
     .drop-info .drop-detail { color: #666; font-size: 11px; }
-    .music-player { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 100%); width: 100%; max-width: 600px; background: #fff; border: 1px solid #eee; border-bottom: none; padding: 16px 24px; z-index: 180; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); display: flex; align-items: center; gap: 16px; }
-    .music-player.active { transform: translate(-50%, 0); }
+    .music-player { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 100%); width: 100%; max-width: 600px; background: #fff; border: 1px solid #eee; border-bottom: none; padding: 16px 24px; z-index: 180; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease-out; display: flex; align-items: center; gap: 16px; }
+    .music-player.active { transform: translate(-50%, 0); opacity: 0.08; }
+    .music-player.active:hover { opacity: 1; }
+    /* state2에서는 플레이어 페이드아웃 (음악은 계속 재생, UI만 사라짐) */
+    body.state2 .music-player.active { opacity: 0; pointer-events: none; }
+    body.state2 .music-player.active:hover { opacity: 0; }
     .player-track-num { font-size: 28px; font-weight: 200; letter-spacing: 2px; color: #111; min-width: 50px; }
     .player-controls { flex: 1; display: flex; align-items: center; gap: 12px; }
     .player-btn { background: none; border: 1px solid #ddd; width: 32px; height: 32px; cursor: pointer; font-size: 11px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
@@ -343,6 +347,7 @@
       body.classList.add('state' + viewState);
       if (isAuthenticated) body.classList.add('authenticated');
       activateLines();
+      applyAudioFilterForState(); // 줌 상태에 따라 음악 필터/볼륨 조절
       const map = { '01':'sndIntro', '12':'sndOutro', '21':'sndFinalHalf', '10':'sndFinalFull' };
       const sndId = map[`${prev}${next}`];
       if (sndId) {
@@ -358,7 +363,7 @@
       if (cat.name === 'headset') { playTrack(parseInt(el.dataset.trackIdx, 10), el); return; }
     }
 
-    // ===== Music Player =====
+    // ===== Music Player + Web Audio (EQ filter for zoom) =====
     const trackAudio = document.getElementById('trackAudio');
     const player = document.getElementById('player');
     const playerNum = document.getElementById('playerNum');
@@ -369,6 +374,47 @@
     let currentTrack = -1;
     let currentTrackEl = null;
 
+    // Web Audio graph — 줌 상태에 따라 lowpass filter + gain 조절
+    let audioCtx = null;
+    let audioSource = null;
+    let lowpassFilter = null;
+    let gainNode = null;
+
+    function initAudioGraph() {
+      if (audioCtx) return;
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        audioSource = audioCtx.createMediaElementSource(trackAudio);
+        lowpassFilter = audioCtx.createBiquadFilter();
+        lowpassFilter.type = 'lowpass';
+        lowpassFilter.frequency.value = 20000; // 기본: 통과 (필터 안 걸린 상태)
+        lowpassFilter.Q.value = 0.7;
+        gainNode = audioCtx.createGain();
+        gainNode.gain.value = 1.0;
+        audioSource.connect(lowpassFilter);
+        lowpassFilter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+      } catch (e) {
+        console.warn('Web Audio init failed', e);
+      }
+    }
+
+    // viewState에 따라 음악 필터/볼륨 부드럽게 변경
+    function applyAudioFilterForState() {
+      if (!audioCtx || !lowpassFilter || !gainNode) return;
+      const now = audioCtx.currentTime;
+      const RAMP = 0.8; // 페이드 시간 (초)
+      // state0 = 또렷  | state1 = 약간 멀리  | state2 = 먹먹 (β 강도)
+      let freq, vol;
+      if (viewState === 0)      { freq = 20000; vol = 1.0; }
+      else if (viewState === 1) { freq = 8000;  vol = 0.7; }
+      else                      { freq = 800;   vol = 0.35; } // state2 = 깊게 잠수, 거의 베이스만
+      lowpassFilter.frequency.cancelScheduledValues(now);
+      lowpassFilter.frequency.setTargetAtTime(freq, now, RAMP / 3);
+      gainNode.gain.cancelScheduledValues(now);
+      gainNode.gain.setTargetAtTime(vol, now, RAMP / 3);
+    }
+
     function playTrack(idx, el) {
       if (idx < 0 || idx >= TRACKS.length) return;
       if (currentTrackEl) currentTrackEl.classList.remove('playing');
@@ -376,6 +422,9 @@
       currentTrackEl = el || document.querySelector(`.headset-icon[data-track-idx="${idx}"]`);
       if (currentTrackEl) currentTrackEl.classList.add('playing');
       trackAudio.src = TRACKS[idx];
+      initAudioGraph(); // 첫 재생 시 오디오 그래프 연결
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      applyAudioFilterForState();
       trackAudio.play().catch(err => console.warn('Audio play blocked:', err));
       playerNum.textContent = String(idx + 1).padStart(2, '0');
       playerToggle.textContent = '❚❚';
