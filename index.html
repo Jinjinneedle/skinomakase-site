@@ -70,9 +70,12 @@
     .music-player { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 100%); width: 100%; max-width: 600px; background: #fff; border: 1px solid #eee; border-bottom: none; padding: 16px 24px; z-index: 180; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease-out; display: flex; align-items: center; gap: 16px; }
     .music-player.active { transform: translate(-50%, 0); opacity: 0.08; }
     .music-player.active:hover { opacity: 1; }
-    /* state2에서는 플레이어 페이드아웃 (음악은 계속 재생, UI만 사라짐) */
-    body.state2 .music-player.active { opacity: 0; pointer-events: none; }
-    body.state2 .music-player.active:hover { opacity: 0; }
+    /* state0 (줌인, 로고만) = 플레이어 거의 사라짐 (음악도 먹먹/작음) */
+    body.state0 .music-player.active { opacity: 0; pointer-events: none; }
+    body.state0 .music-player.active:hover { opacity: 0; }
+    /* state2 (줌아웃 최대) = 플레이어 또렷하게 보임 */
+    body.state2 .music-player.active { opacity: 0.6; }
+    body.state2 .music-player.active:hover { opacity: 1; }
     .player-track-num { font-size: 28px; font-weight: 200; letter-spacing: 2px; color: #111; min-width: 50px; }
     .player-controls { flex: 1; display: flex; align-items: center; gap: 12px; }
     .player-btn { background: none; border: 1px solid #ddd; width: 32px; height: 32px; cursor: pointer; font-size: 11px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
@@ -400,15 +403,17 @@
     }
 
     // viewState에 따라 음악 필터/볼륨 부드럽게 변경
+    // state0 (줌인, 로고만) = 먼 느낌 — 먹먹 + 작게
+    // state1 (중간) = 약간 멀리
+    // state2 (줌아웃 최대) = 또렷 — 본인 세계관이 펼쳐진 상태
     function applyAudioFilterForState() {
       if (!audioCtx || !lowpassFilter || !gainNode) return;
       const now = audioCtx.currentTime;
-      const RAMP = 0.8; // 페이드 시간 (초)
-      // state0 = 또렷  | state1 = 약간 멀리  | state2 = 먹먹 (β 강도)
+      const RAMP = 0.8;
       let freq, vol;
-      if (viewState === 0)      { freq = 20000; vol = 1.0; }
-      else if (viewState === 1) { freq = 8000;  vol = 0.7; }
-      else                      { freq = 800;   vol = 0.35; } // state2 = 깊게 잠수, 거의 베이스만
+      if (viewState === 0)      { freq = 800;   vol = 0.35; }  // 먹먹, 작음
+      else if (viewState === 1) { freq = 8000;  vol = 0.7; }   // 중간
+      else                      { freq = 20000; vol = 1.0; }   // 또렷, 풀볼륨
       lowpassFilter.frequency.cancelScheduledValues(now);
       lowpassFilter.frequency.setTargetAtTime(freq, now, RAMP / 3);
       gainNode.gain.cancelScheduledValues(now);
