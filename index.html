@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>SKINOMAKASE</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Helvetica Neue', 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; overscroll-behavior: none; }
+    body { background: #fff; color: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; touch-action: none; }
+    .viewport { position: relative; width: 100%; height: 100%; overflow: hidden; }
+    .background-layer { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 80vmin; height: 80vmin; background-image: url('assets/bottom-layer.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0; transition: opacity 1.2s ease-out; pointer-events: none; z-index: 0; }
+    body.state1 .background-layer { opacity: 0.08; }
+    body.state2 .background-layer { opacity: 0.15; }
+    .blueprint-wrapper { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 100vw; height: 80vh; max-width: 1600px; }
+    .blueprint-canvas { position: relative; width: 100%; height: 100%; }
+    .logo-wrap { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(1.6); z-index: 50; cursor: pointer; transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .logo-img { display: block; width: 180px; max-width: 18vw; min-width: 140px; height: auto; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+    body.state0 .logo-wrap { transform: translate(-50%, -50%) scale(1.6); opacity: 1; }
+    body.state1 .logo-wrap { transform: translate(-50%, -50%) scale(1.15); opacity: 0.6; }
+    body.state2 .logo-wrap { transform: translate(-50%, -50%) scale(0.85); opacity: 0.3; }
+    body.state2 .logo-wrap::after { content: 'ENTER →'; position: absolute; bottom: -32px; left: 50%; transform: translateX(-50%); font-size: 9px; letter-spacing: 4px; color: #999; white-space: nowrap; animation: pulse 2.5s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+    #linesLayer { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+    .connector-line { fill: none; stroke-width: 1; stroke-linecap: round; opacity: 0; transition: all 0.6s ease-out; }
+    #itemsLayer { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
+    .icon { position: absolute; transform: translate(-50%, -50%) scale(0.25); opacity: 0; width: 5.5vw; min-width: 55px; max-width: 85px; transition: all 0.6s ease-out; pointer-events: auto; cursor: pointer; }
+    .icon img { width: 100%; height: 100%; object-fit: contain; display: block; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+    body.state1 .icon.tier1 { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+    body.state2 .icon.tier1 { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+    body.state2 .icon.tier2 { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+    .icon:hover { opacity: 1 !important; transform: translate(-50%, -50%) scale(1.15); z-index: 100; }
+    .icon.headset-icon::after { content: attr(data-track-num); position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%); font-size: 9px; letter-spacing: 2px; color: #888; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .icon.headset-icon:hover::after { opacity: 1; }
+    .icon.headset-icon.playing::after { opacity: 1; color: #111; font-weight: 700; }
+    .icon.locked { filter: blur(3px) grayscale(0.6); cursor: not-allowed; }
+    .icon.locked:hover { transform: translate(-50%, -50%) scale(1) !important; filter: blur(2px) grayscale(0.4); opacity: 0.6 !important; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal-content { background: #fff; padding: 50px 40px; border: 1px solid #f0f0f0; width: 100%; max-width: 420px; text-align: center; animation: modalIn 0.4s ease-out; max-height: 90vh; overflow-y: auto; }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .modal-content h3 { font-weight: 200; letter-spacing: 4px; margin: 0 0 8px 0; font-size: 1rem; }
+    .modal-content .modal-sub { font-size: 10px; color: #999; letter-spacing: 2px; margin-bottom: 28px; text-transform: uppercase; }
+    .modal-content input, .modal-content textarea { width: 100%; padding: 14px 4px; margin-bottom: 12px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 13px; font-family: inherit; background: transparent; transition: border-color 0.3s; }
+    .modal-content input:focus, .modal-content textarea:focus { border-bottom-color: #111; }
+    .modal-content textarea { resize: none; min-height: 70px; }
+    .modal-content button.primary { width: 100%; padding: 14px; background: #111; color: #fff; border: none; cursor: pointer; margin-top: 24px; letter-spacing: 3px; font-size: 11px; transition: background 0.3s; }
+    .modal-content button.primary:hover { background: #333; }
+    .modal-content button.primary:disabled { background: #ccc; cursor: not-allowed; }
+    .modal-close { font-size: 9px; color: #ccc; margin-top: 24px; cursor: pointer; letter-spacing: 2px; display: inline-block; }
+    .modal-close:hover { color: #666; }
+    .form-status { font-size: 11px; color: #888; margin-top: 16px; min-height: 16px; letter-spacing: 1px; }
+    .form-status.success { color: #2a8c4a; }
+    .form-status.error { color: #c33; }
+    .globe-container { width: 100%; max-width: 480px; }
+    .globe-svg { width: 100%; height: 380px; cursor: grab; display: block; }
+    .globe-svg:active { cursor: grabbing; }
+    .globe-svg .sphere { fill: #fafafa; stroke: #ddd; stroke-width: 0.5; }
+    .globe-svg .graticule { fill: none; stroke: #eee; stroke-width: 0.3; }
+    .globe-svg .country { fill: none; stroke: #999; stroke-width: 0.4; }
+    .globe-svg .pin-pulse { fill: #111; animation: pinPulse 1.6s ease-out infinite; }
+    @keyframes pinPulse { 0% { r: 3; opacity: 1; } 100% { r: 14; opacity: 0; } }
+    .globe-svg .pin-dot { fill: #111; }
+    .drop-info { margin-top: 20px; padding: 16px; background: #fafafa; border-left: 2px solid #111; text-align: left; font-size: 12px; line-height: 1.6; }
+    .drop-info .drop-city { font-weight: 700; letter-spacing: 2px; margin-bottom: 4px; text-transform: uppercase; }
+    .drop-info .drop-detail { color: #666; font-size: 11px; }
+    .music-player { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 100%); width: 100%; max-width: 600px; background: #fff; border: 1px solid #eee; border-bottom: none; padding: 16px 24px; z-index: 180; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); display: flex; align-items: center; gap: 16px; }
+    .music-player.active { transform: translate(-50%, 0); }
+    .player-track-num { font-size: 28px; font-weight: 200; letter-spacing: 2px; color: #111; min-width: 50px; }
+    .player-controls { flex: 1; display: flex; align-items: center; gap: 12px; }
+    .player-btn { background: none; border: 1px solid #ddd; width: 32px; height: 32px; cursor: pointer; font-size: 11px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+    .player-btn:hover { background: #111; color: #fff; }
+    .player-progress { flex: 1; height: 2px; background: #eee; cursor: pointer; position: relative; }
+    .player-progress-fill { height: 100%; background: #111; width: 0; transition: width 0.1s linear; }
+    .player-time { font-size: 10px; color: #888; letter-spacing: 1px; min-width: 60px; text-align: right; }
+    .player-close { cursor: pointer; font-size: 16px; color: #ccc; }
+    .player-close:hover { color: #111; }
+    .hint { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); font-size: 9px; color: #ccc; letter-spacing: 3px; pointer-events: none; z-index: 5; text-transform: uppercase; transition: opacity 0.5s; }
+    body.state2 .hint, body.player-open .hint { opacity: 0; }
+    .nav-trigger { position: fixed; top: 28px; right: 28px; z-index: 150; cursor: pointer; width: 28px; height: 28px; opacity: 0.4; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+    .nav-trigger:hover { opacity: 1; }
+    .nav-trigger span { display: block; width: 18px; height: 1px; background: #111; position: relative; }
+    .nav-trigger span::before, .nav-trigger span::after { content: ''; position: absolute; left: 0; width: 18px; height: 1px; background: #111; }
+    .nav-trigger span::before { top: -6px; }
+    .nav-trigger span::after { top: 6px; }
+    .sidebar { position: fixed; top: 0; right: -400px; width: 400px; max-width: 90vw; height: 100%; background: #fff; border-left: 1px solid #eee; z-index: 300; transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1); padding: 60px 40px; overflow-y: auto; }
+    .sidebar.active { right: 0; }
+    .sidebar h2 { font-size: 10px; letter-spacing: 3px; margin: 0 0 16px 0; color: #999; border-bottom: 1px solid #eee; padding-bottom: 12px; text-transform: uppercase; font-weight: 400; }
+    .sidebar-section { margin-bottom: 40px; }
+    .sidebar-section p { font-size: 13px; color: #444; margin: 0; line-height: 1.6; }
+    .sidebar-section a { color: #111; text-decoration: none; border-bottom: 1px solid #ddd; }
+    .sidebar-section a:hover { border-bottom-color: #111; }
+    .sidebar-close { cursor: pointer; font-size: 9px; color: #ccc; letter-spacing: 3px; margin-bottom: 32px; display: inline-block; }
+    .sidebar-close:hover { color: #111; }
+    @media (max-width: 600px) {
+      .logo-img { width: 120px; }
+      .modal-content { padding: 36px 24px; }
+      .nav-trigger { top: 20px; right: 20px; }
+      .hint { font-size: 8px; bottom: 16px; }
+      .music-player { padding: 12px 16px; gap: 10px; }
+      .player-track-num { font-size: 22px; min-width: 40px; }
+      .globe-svg { height: 280px; }
+    }
+  </style>
+</head>
+<body class="state0">
+  <audio id="sndIntro" src="assets/skm-intro.wav" preload="auto"></audio>
+  <audio id="sndOutro" src="assets/skm-outro.wav" preload="auto"></audio>
+  <audio id="sndFinalHalf" src="assets/skm-outro-final-0-5.wav" preload="auto"></audio>
+  <audio id="sndFinalFull" src="assets/skm-outro-final-1.wav" preload="auto"></audio>
+  <audio id="trackAudio" preload="none"></audio>
+
+  <div class="viewport">
+    <div class="background-layer"></div>
+    <div class="blueprint-wrapper">
+      <div class="blueprint-canvas" id="canvas">
+        <div class="logo-wrap" id="logoWrap"><img src="assets/logo.png" alt="SKM" class="logo-img" /></div>
+        <svg id="linesLayer" width="100%" height="100%"></svg>
+        <div id="itemsLayer"></div>
+      </div>
+    </div>
+    <div class="hint" id="hintText">SCROLL TO EXPAND  /  CLICK LOGO</div>
+  </div>
+
+  <div class="nav-trigger" id="navToggle"><span></span></div>
+  <div class="sidebar" id="sidebar">
+    <span class="sidebar-close" id="sidebarClose">CLOSE —</span>
+    <div class="sidebar-section">
+      <h2>SKINOMAKASE</h2>
+      <p style="font-size:12px; line-height:1.7; color:#666;">The universe of Jin — tattoos, sound, gloves, and objects.</p>
+    </div>
+    <div class="sidebar-section">
+      <h2>CONTACT</h2>
+      <p style="font-size:12px;">
+        <a href="mailto:skinomakase@gmail.com">skinomakase@gmail.com</a><br/>
+        <a href="https://instagram.com/jinjinneedle" target="_blank">@jinjinneedle</a>
+      </p>
+    </div>
+    <div class="sidebar-section">
+      <h2>LEGEND</h2>
+      <p style="font-size:11px; color:#666; line-height:2;">
+        <span style="display:inline-block; width:8px; height:8px; background:#6fd86f; vertical-align:middle; margin-right:6px;"></span> Sound<br/>
+        <span style="display:inline-block; width:8px; height:8px; background:#555; vertical-align:middle; margin-right:6px;"></span> Gloves<br/>
+        <span style="display:inline-block; width:8px; height:8px; background:#ffd54a; vertical-align:middle; margin-right:6px;"></span> Tattoo<br/>
+        <span style="display:inline-block; width:8px; height:8px; background:#6fb5ff; vertical-align:middle; margin-right:6px;"></span> Accessory (soon)
+      </p>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="gloveModal">
+    <div class="modal-content globe-container">
+      <h3>GLOVES</h3>
+      <div class="modal-sub">free drop locations</div>
+      <svg id="globeSvg" class="globe-svg" viewBox="0 0 400 400"></svg>
+      <div class="drop-info">
+        <div class="drop-city">SEOUL · 서울</div>
+        <div class="drop-detail">N Seoul Tower, 2F · 남산타워 2층<br/>Stock: limited · 한정 수량</div>
+      </div>
+      <p style="font-size:10px; color:#aaa; margin-top:20px; letter-spacing:1px;">DRAG GLOBE TO ROTATE</p>
+      <span class="modal-close" id="gloveClose">CLOSE</span>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="tattooModal">
+    <div class="modal-content">
+      <h3>TATTOO</h3>
+      <div class="modal-sub">booking inquiry</div>
+      <input type="text" id="tatName" placeholder="NAME" />
+      <input type="email" id="tatEmail" placeholder="EMAIL" />
+      <input type="text" id="tatLoc" placeholder="CITY / LOCATION" />
+      <textarea id="tatDesc" placeholder="IDEA / SIZE / PLACEMENT"></textarea>
+      <button class="primary" id="tatSubmit">SEND INQUIRY</button>
+      <div class="form-status" id="tatStatus"></div>
+      <p style="font-size:10px; color:#999; margin-top:16px; line-height:1.6;">Jin works mechanical, biomechanical, and geometric. Reply within a few days.</p>
+      <span class="modal-close" id="tattooClose">CLOSE</span>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="accModal">
+    <div class="modal-content">
+      <h3>ACCESSORY</h3>
+      <div class="modal-sub">coming soon</div>
+      <p style="font-size:12px; color:#666; line-height:1.7; margin: 24px 0;">
+        Limited drops of objects from Jin's studio — pendants, charms, and other small forms.<br/><br/>
+        Currently in production. Follow <a href="https://instagram.com/jinjinneedle" target="_blank" style="color:#111;">@jinjinneedle</a> for the release.
+      </p>
+      <span class="modal-close" id="accClose">CLOSE</span>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-content">
+      <h3>INTERIOR</h3>
+      <div class="modal-sub">members only</div>
+      <p style="font-size:12px; color:#666; line-height:1.7; margin: 8px 0 24px 0;">
+        The interior space is reserved for tattooed clients of @jinjinneedle.<br/>
+        Submit your tattoo for verification.
+      </p>
+      <input type="text" id="reqName" placeholder="NAME" />
+      <input type="email" id="reqEmail" placeholder="EMAIL" />
+      <input type="file" id="reqPhoto" accept="image/*" style="font-size:11px; padding:10px 4px;" />
+      <textarea id="reqNote" placeholder="WHEN / WHERE WAS THE TATTOO?"></textarea>
+      <button class="primary" id="doRequest">REQUEST ACCESS</button>
+      <div class="form-status" id="reqStatus"></div>
+      <p style="font-size:10px; color:#999; margin-top:16px; line-height:1.6;">Approval is manual — usually 24-48 hours.</p>
+      <span class="modal-close" id="authClose">CANCEL</span>
+    </div>
+  </div>
+
+  <div class="music-player" id="player">
+    <div class="player-track-num" id="playerNum">01</div>
+    <div class="player-controls">
+      <button class="player-btn" id="playerPrev">‹</button>
+      <button class="player-btn" id="playerToggle">▸</button>
+      <button class="player-btn" id="playerNext">›</button>
+      <div class="player-progress" id="playerProgress"><div class="player-progress-fill" id="playerProgressFill"></div></div>
+      <div class="player-time" id="playerTime">0:00</div>
+    </div>
+    <span class="player-close" id="playerClose">×</span>
+  </div>
+
+  <script>
+    const EMAILJS_PUBLIC_KEY  = 'xEz9t78eBnnGH07jx';
+    const EMAILJS_SERVICE_ID  = 'service_djzfort';
+    const EMAILJS_TEMPLATE_ID = 'template_kqlf0h4';
+    if (window.emailjs) emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+      return a;
+    }
+    const TRACKS = shuffle([
+      'assets/music/3HM.mp3', 'assets/music/BABIapk.mp3', 'assets/music/paris-1.mp3',
+      'assets/music/rh042.mp3', 'assets/music/skinomakase-2025.mp3', 'assets/music/gakkeum.mp3',
+      'assets/music/wolf-guide.mp3', 'assets/music/my-love-cantonese.mp3', 'assets/music/never-stop.mp3',
+      'assets/music/banban.mp3', 'assets/music/bogwangdong-59.mp3', 'assets/music/good-day.mp3',
+      'assets/music/sleep.mp3'
+    ]);
+    const DROP_LOCATIONS = [{ city: 'Seoul', name: 'N Seoul Tower 2F', lat: 37.5512, lon: 126.9882 }];
+
+    const body = document.body;
+    const itemsLayer = document.getElementById('itemsLayer');
+    const linesLayer = document.getElementById('linesLayer');
+    const logoWrap = document.getElementById('logoWrap');
+    const sidebar = document.getElementById('sidebar');
+    let viewState = 0;
+    let icons = [], connectorLines = [];
+    let isAuthenticated = false;
+
+    const categories = [
+      { name: 'glove', img: 'assets/glove.png', count: 33, region: { xMin: 0.05, xMax: 0.40, yMin: 0.25, yMax: 0.80 }, color: '#555' },
+      { name: 'accessory', img: 'assets/accessory.png', count: 33, region: { xMin: 0.60, xMax: 0.95, yMin: 0.25, yMax: 0.80 }, color: '#6fb5ff', locked: true },
+      { name: 'tattoo', img: 'assets/tattoo.png', count: 31, region: { xMin: 0.25, xMax: 0.75, yMin: 0.60, yMax: 0.95 }, color: '#ffd54a' },
+      { name: 'headset', img: 'assets/headset.png', count: TRACKS.length, region: { xMin: 0.25, xMax: 0.75, yMin: 0.05, yMax: 0.35 }, color: '#6fd86f' }
+    ];
+
+    function buildIcons() {
+      itemsLayer.innerHTML = ''; linesLayer.innerHTML = '';
+      icons = []; connectorLines = [];
+      const rect = itemsLayer.getBoundingClientRect();
+      const w = rect.width, h = rect.height;
+      const cx = w * 0.5, cy = h * 0.5;
+      const minDist = 0.07;
+      const placed = [];
+      let headsetTrackIdx = 0;
+
+      categories.forEach(cat => {
+        for (let i = 0; i < cat.count; i++) {
+          let xn, yn, ok = false, attempts = 0;
+          while (!ok && attempts < 50) {
+            attempts++;
+            xn = cat.region.xMin + Math.random() * (cat.region.xMax - cat.region.xMin);
+            yn = cat.region.yMin + Math.random() * (cat.region.yMax - cat.region.yMin);
+            if (Math.hypot(xn - 0.5, yn - 0.5) < 0.17) continue;
+            let tooClose = false;
+            for (const p of placed) { if (Math.hypot(xn - p.x, yn - p.y) < minDist) { tooClose = true; break; } }
+            if (!tooClose) { ok = true; placed.push({ x: xn, y: yn }); }
+          }
+          if (!ok) continue;
+
+          const div = document.createElement('div');
+          div.className = 'icon';
+          if (cat.locked) div.classList.add('locked');
+          if (cat.name === 'headset') {
+            div.classList.add('headset-icon');
+            div.dataset.trackNum = String(headsetTrackIdx + 1).padStart(2, '0');
+            div.dataset.trackIdx = headsetTrackIdx;
+            headsetTrackIdx++;
+          }
+          div.style.left = (xn * 100) + '%';
+          div.style.top = (yn * 100) + '%';
+          const delay = (Math.random() * 0.5).toFixed(2);
+          div.style.transitionDelay = delay + 's';
+          div.dataset.category = cat.name;
+          div.addEventListener('click', e => { e.stopPropagation(); handleIconClick(cat, div); });
+
+          const img = document.createElement('img');
+          img.src = cat.img; img.alt = cat.name;
+          div.appendChild(img);
+          itemsLayer.appendChild(div);
+          icons.push(div);
+
+          const lx2 = xn * w, ly2 = yn * h;
+          const length = Math.hypot(lx2 - cx, ly2 - cy);
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+          line.setAttribute('x2', lx2); line.setAttribute('y2', ly2);
+          line.setAttribute('stroke', cat.color);
+          line.setAttribute('class', 'connector-line');
+          line.style.strokeDasharray = length; line.style.strokeDashoffset = length;
+          line.dataset.length = length; line.style.transitionDelay = delay + 's';
+          linesLayer.appendChild(line);
+          connectorLines.push(line);
+        }
+      });
+
+      icons.forEach((el, idx) => {
+        const tier = idx < icons.length / 2 ? 'tier1' : 'tier2';
+        el.classList.add(tier);
+        connectorLines[idx].dataset.tier = tier === 'tier1' ? '1' : '2';
+      });
+      activateLines();
+    }
+
+    function activateLines() {
+      connectorLines.forEach(line => {
+        const tier = line.dataset.tier;
+        const show = (viewState === 1 && tier === '1') || (viewState === 2);
+        line.style.opacity = show ? (tier === '1' ? 0.25 : 0.4) : 0;
+        line.style.strokeDashoffset = show ? 0 : line.dataset.length;
+      });
+    }
+
+    function changeState(next) {
+      if (next === viewState || next < 0 || next > 2) return;
+      const prev = viewState;
+      viewState = next;
+      body.className = body.className.replace(/state\d/g, '').trim();
+      body.classList.add('state' + viewState);
+      if (isAuthenticated) body.classList.add('authenticated');
+      activateLines();
+      const map = { '01':'sndIntro', '12':'sndOutro', '21':'sndFinalHalf', '10':'sndFinalFull' };
+      const sndId = map[`${prev}${next}`];
+      if (sndId) {
+        const snd = document.getElementById(sndId);
+        if (snd) { snd.currentTime = 0; snd.volume = next < prev ? 0.4 : 0.7; snd.play().catch(() => {}); }
+      }
+    }
+
+    function handleIconClick(cat, el) {
+      if (cat.locked) { document.getElementById('accModal').classList.add('active'); return; }
+      if (cat.name === 'glove')  { document.getElementById('gloveModal').classList.add('active'); renderGlobe(); return; }
+      if (cat.name === 'tattoo') { document.getElementById('tattooModal').classList.add('active'); return; }
+      if (cat.name === 'headset') { playTrack(parseInt(el.dataset.trackIdx, 10), el); return; }
+    }
+
+    // ===== Music Player =====
+    const trackAudio = document.getElementById('trackAudio');
+    const player = document.getElementById('player');
+    const playerNum = document.getElementById('playerNum');
+    const playerToggle = document.getElementById('playerToggle');
+    const playerProgress = document.getElementById('playerProgress');
+    const playerProgressFill = document.getElementById('playerProgressFill');
+    const playerTime = document.getElementById('playerTime');
+    let currentTrack = -1;
+    let currentTrackEl = null;
+
+    function playTrack(idx, el) {
+      if (idx < 0 || idx >= TRACKS.length) return;
+      if (currentTrackEl) currentTrackEl.classList.remove('playing');
+      currentTrack = idx;
+      currentTrackEl = el || document.querySelector(`.headset-icon[data-track-idx="${idx}"]`);
+      if (currentTrackEl) currentTrackEl.classList.add('playing');
+      trackAudio.src = TRACKS[idx];
+      trackAudio.play().catch(err => console.warn('Audio play blocked:', err));
+      playerNum.textContent = String(idx + 1).padStart(2, '0');
+      playerToggle.textContent = '❚❚';
+      player.classList.add('active');
+      body.classList.add('player-open');
+    }
+    function closePlayer() {
+      trackAudio.pause();
+      player.classList.remove('active');
+      body.classList.remove('player-open');
+      if (currentTrackEl) currentTrackEl.classList.remove('playing');
+      currentTrack = -1;
+    }
+    playerToggle.addEventListener('click', () => {
+      if (trackAudio.paused) { trackAudio.play(); playerToggle.textContent = '❚❚'; }
+      else { trackAudio.pause(); playerToggle.textContent = '▸'; }
+    });
+    document.getElementById('playerPrev').addEventListener('click', () => playTrack((currentTrack - 1 + TRACKS.length) % TRACKS.length));
+    document.getElementById('playerNext').addEventListener('click', () => playTrack((currentTrack + 1) % TRACKS.length));
+    document.getElementById('playerClose').addEventListener('click', closePlayer);
+    trackAudio.addEventListener('timeupdate', () => {
+      if (trackAudio.duration) {
+        const pct = (trackAudio.currentTime / trackAudio.duration) * 100;
+        playerProgressFill.style.width = pct + '%';
+        const m = Math.floor(trackAudio.currentTime / 60);
+        const s = Math.floor(trackAudio.currentTime % 60).toString().padStart(2, '0');
+        playerTime.textContent = `${m}:${s}`;
+      }
+    });
+    trackAudio.addEventListener('ended', () => playTrack((currentTrack + 1) % TRACKS.length));
+    playerProgress.addEventListener('click', e => {
+      const rect = playerProgress.getBoundingClientRect();
+      const pct = (e.clientX - rect.left) / rect.width;
+      if (trackAudio.duration) trackAudio.currentTime = pct * trackAudio.duration;
+    });
+
+    // ===== D3 Globe =====
+    let globeRotation = [-126, -37];
+    let globeRendered = false;
+    let worldData = null;
+
+    async function renderGlobe() {
+      const svg = d3.select('#globeSvg');
+      svg.selectAll('*').remove();
+      const width = 400, height = 400;
+      const projection = d3.geoOrthographic().scale(180).translate([width/2, height/2]).clipAngle(90).rotate(globeRotation);
+      const path = d3.geoPath(projection);
+
+      svg.append('circle').attr('class', 'sphere').attr('cx', width/2).attr('cy', height/2).attr('r', 180);
+      const graticule = d3.geoGraticule().step([20, 20]);
+      svg.append('path').datum(graticule).attr('class', 'graticule').attr('d', path);
+
+      if (!worldData) {
+        try {
+          const world = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(r => r.json());
+          worldData = topojson.feature(world, world.objects.countries);
+        } catch (e) { console.warn('Map load failed', e); }
+      }
+      if (worldData) {
+        svg.append('g').selectAll('path').data(worldData.features).join('path').attr('class', 'country').attr('d', path);
+      }
+
+      const pinsGroup = svg.append('g').attr('class', 'pins');
+      function renderPins() {
+        pinsGroup.selectAll('*').remove();
+        DROP_LOCATIONS.forEach(loc => {
+          // 뒤에 있는 핀은 안 보이게 — 회전된 위치가 가시 영역인지 확인
+          const r = projection.rotate();
+          const lambda = -r[0], phi = -r[1];
+          const cosD = Math.sin(phi * Math.PI/180) * Math.sin(loc.lat * Math.PI/180) +
+                       Math.cos(phi * Math.PI/180) * Math.cos(loc.lat * Math.PI/180) *
+                       Math.cos((loc.lon - lambda) * Math.PI/180);
+          if (cosD < 0) return; // 지구 뒤편
+          const coords = projection([loc.lon, loc.lat]);
+          if (!coords) return;
+          pinsGroup.append('circle').attr('class', 'pin-pulse').attr('cx', coords[0]).attr('cy', coords[1]).attr('r', 3);
+          pinsGroup.append('circle').attr('class', 'pin-dot').attr('cx', coords[0]).attr('cy', coords[1]).attr('r', 3);
+        });
+      }
+      renderPins();
+
+      let dragStart = null;
+      const svgNode = svg.node();
+      function onDragStart(e) {
+        const x = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
+        const y = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+        dragStart = { x, y, rot: [...globeRotation] };
+      }
+      function onDragMove(e) {
+        if (!dragStart) return;
+        e.preventDefault();
+        const cx = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
+        const cy = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+        const dx = cx - dragStart.x, dy = cy - dragStart.y;
+        globeRotation = [dragStart.rot[0] + dx * 0.5, Math.max(-90, Math.min(90, dragStart.rot[1] - dy * 0.5))];
+        projection.rotate(globeRotation);
+        svg.select('.graticule').attr('d', path);
+        svg.selectAll('.country').attr('d', path);
+        renderPins();
+      }
+      function onDragEnd() { dragStart = null; }
+      svgNode.addEventListener('mousedown', onDragStart);
+      window.addEventListener('mousemove', onDragMove);
+      window.addEventListener('mouseup', onDragEnd);
+      svgNode.addEventListener('touchstart', onDragStart, { passive: true });
+      window.addEventListener('touchmove', onDragMove, { passive: false });
+      window.addEventListener('touchend', onDragEnd);
+      globeRendered = true;
+    }
+
+    // ===== Events =====
+    let wheelLock = false;
+    window.addEventListener('wheel', (e) => {
+      if (e.target.closest('.modal-overlay') || e.target.closest('.music-player') || e.target.closest('.sidebar')) return;
+      e.preventDefault();
+      if (wheelLock) return;
+      if (Math.abs(e.deltaY) < 10) return;
+      wheelLock = true;
+      setTimeout(() => { wheelLock = false; }, 700);
+      e.deltaY > 0 ? changeState(viewState + 1) : changeState(viewState - 1);
+    }, { passive: false });
+
+    let touchStartDist = 0;
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        touchStartDist = Math.hypot(dx, dy);
+      }
+    }, { passive: true });
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2 && touchStartDist > 0) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const newDist = Math.hypot(dx, dy);
+        const delta = newDist - touchStartDist;
+        if (Math.abs(delta) > 50) {
+          if (delta > 0) changeState(viewState + 1); else changeState(viewState - 1);
+          touchStartDist = newDist;
+        }
+      }
+    }, { passive: true });
+
+    logoWrap.addEventListener('click', () => {
+      if (viewState === 0) {
+        changeState(1);
+      } else if (viewState === 2) {
+        if (isAuthenticated) window.open('https://hamasu1989.itch.io/skinomakasewebtest', '_blank');
+        else document.getElementById('authModal').classList.add('active');
+      } else {
+        changeState(0);
+      }
+    });
+
+    document.getElementById('gloveClose').addEventListener('click', () => document.getElementById('gloveModal').classList.remove('active'));
+    document.getElementById('tattooClose').addEventListener('click', () => document.getElementById('tattooModal').classList.remove('active'));
+    document.getElementById('accClose').addEventListener('click', () => document.getElementById('accModal').classList.remove('active'));
+    document.getElementById('authClose').addEventListener('click', () => document.getElementById('authModal').classList.remove('active'));
+    document.getElementById('navToggle').addEventListener('click', () => sidebar.classList.add('active'));
+    document.getElementById('sidebarClose').addEventListener('click', () => sidebar.classList.remove('active'));
+
+    document.getElementById('tatSubmit').addEventListener('click', async () => {
+      const name = document.getElementById('tatName').value.trim();
+      const email = document.getElementById('tatEmail').value.trim();
+      const loc = document.getElementById('tatLoc').value.trim();
+      const desc = document.getElementById('tatDesc').value.trim();
+      const status = document.getElementById('tatStatus');
+      const btn = document.getElementById('tatSubmit');
+      if (!name || !email || !desc) { status.textContent = 'Name, email, and description required.'; status.className = 'form-status error'; return; }
+      btn.disabled = true; status.textContent = 'Sending...'; status.className = 'form-status';
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          name, email,
+          tattoo_url: 'https://placehold.co/400x200?text=Tattoo+Inquiry',
+          vision_analysis: `TATTOO INQUIRY\n\nLocation: ${loc || '(any)'}\n\nIdea:\n${desc}`
+        });
+        status.textContent = 'Inquiry sent. Reply within a few days.';
+        status.className = 'form-status success';
+        ['tatName','tatEmail','tatLoc','tatDesc'].forEach(id => document.getElementById(id).value = '');
+      } catch (e) {
+        console.error(e);
+        status.textContent = 'Failed. DM @jinjinneedle instead.';
+        status.className = 'form-status error';
+      } finally { btn.disabled = false; }
+    });
+
+    document.getElementById('doRequest').addEventListener('click', async () => {
+      const name = document.getElementById('reqName').value.trim();
+      const email = document.getElementById('reqEmail').value.trim();
+      const photo = document.getElementById('reqPhoto').files[0];
+      const note = document.getElementById('reqNote').value.trim();
+      const status = document.getElementById('reqStatus');
+      const btn = document.getElementById('doRequest');
+      if (!name || !email || !photo) { status.textContent = 'Name, email, and tattoo photo required.'; status.className = 'form-status error'; return; }
+      if (photo.size > 4 * 1024 * 1024) { status.textContent = 'Photo too large (max 4MB).'; status.className = 'form-status error'; return; }
+      btn.disabled = true; status.textContent = 'Sending...'; status.className = 'form-status';
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          name, email,
+          tattoo_url: 'https://placehold.co/400x300?text=Photo+pending+(reply+to+request)',
+          vision_analysis: `ACCESS REQUEST — INTERIOR\n\nNote: ${note || '(none)'}\nPhoto: ${(photo.size/1024).toFixed(0)}KB ${photo.type}\nReply to user for the original photo.`
+        });
+        status.textContent = 'Submitted. Check your inbox in 24-48h.';
+        status.className = 'form-status success';
+        ['reqName','reqEmail','reqPhoto','reqNote'].forEach(id => document.getElementById(id).value = '');
+      } catch (e) {
+        console.error(e);
+        status.textContent = 'Failed. DM @jinjinneedle.';
+        status.className = 'form-status error';
+      } finally { btn.disabled = false; }
+    });
+
+    window.addEventListener('load', buildIcons);
+    let resizeTimer;
+    window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(buildIcons, 200); });
+  </script>
+</body>
+</html>
