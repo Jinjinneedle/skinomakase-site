@@ -85,7 +85,7 @@
     .auth-tabs { display: flex; gap: 0; margin: 16px 0 20px 0; border-bottom: 1px solid #eee; font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace; }
     .auth-tab { flex: 1; padding: 10px; font-size: 9px; letter-spacing: 3px; cursor: pointer; color: #999; border-bottom: 1px solid transparent; transition: all 0.2s; text-align: center; }
     .auth-tab.active { color: #111; border-bottom-color: #111; }
-    .music-player { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 100%); width: 100%; max-width: 600px; background: #fff; border: 1px solid #eee; border-bottom: none; padding: 16px 24px; z-index: 180; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease-out; display: flex; align-items: center; gap: 16px; }
+    .music-player { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 100%); width: 100%; max-width: 600px; background: transparent; border: none; padding: 16px 24px; z-index: 180; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease-out; display: flex; align-items: center; gap: 16px; }
     .music-player.active { transform: translate(-50%, 0); opacity: 0.08; }
     .music-player.active:hover { opacity: 1; }
     /* state0 (줌인, 로고만) = 플레이어 거의 사라짐 (음악도 먹먹/작음) */
@@ -121,7 +121,10 @@
     .sidebar-close { cursor: pointer; font-size: 9px; color: #ccc; letter-spacing: 3px; margin-bottom: 32px; display: inline-block; }
     .sidebar-close:hover { color: #111; }
     @media (max-width: 600px) {
-      .logo-img { width: 120px; }
+      .logo-img { width: 100px; min-width: 100px; max-width: 100px; }
+      .blueprint-wrapper { width: 100vw; height: 100vh; }
+      .icon { width: 11vw; min-width: 42px; max-width: 56px; }
+      body.state1 .icon.tier1, body.state2 .icon.tier1, body.state2 .icon.tier2 { opacity: 0.7; }
       .modal-content { padding: 36px 24px; }
       .nav-trigger { top: 20px; right: 20px; }
       .hint { font-size: 8px; bottom: 16px; }
@@ -224,7 +227,7 @@
   <div class="modal-overlay" id="authModal">
     <div class="modal-content">
       <div class="sys-line">
-        <span class="sys-id">INTERIOR</span>
+        <span class="sys-id">CORE</span>
         <span class="sys-tag">marked only</span>
       </div>
 
@@ -293,11 +296,22 @@
     let icons = [], connectorLines = [];
     let isAuthenticated = false;
 
-    const categories = [
-      { name: 'glove', img: 'assets/glove.png', count: 33, region: { xMin: 0.05, xMax: 0.40, yMin: 0.25, yMax: 0.80 }, color: '#555' },
+    // 모바일 감지 — 세로 화면 + 좁은 너비
+    const IS_MOBILE = window.matchMedia('(max-width: 600px)').matches;
+
+    // 카테고리 정의 — 모바일/데스크탑 분기
+    // 데스크탑: 가로로 넓게 4방향 펼침
+    // 모바일: 세로 화면에 맞게 4방향 압축, 아이콘 수 감소
+    const categories = IS_MOBILE ? [
+      { name: 'glove',     img: 'assets/glove.png',     count: 10, region: { xMin: 0.02, xMax: 0.32, yMin: 0.30, yMax: 0.70 }, color: '#555' },
+      { name: 'accessory', img: 'assets/accessory.png', count: 10, region: { xMin: 0.68, xMax: 0.98, yMin: 0.30, yMax: 0.70 }, color: '#6fb5ff', locked: true },
+      { name: 'tattoo',    img: 'assets/tattoo.png',    count: 9,  region: { xMin: 0.20, xMax: 0.80, yMin: 0.72, yMax: 0.95 }, color: '#ffd54a' },
+      { name: 'headset',   img: 'assets/headset.png',   count: TRACKS.length, region: { xMin: 0.20, xMax: 0.80, yMin: 0.05, yMax: 0.28 }, color: '#6fd86f' }
+    ] : [
+      { name: 'glove',     img: 'assets/glove.png',     count: 33, region: { xMin: 0.05, xMax: 0.40, yMin: 0.25, yMax: 0.80 }, color: '#555' },
       { name: 'accessory', img: 'assets/accessory.png', count: 33, region: { xMin: 0.60, xMax: 0.95, yMin: 0.25, yMax: 0.80 }, color: '#6fb5ff', locked: true },
-      { name: 'tattoo', img: 'assets/tattoo.png', count: 31, region: { xMin: 0.25, xMax: 0.75, yMin: 0.60, yMax: 0.95 }, color: '#ffd54a' },
-      { name: 'headset', img: 'assets/headset.png', count: TRACKS.length, region: { xMin: 0.25, xMax: 0.75, yMin: 0.05, yMax: 0.35 }, color: '#6fd86f' }
+      { name: 'tattoo',    img: 'assets/tattoo.png',    count: 31, region: { xMin: 0.25, xMax: 0.75, yMin: 0.60, yMax: 0.95 }, color: '#ffd54a' },
+      { name: 'headset',   img: 'assets/headset.png',   count: TRACKS.length, region: { xMin: 0.25, xMax: 0.75, yMin: 0.05, yMax: 0.35 }, color: '#6fd86f' }
     ];
 
     function buildIcons() {
@@ -306,7 +320,8 @@
       const rect = itemsLayer.getBoundingClientRect();
       const w = rect.width, h = rect.height;
       const cx = w * 0.5, cy = h * 0.5;
-      const minDist = 0.07;
+      const minDist = IS_MOBILE ? 0.09 : 0.07;
+      const centerAvoid = IS_MOBILE ? 0.12 : 0.17;
       const placed = [];
       let headsetTrackIdx = 0;
 
@@ -317,7 +332,7 @@
             attempts++;
             xn = cat.region.xMin + Math.random() * (cat.region.xMax - cat.region.xMin);
             yn = cat.region.yMin + Math.random() * (cat.region.yMax - cat.region.yMin);
-            if (Math.hypot(xn - 0.5, yn - 0.5) < 0.17) continue;
+            if (Math.hypot(xn - 0.5, yn - 0.5) < centerAvoid) continue;
             let tooClose = false;
             for (const p of placed) { if (Math.hypot(xn - p.x, yn - p.y) < minDist) { tooClose = true; break; } }
             if (!tooClose) { ok = true; placed.push({ x: xn, y: yn }); }
@@ -669,7 +684,7 @@
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
           name, email,
           tattoo_url: 'https://placehold.co/400x300?text=Photo+pending+(reply+to+request)',
-          vision_analysis: `ACCESS REQUEST — INTERIOR\n\nNote: ${note || '(none)'}\nPhoto: ${(photo.size/1024).toFixed(0)}KB ${photo.type}\nReply to user for the original photo.`
+          vision_analysis: `ACCESS REQUEST — CORE\n\nNote: ${note || '(none)'}\nPhoto: ${(photo.size/1024).toFixed(0)}KB ${photo.type}\nReply to user for the original photo.`
         });
         status.textContent = 'Submitted. Check your inbox in 24-48h.';
         status.className = 'form-status success';
