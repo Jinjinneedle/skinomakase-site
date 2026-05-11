@@ -67,6 +67,24 @@
     .drop-info { margin-top: 20px; padding: 16px; background: #fafafa; border-left: 2px solid #111; text-align: left; font-size: 12px; line-height: 1.6; }
     .drop-info .drop-city { font-weight: 700; letter-spacing: 2px; margin-bottom: 4px; text-transform: uppercase; }
     .drop-info .drop-detail { color: #666; font-size: 11px; }
+
+    /* ====================== System Look (Minimal) ====================== */
+    .sys-line { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace; }
+    .sys-line .sys-id { font-size: 13px; font-weight: 700; letter-spacing: 3px; }
+    .sys-line .sys-tag { font-size: 10px; color: #999; letter-spacing: 2px; }
+    .pickup-info { margin-top: 18px; font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace; font-size: 11px; line-height: 1.9; color: #444; text-align: center; letter-spacing: 1px; transition: filter 0.5s; }
+    body:not(.marked) .pickup-info { filter: blur(7px); user-select: none; }
+    .sys-action { display: block; width: 100%; margin-top: 20px; padding: 12px; background: transparent; border: 1px solid #111; color: #111; cursor: pointer; letter-spacing: 3px; font-size: 10px; font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace; transition: all 0.2s; }
+    .sys-action:hover { background: #111; color: #fff; }
+    body.marked .verify-only { display: none; }
+    .acc-block { font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace; text-align: left; font-size: 11px; line-height: 1.9; color: #444; letter-spacing: 0.5px; margin-top: 20px; }
+    .acc-block .acc-row { display: flex; justify-content: space-between; }
+    .acc-block .acc-row > span:first-child { color: #999; text-transform: uppercase; letter-spacing: 1px; font-size: 9px; }
+
+    /* Auth tabs */
+    .auth-tabs { display: flex; gap: 0; margin: 16px 0 20px 0; border-bottom: 1px solid #eee; font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace; }
+    .auth-tab { flex: 1; padding: 10px; font-size: 9px; letter-spacing: 3px; cursor: pointer; color: #999; border-bottom: 1px solid transparent; transition: all 0.2s; text-align: center; }
+    .auth-tab.active { color: #111; border-bottom-color: #111; }
     .music-player { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 100%); width: 100%; max-width: 600px; background: #fff; border: 1px solid #eee; border-bottom: none; padding: 16px 24px; z-index: 180; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease-out; display: flex; align-items: center; gap: 16px; }
     .music-player.active { transform: translate(-50%, 0); opacity: 0.08; }
     .music-player.active:hover { opacity: 1; }
@@ -129,7 +147,6 @@
         <div id="itemsLayer"></div>
       </div>
     </div>
-    <div class="hint" id="hintText">SCROLL TO EXPAND  /  CLICK LOGO</div>
   </div>
 
   <div class="nav-trigger" id="navToggle"><span></span></div>
@@ -137,7 +154,7 @@
     <span class="sidebar-close" id="sidebarClose">CLOSE —</span>
     <div class="sidebar-section">
       <h2>SKINOMAKASE</h2>
-      <p style="font-size:12px; line-height:1.7; color:#666;">The universe of Jin — tattoos, sound, gloves, and objects.</p>
+      <p style="font-size:12px; line-height:1.7; color:#666;">marked, sound, gloves, objects.</p>
     </div>
     <div class="sidebar-section">
       <h2>CONTACT</h2>
@@ -151,7 +168,7 @@
       <p style="font-size:11px; color:#666; line-height:2;">
         <span style="display:inline-block; width:8px; height:8px; background:#6fd86f; vertical-align:middle; margin-right:6px;"></span> Sound<br/>
         <span style="display:inline-block; width:8px; height:8px; background:#555; vertical-align:middle; margin-right:6px;"></span> Gloves<br/>
-        <span style="display:inline-block; width:8px; height:8px; background:#ffd54a; vertical-align:middle; margin-right:6px;"></span> Tattoo<br/>
+        <span style="display:inline-block; width:8px; height:8px; background:#ffd54a; vertical-align:middle; margin-right:6px;"></span> Marked<br/>
         <span style="display:inline-block; width:8px; height:8px; background:#6fb5ff; vertical-align:middle; margin-right:6px;"></span> Accessory (soon)
       </p>
     </div>
@@ -159,61 +176,79 @@
 
   <div class="modal-overlay" id="gloveModal">
     <div class="modal-content globe-container">
-      <h3>GLOVES</h3>
-      <div class="modal-sub">free drop locations</div>
-      <svg id="globeSvg" class="globe-svg" viewBox="0 0 400 400"></svg>
-      <div class="drop-info">
-        <div class="drop-city">SEOUL · 서울</div>
-        <div class="drop-detail">N Seoul Tower, 2F · 남산타워 2층<br/>Stock: limited · 한정 수량</div>
+      <div class="sys-line">
+        <span class="sys-id">STG-01</span>
+        <span class="sys-tag">softunit</span>
       </div>
-      <p style="font-size:10px; color:#aaa; margin-top:20px; letter-spacing:1px;">DRAG GLOBE TO ROTATE</p>
-      <span class="modal-close" id="gloveClose">CLOSE</span>
+      <svg id="globeSvg" class="globe-svg" viewBox="0 0 400 400"></svg>
+      <div class="pickup-info" id="pickupInfo">
+        <div>SEOUL</div>
+        <div>N.SEOUL.TWR L2</div>
+        <div>37.5512N 126.9882E</div>
+      </div>
+      <button class="sys-action verify-only" id="gloveVerify">REQUEST ACCESS</button>
+      <span class="modal-close" id="gloveClose">close</span>
     </div>
   </div>
 
   <div class="modal-overlay" id="tattooModal">
     <div class="modal-content">
-      <h3>TATTOO</h3>
-      <div class="modal-sub">booking inquiry</div>
-      <input type="text" id="tatName" placeholder="NAME" />
-      <input type="email" id="tatEmail" placeholder="EMAIL" />
-      <input type="text" id="tatLoc" placeholder="CITY / LOCATION" />
-      <textarea id="tatDesc" placeholder="IDEA / SIZE / PLACEMENT"></textarea>
-      <button class="primary" id="tatSubmit">SEND INQUIRY</button>
+      <div class="sys-line">
+        <span class="sys-id">MARKED</span>
+        <span class="sys-tag">new mark</span>
+      </div>
+      <input type="text" id="tatName" placeholder="name" />
+      <input type="email" id="tatEmail" placeholder="email" />
+      <input type="text" id="tatLoc" placeholder="city" />
+      <textarea id="tatDesc" placeholder="idea / size / placement"></textarea>
+      <button class="sys-action" id="tatSubmit">SEND</button>
       <div class="form-status" id="tatStatus"></div>
-      <p style="font-size:10px; color:#999; margin-top:16px; line-height:1.6;">Jin works mechanical, biomechanical, and geometric. Reply within a few days.</p>
-      <span class="modal-close" id="tattooClose">CLOSE</span>
+      <span class="modal-close" id="tattooClose">close</span>
     </div>
   </div>
 
   <div class="modal-overlay" id="accModal">
     <div class="modal-content">
-      <h3>ACCESSORY</h3>
-      <div class="modal-sub">coming soon</div>
-      <p style="font-size:12px; color:#666; line-height:1.7; margin: 24px 0;">
-        Limited drops of objects from Jin's studio — pendants, charms, and other small forms.<br/><br/>
-        Currently in production. Follow <a href="https://instagram.com/jinjinneedle" target="_blank" style="color:#111;">@jinjinneedle</a> for the release.
-      </p>
-      <span class="modal-close" id="accClose">CLOSE</span>
+      <div class="sys-line">
+        <span class="sys-id">DGTG-01</span>
+        <span class="sys-tag">silver 925</span>
+      </div>
+      <div class="acc-block">
+        <div class="acc-row"><span>by</span><span>@4th_death × @skinomakase</span></div>
+        <div class="acc-row"><span>status</span><span>pending drop</span></div>
+      </div>
+      <span class="modal-close" id="accClose">close</span>
     </div>
   </div>
 
   <div class="modal-overlay" id="authModal">
     <div class="modal-content">
-      <h3>INTERIOR</h3>
-      <div class="modal-sub">members only</div>
-      <p style="font-size:12px; color:#666; line-height:1.7; margin: 8px 0 24px 0;">
-        The interior space is reserved for tattooed clients of @jinjinneedle.<br/>
-        Submit your tattoo for verification.
-      </p>
-      <input type="text" id="reqName" placeholder="NAME" />
-      <input type="email" id="reqEmail" placeholder="EMAIL" />
-      <input type="file" id="reqPhoto" accept="image/*" style="font-size:11px; padding:10px 4px;" />
-      <textarea id="reqNote" placeholder="WHEN / WHERE WAS THE TATTOO?"></textarea>
-      <button class="primary" id="doRequest">REQUEST ACCESS</button>
-      <div class="form-status" id="reqStatus"></div>
-      <p style="font-size:10px; color:#999; margin-top:16px; line-height:1.6;">Approval is manual — usually 24-48 hours.</p>
-      <span class="modal-close" id="authClose">CANCEL</span>
+      <div class="sys-line">
+        <span class="sys-id">INTERIOR</span>
+        <span class="sys-tag">marked only</span>
+      </div>
+
+      <div class="auth-tabs">
+        <div class="auth-tab active" data-tab="request">REQUEST</div>
+        <div class="auth-tab" data-tab="enter">ENTER CODE</div>
+      </div>
+
+      <div class="auth-pane" id="pane-request">
+        <input type="text" id="reqName" placeholder="name" />
+        <input type="email" id="reqEmail" placeholder="email" />
+        <input type="file" id="reqPhoto" accept="image/*" style="font-size:11px; padding:10px 4px;" />
+        <textarea id="reqNote" placeholder="when / where was the mark"></textarea>
+        <button class="sys-action" id="doRequest">SUBMIT</button>
+        <div class="form-status" id="reqStatus"></div>
+      </div>
+
+      <div class="auth-pane" id="pane-enter" style="display:none;">
+        <input type="text" id="codeInput" placeholder="access code" style="font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace; letter-spacing: 4px; text-align: center;" />
+        <button class="sys-action" id="doVerifyCode">VERIFY</button>
+        <div class="form-status" id="codeStatus"></div>
+      </div>
+
+      <span class="modal-close" id="authClose">close</span>
     </div>
   </div>
 
@@ -585,6 +620,10 @@
     });
 
     document.getElementById('gloveClose').addEventListener('click', () => document.getElementById('gloveModal').classList.remove('active'));
+    document.getElementById('gloveVerify').addEventListener('click', () => {
+      document.getElementById('gloveModal').classList.remove('active');
+      document.getElementById('authModal').classList.add('active');
+    });
     document.getElementById('tattooClose').addEventListener('click', () => document.getElementById('tattooModal').classList.remove('active'));
     document.getElementById('accClose').addEventListener('click', () => document.getElementById('accModal').classList.remove('active'));
     document.getElementById('authClose').addEventListener('click', () => document.getElementById('authModal').classList.remove('active'));
@@ -641,6 +680,65 @@
         status.className = 'form-status error';
       } finally { btn.disabled = false; }
     });
+
+    // ============================================================
+    // ACCESS CODE SYSTEM (β-1)
+    // ============================================================
+    // Jin이 신청자에게 발급한 코드들 — 신청 확인 후 여기 추가하고 push
+    const APPROVED_CODES = [
+      // 예시: 'M-A8K3FQ',
+      //       'M-9XPL2D',
+    ];
+
+    function setMarked(on, code) {
+      if (on) {
+        isAuthenticated = true;
+        body.classList.add('marked');
+        body.classList.add('authenticated');
+        if (code) localStorage.setItem('skm_marked', code);
+      } else {
+        isAuthenticated = false;
+        body.classList.remove('marked');
+        body.classList.remove('authenticated');
+        localStorage.removeItem('skm_marked');
+      }
+    }
+
+    // 탭 전환
+    document.querySelectorAll('.auth-tab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.auth-tab').forEach(x => x.classList.toggle('active', x === t));
+        const tab = t.dataset.tab;
+        document.getElementById('pane-request').style.display = tab === 'request' ? 'block' : 'none';
+        document.getElementById('pane-enter').style.display = tab === 'enter' ? 'block' : 'none';
+      });
+    });
+
+    // 코드 검증
+    document.getElementById('doVerifyCode').addEventListener('click', () => {
+      const code = document.getElementById('codeInput').value.trim().toUpperCase();
+      const status = document.getElementById('codeStatus');
+      if (!code) { status.textContent = 'enter your code.'; status.className = 'form-status error'; return; }
+      if (APPROVED_CODES.includes(code)) {
+        setMarked(true, code);
+        status.textContent = 'marked.';
+        status.className = 'form-status success';
+        setTimeout(() => {
+          document.getElementById('authModal').classList.remove('active');
+        }, 900);
+      } else {
+        status.textContent = 'invalid code.';
+        status.className = 'form-status error';
+      }
+    });
+
+    // 페이지 로드 시 저장된 코드 복원
+    (function restoreMarked() {
+      const saved = localStorage.getItem('skm_marked');
+      if (saved && APPROVED_CODES.includes(saved)) {
+        setMarked(true);
+      }
+    })();
 
     window.addEventListener('load', buildIcons);
     let resizeTimer;
