@@ -22,8 +22,6 @@
     body.state0 .logo-wrap { transform: translate(-50%, -50%) scale(1.6); opacity: 1; }
     body.state1 .logo-wrap { transform: translate(-50%, -50%) scale(1.15); opacity: 0.6; }
     body.state2 .logo-wrap { transform: translate(-50%, -50%) scale(0.85); opacity: 0.3; }
-    body.state2 .logo-wrap::after { content: 'ENTER →'; position: absolute; bottom: -32px; left: 50%; transform: translateX(-50%); font-size: 9px; letter-spacing: 4px; color: #999; white-space: nowrap; animation: pulse 2.5s infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
     #linesLayer { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
     .connector-line { fill: none; stroke-width: 1; stroke-linecap: round; opacity: 0; transition: all 0.6s ease-out; }
     #itemsLayer { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
@@ -85,51 +83,31 @@
     .auth-tabs { display: flex; gap: 0; margin: 16px 0 20px 0; border-bottom: 1px solid #eee; font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace; }
     .auth-tab { flex: 1; padding: 10px; font-size: 9px; letter-spacing: 3px; cursor: pointer; color: #999; border-bottom: 1px solid transparent; transition: all 0.2s; text-align: center; }
     .auth-tab.active { color: #111; border-bottom-color: #111; }
-    .music-player { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 100%); width: 100%; max-width: 600px; background: transparent; border: none; padding: 16px 24px; z-index: 180; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease-out; display: flex; align-items: center; gap: 16px; }
-    .music-player.active { transform: translate(-50%, 0); opacity: 0.08; }
-    .music-player.active:hover { opacity: 1; }
-    /* state0 (줌인, 로고만) = 플레이어 거의 사라짐 (음악도 먹먹/작음) */
-    body.state0 .music-player.active { opacity: 0; pointer-events: none; }
-    body.state0 .music-player.active:hover { opacity: 0; }
-    /* state2 (줌아웃 최대) = 플레이어 또렷하게 보임 */
-    body.state2 .music-player.active { opacity: 0.6; }
-    body.state2 .music-player.active:hover { opacity: 1; }
-    .player-track-num { font-size: 28px; font-weight: 200; letter-spacing: 2px; color: #111; min-width: 50px; }
-    .player-controls { flex: 1; display: flex; align-items: center; gap: 12px; }
-    .player-btn { background: none; border: 1px solid #ddd; width: 32px; height: 32px; cursor: pointer; font-size: 11px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
-    .player-btn:hover { background: #111; color: #fff; }
-    .player-progress { flex: 1; height: 2px; background: #eee; cursor: pointer; position: relative; }
-    .player-progress-fill { height: 100%; background: #111; width: 0; transition: width 0.1s linear; }
-    .player-time { font-size: 10px; color: #888; letter-spacing: 1px; min-width: 60px; text-align: right; }
-    .player-close { cursor: pointer; font-size: 16px; color: #ccc; }
-    .player-close:hover { color: #111; }
-    .hint { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); font-size: 9px; color: #ccc; letter-spacing: 3px; pointer-events: none; z-index: 5; text-transform: uppercase; transition: opacity 0.5s; }
-    body.state2 .hint, body.player-open .hint { opacity: 0; }
-    .nav-trigger { position: fixed; top: 28px; right: 28px; z-index: 150; cursor: pointer; width: 28px; height: 28px; opacity: 0.4; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
-    .nav-trigger:hover { opacity: 1; }
-    .nav-trigger span { display: block; width: 18px; height: 1px; background: #111; position: relative; }
-    .nav-trigger span::before, .nav-trigger span::after { content: ''; position: absolute; left: 0; width: 18px; height: 1px; background: #111; }
-    .nav-trigger span::before { top: -6px; }
-    .nav-trigger span::after { top: 6px; }
-    .sidebar { position: fixed; top: 0; right: -400px; width: 400px; max-width: 90vw; height: 100%; background: #fff; border-left: 1px solid #eee; z-index: 300; transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1); padding: 60px 40px; overflow-y: auto; }
-    .sidebar.active { right: 0; }
-    .sidebar h2 { font-size: 10px; letter-spacing: 3px; margin: 0 0 16px 0; color: #999; border-bottom: 1px solid #eee; padding-bottom: 12px; text-transform: uppercase; font-weight: 400; }
-    .sidebar-section { margin-bottom: 40px; }
-    .sidebar-section p { font-size: 13px; color: #444; margin: 0; line-height: 1.6; }
-    .sidebar-section a { color: #111; text-decoration: none; border-bottom: 1px solid #ddd; }
-    .sidebar-section a:hover { border-bottom-color: #111; }
-    .sidebar-close { cursor: pointer; font-size: 9px; color: #ccc; letter-spacing: 3px; margin-bottom: 32px; display: inline-block; }
-    .sidebar-close:hover { color: #111; }
+
+    /* Logo button (SUBMIT replaced with SKM logo) */
+    .logo-action { display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 20px; padding: 14px; background: transparent; border: 1px solid #111; cursor: pointer; transition: all 0.2s; }
+    .logo-action img { width: 28px; height: auto; display: block; opacity: 0.85; transition: opacity 0.2s; }
+    .logo-action:hover { background: #111; }
+    .logo-action:hover img { filter: invert(1); opacity: 1; }
+    .logo-action:disabled { border-color: #ccc; cursor: not-allowed; }
+    .logo-action:disabled img { opacity: 0.4; }
+
+    /* Headset playing — subtle shake animation */
+    @keyframes headsetShake {
+      0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+      25%      { transform: translate(-50%, -50%) rotate(-1.6deg); }
+      75%      { transform: translate(-50%, -50%) rotate(1.6deg); }
+    }
+    .icon.headset-icon.playing {
+      opacity: 1 !important;
+      animation: headsetShake 1.2s ease-in-out infinite;
+    }
     @media (max-width: 600px) {
       .logo-img { width: 100px; min-width: 100px; max-width: 100px; }
       .blueprint-wrapper { width: 100vw; height: 100vh; }
       .icon { width: 11vw; min-width: 42px; max-width: 56px; }
       body.state1 .icon.tier1, body.state2 .icon.tier1, body.state2 .icon.tier2 { opacity: 0.7; }
       .modal-content { padding: 36px 24px; }
-      .nav-trigger { top: 20px; right: 20px; }
-      .hint { font-size: 8px; bottom: 16px; }
-      .music-player { padding: 12px 16px; gap: 10px; }
-      .player-track-num { font-size: 22px; min-width: 40px; }
       .globe-svg { height: 280px; }
     }
   </style>
@@ -149,31 +127,6 @@
         <svg id="linesLayer" width="100%" height="100%"></svg>
         <div id="itemsLayer"></div>
       </div>
-    </div>
-  </div>
-
-  <div class="nav-trigger" id="navToggle"><span></span></div>
-  <div class="sidebar" id="sidebar">
-    <span class="sidebar-close" id="sidebarClose">CLOSE —</span>
-    <div class="sidebar-section">
-      <h2>SKINOMAKASE</h2>
-      <p style="font-size:12px; line-height:1.7; color:#666;">marked, sound, gloves, objects.</p>
-    </div>
-    <div class="sidebar-section">
-      <h2>CONTACT</h2>
-      <p style="font-size:12px;">
-        <a href="mailto:skinomakase@gmail.com">skinomakase@gmail.com</a><br/>
-        <a href="https://instagram.com/jinjinneedle" target="_blank">@jinjinneedle</a>
-      </p>
-    </div>
-    <div class="sidebar-section">
-      <h2>LEGEND</h2>
-      <p style="font-size:11px; color:#666; line-height:2;">
-        <span style="display:inline-block; width:8px; height:8px; background:#6fd86f; vertical-align:middle; margin-right:6px;"></span> Sound<br/>
-        <span style="display:inline-block; width:8px; height:8px; background:#555; vertical-align:middle; margin-right:6px;"></span> Gloves<br/>
-        <span style="display:inline-block; width:8px; height:8px; background:#ffd54a; vertical-align:middle; margin-right:6px;"></span> Marked<br/>
-        <span style="display:inline-block; width:8px; height:8px; background:#6fb5ff; vertical-align:middle; margin-right:6px;"></span> Accessory (soon)
-      </p>
     </div>
   </div>
 
@@ -226,14 +179,9 @@
 
   <div class="modal-overlay" id="authModal">
     <div class="modal-content">
-      <div class="sys-line">
-        <span class="sys-id">CORE</span>
-        <span class="sys-tag">marked only</span>
-      </div>
-
       <div class="auth-tabs">
         <div class="auth-tab active" data-tab="request">REQUEST</div>
-        <div class="auth-tab" data-tab="enter">ENTER CODE</div>
+        <div class="auth-tab" data-tab="enter">CODE</div>
       </div>
 
       <div class="auth-pane" id="pane-request">
@@ -241,30 +189,18 @@
         <input type="email" id="reqEmail" placeholder="email" />
         <input type="file" id="reqPhoto" accept="image/*" style="font-size:11px; padding:10px 4px;" />
         <textarea id="reqNote" placeholder="when / where was the mark"></textarea>
-        <button class="sys-action" id="doRequest">SUBMIT</button>
+        <button class="logo-action" id="doRequest" aria-label="submit"><img src="assets/logo.png" alt="" /></button>
         <div class="form-status" id="reqStatus"></div>
       </div>
 
       <div class="auth-pane" id="pane-enter" style="display:none;">
         <input type="text" id="codeInput" placeholder="access code" style="font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace; letter-spacing: 4px; text-align: center;" />
-        <button class="sys-action" id="doVerifyCode">VERIFY</button>
+        <button class="logo-action" id="doVerifyCode" aria-label="verify"><img src="assets/logo.png" alt="" /></button>
         <div class="form-status" id="codeStatus"></div>
       </div>
 
       <span class="modal-close" id="authClose">close</span>
     </div>
-  </div>
-
-  <div class="music-player" id="player">
-    <div class="player-track-num" id="playerNum">01</div>
-    <div class="player-controls">
-      <button class="player-btn" id="playerPrev">‹</button>
-      <button class="player-btn" id="playerToggle">▸</button>
-      <button class="player-btn" id="playerNext">›</button>
-      <div class="player-progress" id="playerProgress"><div class="player-progress-fill" id="playerProgressFill"></div></div>
-      <div class="player-time" id="playerTime">0:00</div>
-    </div>
-    <span class="player-close" id="playerClose">×</span>
   </div>
 
   <script>
@@ -291,7 +227,6 @@
     const itemsLayer = document.getElementById('itemsLayer');
     const linesLayer = document.getElementById('linesLayer');
     const logoWrap = document.getElementById('logoWrap');
-    const sidebar = document.getElementById('sidebar');
     let viewState = 0;
     let icons = [], connectorLines = [];
     let isAuthenticated = false;
@@ -416,18 +351,12 @@
       if (cat.name === 'headset') { playTrack(parseInt(el.dataset.trackIdx, 10), el); return; }
     }
 
-    // ===== Music Player + Web Audio (EQ filter for zoom) =====
+    // ===== Music + Web Audio (EQ filter for zoom, headset-icon toggle) =====
     const trackAudio = document.getElementById('trackAudio');
-    const player = document.getElementById('player');
-    const playerNum = document.getElementById('playerNum');
-    const playerToggle = document.getElementById('playerToggle');
-    const playerProgress = document.getElementById('playerProgress');
-    const playerProgressFill = document.getElementById('playerProgressFill');
-    const playerTime = document.getElementById('playerTime');
     let currentTrack = -1;
     let currentTrackEl = null;
 
-    // Web Audio graph — 줌 상태에 따라 lowpass filter + gain 조절
+    // Web Audio graph
     let audioCtx = null;
     let audioSource = null;
     let lowpassFilter = null;
@@ -440,7 +369,7 @@
         audioSource = audioCtx.createMediaElementSource(trackAudio);
         lowpassFilter = audioCtx.createBiquadFilter();
         lowpassFilter.type = 'lowpass';
-        lowpassFilter.frequency.value = 20000; // 기본: 통과 (필터 안 걸린 상태)
+        lowpassFilter.frequency.value = 20000;
         lowpassFilter.Q.value = 0.7;
         gainNode = audioCtx.createGain();
         gainNode.gain.value = 1.0;
@@ -452,69 +381,47 @@
       }
     }
 
-    // viewState에 따라 음악 필터/볼륨 부드럽게 변경
-    // state0 (줌인, 로고만) = 먼 느낌 — 먹먹 + 작게
-    // state1 (중간) = 약간 멀리
-    // state2 (줌아웃 최대) = 또렷 — 본인 세계관이 펼쳐진 상태
+    // viewState에 따라 음악 필터/볼륨 — state0 먹먹, state2 또렷
     function applyAudioFilterForState() {
       if (!audioCtx || !lowpassFilter || !gainNode) return;
       const now = audioCtx.currentTime;
       const RAMP = 0.8;
       let freq, vol;
-      if (viewState === 0)      { freq = 800;   vol = 0.35; }  // 먹먹, 작음
-      else if (viewState === 1) { freq = 8000;  vol = 0.7; }   // 중간
-      else                      { freq = 20000; vol = 1.0; }   // 또렷, 풀볼륨
+      if (viewState === 0)      { freq = 800;   vol = 0.35; }
+      else if (viewState === 1) { freq = 8000;  vol = 0.7; }
+      else                      { freq = 20000; vol = 1.0; }
       lowpassFilter.frequency.cancelScheduledValues(now);
       lowpassFilter.frequency.setTargetAtTime(freq, now, RAMP / 3);
       gainNode.gain.cancelScheduledValues(now);
       gainNode.gain.setTargetAtTime(vol, now, RAMP / 3);
     }
 
+    function stopCurrentTrack() {
+      trackAudio.pause();
+      trackAudio.currentTime = 0;
+      if (currentTrackEl) currentTrackEl.classList.remove('playing');
+      currentTrack = -1;
+      currentTrackEl = null;
+    }
+
     function playTrack(idx, el) {
       if (idx < 0 || idx >= TRACKS.length) return;
+      // 같은 아이콘을 다시 눌렀으면 정지
+      if (currentTrack === idx) { stopCurrentTrack(); return; }
+      // 다른 아이콘 재생 중이면 그것 정지
       if (currentTrackEl) currentTrackEl.classList.remove('playing');
       currentTrack = idx;
       currentTrackEl = el || document.querySelector(`.headset-icon[data-track-idx="${idx}"]`);
       if (currentTrackEl) currentTrackEl.classList.add('playing');
       trackAudio.src = TRACKS[idx];
-      initAudioGraph(); // 첫 재생 시 오디오 그래프 연결
+      initAudioGraph();
       if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
       applyAudioFilterForState();
       trackAudio.play().catch(err => console.warn('Audio play blocked:', err));
-      playerNum.textContent = String(idx + 1).padStart(2, '0');
-      playerToggle.textContent = '❚❚';
-      player.classList.add('active');
-      body.classList.add('player-open');
     }
-    function closePlayer() {
-      trackAudio.pause();
-      player.classList.remove('active');
-      body.classList.remove('player-open');
-      if (currentTrackEl) currentTrackEl.classList.remove('playing');
-      currentTrack = -1;
-    }
-    playerToggle.addEventListener('click', () => {
-      if (trackAudio.paused) { trackAudio.play(); playerToggle.textContent = '❚❚'; }
-      else { trackAudio.pause(); playerToggle.textContent = '▸'; }
-    });
-    document.getElementById('playerPrev').addEventListener('click', () => playTrack((currentTrack - 1 + TRACKS.length) % TRACKS.length));
-    document.getElementById('playerNext').addEventListener('click', () => playTrack((currentTrack + 1) % TRACKS.length));
-    document.getElementById('playerClose').addEventListener('click', closePlayer);
-    trackAudio.addEventListener('timeupdate', () => {
-      if (trackAudio.duration) {
-        const pct = (trackAudio.currentTime / trackAudio.duration) * 100;
-        playerProgressFill.style.width = pct + '%';
-        const m = Math.floor(trackAudio.currentTime / 60);
-        const s = Math.floor(trackAudio.currentTime % 60).toString().padStart(2, '0');
-        playerTime.textContent = `${m}:${s}`;
-      }
-    });
-    trackAudio.addEventListener('ended', () => playTrack((currentTrack + 1) % TRACKS.length));
-    playerProgress.addEventListener('click', e => {
-      const rect = playerProgress.getBoundingClientRect();
-      const pct = (e.clientX - rect.left) / rect.width;
-      if (trackAudio.duration) trackAudio.currentTime = pct * trackAudio.duration;
-    });
+
+    // 곡 끝나면 자동 정지 (다음 곡 자동재생 X)
+    trackAudio.addEventListener('ended', stopCurrentTrack);
 
     // ===== D3 Globe =====
     let globeRotation = [-126, -37];
@@ -593,7 +500,7 @@
     // ===== Events =====
     let wheelLock = false;
     window.addEventListener('wheel', (e) => {
-      if (e.target.closest('.modal-overlay') || e.target.closest('.music-player') || e.target.closest('.sidebar')) return;
+      if (e.target.closest('.modal-overlay')) return;
       e.preventDefault();
       if (wheelLock) return;
       if (Math.abs(e.deltaY) < 10) return;
@@ -642,8 +549,6 @@
     document.getElementById('tattooClose').addEventListener('click', () => document.getElementById('tattooModal').classList.remove('active'));
     document.getElementById('accClose').addEventListener('click', () => document.getElementById('accModal').classList.remove('active'));
     document.getElementById('authClose').addEventListener('click', () => document.getElementById('authModal').classList.remove('active'));
-    document.getElementById('navToggle').addEventListener('click', () => sidebar.classList.add('active'));
-    document.getElementById('sidebarClose').addEventListener('click', () => sidebar.classList.remove('active'));
 
     document.getElementById('tatSubmit').addEventListener('click', async () => {
       const name = document.getElementById('tatName').value.trim();
