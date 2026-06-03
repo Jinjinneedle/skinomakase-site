@@ -50,6 +50,8 @@
     .modal-content button.primary:disabled { background: #ccc; cursor: not-allowed; }
     .modal-close { font-size: 9px; color: #ccc; margin-top: 24px; cursor: pointer; letter-spacing: 2px; display: inline-block; }
     .modal-close:hover { color: #666; }
+    .acc-buy { display: inline-block; margin-top: 28px; padding: 12px 20px; border: 1px solid #111; color: #111; text-decoration: none; font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; transition: background 0.3s, color 0.3s; }
+    .acc-buy:hover { background: #111; color: #fff; }
     .form-status { font-size: 11px; color: #888; margin-top: 16px; min-height: 16px; letter-spacing: 1px; }
     .form-status.success { color: #2a8c4a; }
     .form-status.error { color: #c33; }
@@ -171,8 +173,9 @@
       </div>
       <div class="acc-block">
         <div class="acc-row"><span>by</span><span>@4th_death × @skinomakase</span></div>
-        <div class="acc-row"><span>status</span><span>pending drop</span></div>
+        <div class="acc-row"><span>status</span><span>available</span></div>
       </div>
+      <a href="https://4thdeath.com/products/dgtg-01" target="_blank" rel="noopener noreferrer" class="acc-buy">→ buy at 4thdeath</a>
       <span class="modal-close" id="accClose">close</span>
     </div>
   </div>
@@ -239,12 +242,12 @@
     // 모바일: 세로 화면에 맞게 4방향 압축, 아이콘 수 감소
     const categories = IS_MOBILE ? [
       { name: 'glove',     img: 'assets/glove.png',     count: 10, region: { xMin: 0.02, xMax: 0.32, yMin: 0.30, yMax: 0.70 }, color: '#555' },
-      { name: 'accessory', img: 'assets/accessory.png', count: 10, region: { xMin: 0.68, xMax: 0.98, yMin: 0.30, yMax: 0.70 }, color: '#6fb5ff', locked: true },
+      { name: 'accessory', img: 'assets/accessory.png', count: 10, region: { xMin: 0.68, xMax: 0.98, yMin: 0.30, yMax: 0.70 }, color: '#6fb5ff' },
       { name: 'tattoo',    img: 'assets/tattoo.png',    count: 9,  region: { xMin: 0.20, xMax: 0.80, yMin: 0.72, yMax: 0.95 }, color: '#ffd54a' },
       { name: 'headset',   img: 'assets/headset.png',   count: TRACKS.length, region: { xMin: 0.20, xMax: 0.80, yMin: 0.05, yMax: 0.28 }, color: '#6fd86f' }
     ] : [
       { name: 'glove',     img: 'assets/glove.png',     count: 33, region: { xMin: 0.05, xMax: 0.40, yMin: 0.25, yMax: 0.80 }, color: '#555' },
-      { name: 'accessory', img: 'assets/accessory.png', count: 33, region: { xMin: 0.60, xMax: 0.95, yMin: 0.25, yMax: 0.80 }, color: '#6fb5ff', locked: true },
+      { name: 'accessory', img: 'assets/accessory.png', count: 33, region: { xMin: 0.60, xMax: 0.95, yMin: 0.25, yMax: 0.80 }, color: '#6fb5ff' },
       { name: 'tattoo',    img: 'assets/tattoo.png',    count: 31, region: { xMin: 0.25, xMax: 0.75, yMin: 0.60, yMax: 0.95 }, color: '#ffd54a' },
       { name: 'headset',   img: 'assets/headset.png',   count: TRACKS.length, region: { xMin: 0.25, xMax: 0.75, yMin: 0.05, yMax: 0.35 }, color: '#6fd86f' }
     ];
@@ -345,7 +348,7 @@
     }
 
     function handleIconClick(cat, el) {
-      if (cat.locked) { document.getElementById('accModal').classList.add('active'); return; }
+      if (cat.name === 'accessory') { window.open('https://4thdeath.com/products/dgtg-01?fbclid=PAVERFWASNBC9leHRuA2FlbQIxMABzcnRjBmFwcF9pZA8xMjQwMjQ1NzQyODc0MTQAAacqa36LGn4cfxAeivwj8s7DSdQnEOfzaTbxvCxzg_ibGcoqLr3glkLMIDLMxg_aem_FOsbUnlf-DudJ2swhXLd1g', '_blank', 'noopener,noreferrer'); return; }
       if (cat.name === 'glove')  { document.getElementById('gloveModal').classList.add('active'); renderGlobe(); return; }
       if (cat.name === 'tattoo') { document.getElementById('tattooModal').classList.add('active'); return; }
       if (cat.name === 'headset') { playTrack(parseInt(el.dataset.trackIdx, 10), el); return; }
