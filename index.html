@@ -36,6 +36,27 @@
     .icon.headset-icon.playing::after { opacity: 1; color: #111; font-weight: 700; }
     .icon.locked { filter: blur(3px) grayscale(0.6); cursor: not-allowed; }
     .icon.locked:hover { transform: translate(-50%, -50%) scale(1) !important; filter: blur(2px) grayscale(0.4); opacity: 0.6 !important; }
+    .icon.video-icon { width: 14vw; min-width: 140px; max-width: 210px; }
+    /* ====================== Fullscreen Video Player ====================== */
+    .video-player-overlay {
+      position: fixed; inset: 0; background: #000; z-index: 300;
+      display: none; align-items: center; justify-content: center;
+      opacity: 0; filter: blur(24px);
+      transition: opacity 0.55s ease, filter 0.55s ease;
+    }
+    .video-player-overlay.active { display: flex; }
+    .video-player-overlay.active.visible { opacity: 1; filter: blur(0px); }
+    .video-player { width: 100%; height: 100%; object-fit: contain; background: #000; transform: scale(1.04); transition: transform 0.55s ease; }
+    .video-player-overlay.active.visible .video-player { transform: scale(1); }
+    .video-close { position: absolute; top: 20px; right: 20px; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.4); color: #fff; font-size: 20px; line-height: 1; cursor: pointer; z-index: 301; display: flex; align-items: center; justify-content: center; transition: background 0.2s, border-color 0.2s; }
+    .video-close:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.6); }
+    .video-zoom-hint { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.55); font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; z-index: 301; pointer-events: none; opacity: 0; transition: opacity 0.6s ease 0.3s; }
+    .video-player-overlay.active.visible .video-zoom-hint { opacity: 1; }
+    @media (max-width: 600px) {
+      .video-close { top: 14px; right: 14px; width: 38px; height: 38px; font-size: 18px; }
+      .video-zoom-hint { bottom: 18px; font-size: 9px; }
+    }
+
     .modal-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.active { display: flex; }
     .modal-content { background: #fff; padding: 50px 40px; border: 1px solid #f0f0f0; width: 100%; max-width: 420px; text-align: center; animation: modalIn 0.4s ease-out; max-height: 90vh; overflow-y: auto; }
@@ -108,6 +129,7 @@
       .logo-img { width: 100px; min-width: 100px; max-width: 100px; }
       .blueprint-wrapper { width: 100vw; height: 100vh; }
       .icon { width: 11vw; min-width: 42px; max-width: 56px; }
+      .icon.video-icon { width: 28vw; min-width: 105px; max-width: 140px; }
       body.state1 .icon.tier1, body.state2 .icon.tier1, body.state2 .icon.tier2 { opacity: 0.7; }
       .modal-content { padding: 36px 24px; }
       .globe-svg { height: 280px; }
@@ -132,6 +154,12 @@
     </div>
   </div>
 
+  <div class="video-player-overlay" id="videoPlayerOverlay">
+    <video id="skmVideoPlayer" class="video-player" playsinline controls></video>
+    <button class="video-close" id="videoPlayerClose" aria-label="close">×</button>
+    <div class="video-zoom-hint">scroll / pinch out to close</div>
+  </div>
+
   <div class="modal-overlay" id="gloveModal">
     <div class="modal-content globe-container">
       <div class="sys-line">
@@ -146,22 +174,6 @@
       </div>
       <button class="sys-action verify-only" id="gloveVerify">REQUEST ACCESS</button>
       <span class="modal-close" id="gloveClose">close</span>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="tattooModal">
-    <div class="modal-content">
-      <div class="sys-line">
-        <span class="sys-id">MARKED</span>
-        <span class="sys-tag">new mark</span>
-      </div>
-      <input type="text" id="tatName" placeholder="name" />
-      <input type="email" id="tatEmail" placeholder="email" />
-      <input type="text" id="tatLoc" placeholder="city" />
-      <textarea id="tatDesc" placeholder="idea / size / placement"></textarea>
-      <button class="sys-action" id="tatSubmit">SEND</button>
-      <div class="form-status" id="tatStatus"></div>
-      <span class="modal-close" id="tattooClose">close</span>
     </div>
   </div>
 
@@ -243,13 +255,13 @@
     const categories = IS_MOBILE ? [
       { name: 'glove',     img: 'assets/glove.png',     count: 10, region: { xMin: 0.02, xMax: 0.32, yMin: 0.30, yMax: 0.70 }, color: '#555' },
       { name: 'accessory', img: 'assets/accessory.png', count: 10, region: { xMin: 0.68, xMax: 0.98, yMin: 0.30, yMax: 0.70 }, color: '#6fb5ff' },
-      { name: 'tattoo',    img: 'assets/tattoo.png',    count: 9,  region: { xMin: 0.20, xMax: 0.80, yMin: 0.72, yMax: 0.95 }, color: '#ffd54a' },
-      { name: 'headset',   img: 'assets/headset.png',   count: TRACKS.length, region: { xMin: 0.20, xMax: 0.80, yMin: 0.05, yMax: 0.28 }, color: '#6fd86f' }
+      { name: 'headset',   img: 'assets/headset.png',   count: TRACKS.length, region: { xMin: 0.20, xMax: 0.80, yMin: 0.05, yMax: 0.28 }, color: '#6fd86f' },
+      { name: 'video',     img: 'assets/video-icon.png', count: 1, region: { xMin: 0.50, xMax: 0.50, yMin: 0.90, yMax: 0.90 }, color: '#ff5a5a' }
     ] : [
       { name: 'glove',     img: 'assets/glove.png',     count: 33, region: { xMin: 0.05, xMax: 0.40, yMin: 0.25, yMax: 0.80 }, color: '#555' },
       { name: 'accessory', img: 'assets/accessory.png', count: 33, region: { xMin: 0.60, xMax: 0.95, yMin: 0.25, yMax: 0.80 }, color: '#6fb5ff' },
-      { name: 'tattoo',    img: 'assets/tattoo.png',    count: 31, region: { xMin: 0.25, xMax: 0.75, yMin: 0.60, yMax: 0.95 }, color: '#ffd54a' },
-      { name: 'headset',   img: 'assets/headset.png',   count: TRACKS.length, region: { xMin: 0.25, xMax: 0.75, yMin: 0.05, yMax: 0.35 }, color: '#6fd86f' }
+      { name: 'headset',   img: 'assets/headset.png',   count: TRACKS.length, region: { xMin: 0.25, xMax: 0.75, yMin: 0.05, yMax: 0.35 }, color: '#6fd86f' },
+      { name: 'video',     img: 'assets/video-icon.png', count: 1, region: { xMin: 0.50, xMax: 0.50, yMin: 0.88, yMax: 0.88 }, color: '#ff5a5a' }
     ];
 
     function buildIcons() {
@@ -285,6 +297,9 @@
             div.dataset.trackNum = String(headsetTrackIdx + 1).padStart(2, '0');
             div.dataset.trackIdx = headsetTrackIdx;
             headsetTrackIdx++;
+          }
+          if (cat.name === 'video') {
+            div.classList.add('video-icon');
           }
           div.style.left = (xn * 100) + '%';
           div.style.top = (yn * 100) + '%';
@@ -350,9 +365,82 @@
     function handleIconClick(cat, el) {
       if (cat.name === 'accessory') { window.open('https://4thdeath.com/products/dgtg-01?fbclid=PAVERFWASNBC9leHRuA2FlbQIxMABzcnRjBmFwcF9pZA8xMjQwMjQ1NzQyODc0MTQAAacqa36LGn4cfxAeivwj8s7DSdQnEOfzaTbxvCxzg_ibGcoqLr3glkLMIDLMxg_aem_FOsbUnlf-DudJ2swhXLd1g', '_blank', 'noopener,noreferrer'); return; }
       if (cat.name === 'glove')  { document.getElementById('gloveModal').classList.add('active'); renderGlobe(); return; }
-      if (cat.name === 'tattoo') { document.getElementById('tattooModal').classList.add('active'); return; }
       if (cat.name === 'headset') { playTrack(parseInt(el.dataset.trackIdx, 10), el); return; }
+      if (cat.name === 'video') { openVideoPlayer(); return; }
     }
+
+    // ===== Fullscreen video player =====
+    const VIDEO_SRC = 'assets/video/showcase.mp4';
+    const videoOverlay = document.getElementById('videoPlayerOverlay');
+    const videoEl = document.getElementById('skmVideoPlayer');
+
+    function openVideoPlayer() {
+      videoEl.src = VIDEO_SRC;
+      videoOverlay.classList.add('active');
+      videoEl.play().catch(() => {});
+      if (videoOverlay.requestFullscreen) videoOverlay.requestFullscreen().catch(() => {});
+      // 다음 프레임에 visible 추가 → blur/opacity 트랜지션이 걸리도록
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        videoOverlay.classList.add('visible');
+      }));
+    }
+
+    function closeVideoPlayer() {
+      if (!videoOverlay.classList.contains('active')) return;
+      if (!videoOverlay.classList.contains('visible')) return; // 이미 닫히는 중
+      videoOverlay.classList.remove('visible'); // 블러+페이드 아웃 시작
+      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+      setTimeout(() => {
+        videoEl.pause();
+        videoEl.removeAttribute('src');
+        videoEl.load();
+        videoOverlay.classList.remove('active');
+      }, 560);
+    }
+
+    document.getElementById('videoPlayerClose').addEventListener('click', closeVideoPlayer);
+    videoOverlay.addEventListener('click', (e) => {
+      if (e.target.id === 'videoPlayerOverlay') closeVideoPlayer();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVideoPlayer(); });
+
+    // 줌아웃 제스처(휠 스크롤업 / 핀치 아웃)로 닫기 — 전역 zoom 핸들러로 이벤트가 새지 않도록 stopPropagation
+    let videoWheelLock = false;
+    videoOverlay.addEventListener('wheel', (e) => {
+      if (!videoOverlay.classList.contains('active')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (videoWheelLock) return;
+      if (e.deltaY < -12) { // 스크롤 업 = 줌아웃 제스처
+        videoWheelLock = true;
+        closeVideoPlayer();
+        setTimeout(() => { videoWheelLock = false; }, 700);
+      }
+    }, { passive: false });
+
+    let videoTouchStartDist = 0;
+    videoOverlay.addEventListener('touchstart', (e) => {
+      e.stopPropagation();
+      if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        videoTouchStartDist = Math.hypot(dx, dy);
+      }
+    }, { passive: true });
+    videoOverlay.addEventListener('touchmove', (e) => {
+      e.stopPropagation();
+      if (e.touches.length === 2 && videoTouchStartDist > 0) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const newDist = Math.hypot(dx, dy);
+        const delta = newDist - videoTouchStartDist;
+        if (delta < -50) { // 핀치 인 = 줌아웃 제스처
+          closeVideoPlayer();
+          videoTouchStartDist = 0;
+        }
+      }
+    }, { passive: true });
+    videoOverlay.addEventListener('touchend', (e) => { e.stopPropagation(); }, { passive: true });
 
     // ===== Music + Web Audio (EQ filter for zoom, headset-icon toggle) =====
     const trackAudio = document.getElementById('trackAudio');
@@ -549,34 +637,8 @@
       document.getElementById('gloveModal').classList.remove('active');
       document.getElementById('authModal').classList.add('active');
     });
-    document.getElementById('tattooClose').addEventListener('click', () => document.getElementById('tattooModal').classList.remove('active'));
     document.getElementById('accClose').addEventListener('click', () => document.getElementById('accModal').classList.remove('active'));
     document.getElementById('authClose').addEventListener('click', () => document.getElementById('authModal').classList.remove('active'));
-
-    document.getElementById('tatSubmit').addEventListener('click', async () => {
-      const name = document.getElementById('tatName').value.trim();
-      const email = document.getElementById('tatEmail').value.trim();
-      const loc = document.getElementById('tatLoc').value.trim();
-      const desc = document.getElementById('tatDesc').value.trim();
-      const status = document.getElementById('tatStatus');
-      const btn = document.getElementById('tatSubmit');
-      if (!name || !email || !desc) { status.textContent = 'Name, email, and description required.'; status.className = 'form-status error'; return; }
-      btn.disabled = true; status.textContent = 'Sending...'; status.className = 'form-status';
-      try {
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-          name, email,
-          tattoo_url: 'https://placehold.co/400x200?text=Tattoo+Inquiry',
-          vision_analysis: `TATTOO INQUIRY\n\nLocation: ${loc || '(any)'}\n\nIdea:\n${desc}`
-        });
-        status.textContent = 'Inquiry sent. Reply within a few days.';
-        status.className = 'form-status success';
-        ['tatName','tatEmail','tatLoc','tatDesc'].forEach(id => document.getElementById(id).value = '');
-      } catch (e) {
-        console.error(e);
-        status.textContent = 'Failed. DM @jinjinneedle instead.';
-        status.className = 'form-status error';
-      } finally { btn.disabled = false; }
-    });
 
     document.getElementById('doRequest').addEventListener('click', async () => {
       const name = document.getElementById('reqName').value.trim();
