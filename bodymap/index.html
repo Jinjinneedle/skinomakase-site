@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Skinomakase Body Map</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<!-- 배경음악 — bodymap 폴더에 bgm.mp3 가 있으면 자동 재생 (없으면 조용히 무시) -->
+<audio id="bgm" src="bgm.mp3" loop preload="auto"></audio>
+
+<!-- 언어 -->
+<div class="langwrap">
+  <button class="globe" id="globe" aria-haspopup="true" aria-expanded="false">
+    <svg viewBox="0 0 22 22" aria-hidden="true">
+      <circle cx="11" cy="11" r="8.2"/>
+      <ellipse cx="11" cy="11" rx="3.5" ry="8.2"/>
+      <path d="M3.2 8.4h15.6M3.2 13.6h15.6"/>
+    </svg>
+    <em id="globe-code">KO</em>
+  </button>
+  <div class="langmenu" id="langmenu" hidden></div>
+</div>
+
+<!-- 도면 표제란 -->
+<div class="titleblock" id="titleblock">
+  <span>BODY MAP</span><span>SHEET 01</span><span>N=<b id="sheet-n">00</b></span>
+</div>
+
+<p class="lede" id="lede" data-i18n="lede">도안을 끌어다 몸 위에 놓으세요</p>
+
+<!-- 입장 안내 -->
+<div class="intro" id="intro">
+  <div class="intro-body">
+    <div class="intro-eyebrow">SKINOMAKASE — PRIVATE SESSION</div>
+    <p data-i18n="in_hello">환영합니다. 스키노마카세 프라이빗 세션에 참가해 주셔서 감사합니다.</p>
+    <p data-i18n="in_loc">현재 작업 위치는 서울입니다. 다른 도시 방문은 추후 공지합니다.</p>
+    <p data-i18n="in_how">도안을 끌어 중앙의 몸 위에 배치하고, 완성되면 이메일로 보내 주세요.</p>
+    <p data-i18n="in_vision">당신의 직관과 비전은 정확합니다. 인터넷 세상을 여행하다 이 페이지를 찾아내고 SKM과의 세션을 떠올린 순간부터, 머릿속의 이미지는 이미 존재합니다. 그 비전을 현실로 가져오는 과정을 돕겠습니다.</p>
+    <p class="intro-rule" data-i18n="in_rule">모든 도안은 반복 사용될 수 있으나, 단독으로는 사용되지 않습니다.</p>
+    <button class="intro-start" id="intro-start" data-i18n="in_start">시작하기</button>
+  </div>
+</div>
+
+<nav class="zones" id="zones" hidden></nav>
+
+<div class="bar" id="bar" hidden>
+  <button class="t on" data-tool="select" data-i18n="tool_select">이동</button>
+  <button class="t" data-tool="erase" data-i18n="tool_erase">지우개</button>
+  <button class="t" data-tool="restore" data-i18n="tool_restore">복구</button>
+  <span class="sep"></span>
+  <label class="sl"><i data-i18n="lbl_scale">크기</i><input type="range" id="p-scale" min="4" max="260" step="1"></label>
+  <label class="sl"><i data-i18n="lbl_rot">회전</i><input type="range" id="p-rot" min="-180" max="180" step="1"></label>
+  <label class="sl" id="brushwrap" hidden><i data-i18n="lbl_brush">굵기</i><input type="range" id="brush" min="6" max="200" step="2" value="52"><b id="brush-v">52</b></label>
+  <span class="sep"></span>
+  <div class="sws" id="sws"></div>
+  <span class="sep"></span>
+  <button class="t icon" id="b-undo" data-i18n-title="btn_undo" title="되돌리기">↶</button>
+  <button class="t icon" id="b-redo" data-i18n-title="btn_redo" title="다시">↷</button>
+  <button class="t" id="p-flip" data-i18n="btn_flip">뒤집기</button>
+  <button class="t" id="p-merge" data-i18n="btn_merge" hidden>합치기</button>
+  <button class="t warn" id="p-del" data-i18n="btn_del">삭제</button>
+</div>
+
+<p class="toolhint" id="toolhint" hidden></p>
+
+<button class="next" id="next" hidden><span data-i18n="btn_next">다음</span> →</button>
+<button class="back-spread" id="back-spread" hidden>← <span data-i18n="btn_back">도안 더 고르기</span></button>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-card">
+    <button class="x" id="sheet-close" data-i18n-aria="close" aria-label="닫기">×</button>
+    <img id="sheet-preview" alt="">
+    <div class="sheet-form">
+      <h1 data-i18n="form_title">문의 남기기</h1>
+      <input id="f-name" data-i18n-ph="ph_name" placeholder="이름">
+      <input id="f-contact" data-i18n-ph="ph_contact" placeholder="연락처 · 인스타">
+      <input id="f-placement" data-i18n-ph="ph_place" placeholder="시술 부위">
+      <input id="f-size" data-i18n-ph="ph_size" placeholder="희망 크기 (cm)">
+      <textarea id="f-note" rows="3" data-i18n-ph="ph_note" placeholder="하고 싶은 얘기"></textarea>
+      <button class="send" id="send" data-i18n="btn_send">보내기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 도안 미리보기 — 배경 블러, 그림, 버튼 하나 -->
+<div class="pv" id="pv" hidden>
+  <img id="pv-img" alt="" draggable="false">
+  <button class="pv-add" id="pv-add">USE</button>
+</div>
+
+<div class="brushring" id="brushring" hidden><b id="brushring-v"></b></div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="config.js"></script>
+<script>if (window.emailjs && window.SKM_CONFIG.EMAILJS) emailjs.init({ publicKey: window.SKM_CONFIG.EMAILJS.publicKey });</script>
+<script src="i18n.js"></script>
+<script src="body.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
