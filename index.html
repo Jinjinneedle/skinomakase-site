@@ -491,16 +491,27 @@
     const bmOverlay = document.getElementById('bmOverlay');
     const bmFrame = document.getElementById('bmFrame');
 
+    function bmAudio(cmd) {
+      // 같은 도메인이라 iframe 안의 배경음악을 직접 제어할 수 있다
+      try {
+        const a = bmFrame.contentWindow && bmFrame.contentWindow.document.getElementById('bgm');
+        if (!a) return;
+        if (cmd === 'pause') a.pause();
+        else if (cmd === 'play' && a.getAttribute('src')) a.play().catch(() => {});
+      } catch (_) {}
+    }
     function openBodyMap() {
       if (window.va) va('event', { name: 'bodymap_open' });
       if (!bmFrame.src) bmFrame.src = 'bodymap/index.html';
       bmOverlay.classList.add('active');
       document.body.classList.add('bm-open');
+      bmAudio('play');
       requestAnimationFrame(() => requestAnimationFrame(() => bmOverlay.classList.add('visible')));
     }
     function closeBodyMap() {
       if (!bmOverlay.classList.contains('active')) return;
       bmOverlay.classList.remove('visible');
+      bmAudio('pause');                       // 나가면 음악 끔
       setTimeout(() => {
         bmOverlay.classList.remove('active');
         document.body.classList.remove('bm-open');
