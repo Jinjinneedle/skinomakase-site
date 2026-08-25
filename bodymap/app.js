@@ -1002,6 +1002,22 @@ $('#send').onclick = async () => {
     const data = payload();
     const url = CFG.WEBHOOK_URL;
     if (!url && CFG.EMAILJS && window.emailjs) {
+      // Cloudinary 가 설정돼 있으면 배치 이미지를 올려 메일에 바로 보이게 한다
+      let imageUrl = null;
+      const cl = CFG.CLOUDINARY;
+      if (cl && cl.cloudName && cl.uploadPreset) {
+        try {
+          const blob = await new Promise(r => out.toBlob(r, 'image/png'));
+          const fd = new FormData();
+          fd.append('file', blob);
+          fd.append('upload_preset', cl.uploadPreset);
+          const res2 = await fetch(
+            `https://api.cloudinary.com/v1_1/${cl.cloudName}/image/upload`,
+            { method: 'POST', body: fd });
+          if (res2.ok) imageUrl = (await res2.json()).secure_url;
+        } catch (_) { /* 업로드 실패해도 메일은 보낸다 */ }
+      }
+
       const g = data.graphics.map((x, i) =>
         `${i + 1}. ${x.graphicId}  pos(${x.x},${x.y})  size(${x.width}x${x.height})` +
         `  rot ${x.rotation}deg${x.flipped ? ' flipped' : ''}` +
@@ -1009,12 +1025,13 @@ $('#send').onclick = async () => {
       const c2 = data.customer;
       await emailjs.send(CFG.EMAILJS.serviceId, CFG.EMAILJS.templateId, {
         name: c2.name, email: c2.contact,
-        tattoo_url: 'https://placehold.co/400x300?text=Body+Map+design+(image+sent+separately)',
+        tattoo_url: imageUrl || 'https://placehold.co/400x300?text=Body+Map+design+(image+sent+separately)',
         vision_analysis:
           `BODY MAP PLACEMENT\n\nContact: ${c2.contact}\nPlacement: ${c2.placement || '-'}\n` +
           `Size: ${c2.size || '-'}\nNote: ${c2.note || '-'}\n\n` +
           `Canvas ${data.canvas.width}x${data.canvas.height}\n${g}\n\n` +
-          `The customer also has the composed PNG — ask them to reply with it.`,
+          (imageUrl ? `Design image: ${imageUrl}` :
+            `The customer also has the composed PNG — ask them to reply with it.`),
       });
       if (!CFG.NO_DOWNLOAD) {
         const a = document.createElement('a');

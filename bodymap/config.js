@@ -8,6 +8,13 @@ window.SKM_CONFIG = {
   WEBHOOK_HEADERS: {},
   WEBHOOK_MODE: "json",     // "json" | "formdata"
   EXPORT_SCALE: 2,
+  // 이미지 호스팅 (선택) — 채우면 배치 이미지가 이메일 본문에 바로 보입니다.
+  // cloudinary.com 무료 계정 → Cloud name + Unsigned upload preset
+  CLOUDINARY: {
+    cloudName: "o8ytkoqj",
+    uploadPreset: "skm-bodymap",
+  },
+
   EMAILJS: {
     publicKey:  'xEz9t78eBnnGH07jx',
     serviceId:  'service_djzfort',
