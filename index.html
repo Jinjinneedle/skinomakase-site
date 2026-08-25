@@ -37,6 +37,36 @@
     .icon.locked { filter: blur(3px) grayscale(0.6); cursor: not-allowed; }
     .icon.locked:hover { transform: translate(-50%, -50%) scale(1) !important; filter: blur(2px) grayscale(0.4); opacity: 0.6 !important; }
     .icon.video-icon { width: 14vw; min-width: 140px; max-width: 210px; }
+    /* ====================== Body Map ====================== */
+    .icon.bodymap-icon { width: 13vw; min-width: 124px; max-width: 196px; z-index: 60; }
+    .icon.bodymap-icon .bm-mini { width: 100%; height: 100%; display: block; pointer-events: none; }
+    .icon.bodymap-icon::after {
+      content: 'BODY MAP'; position: absolute; bottom: -18px; left: 50%;
+      transform: translateX(-50%); font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
+      font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+      color: #bbb; white-space: nowrap; transition: color 0.3s; pointer-events: none;
+    }
+    .icon.bodymap-icon:hover::after { color: #111; }
+    body.state1 .icon.bodymap-icon, body.state2 .icon.bodymap-icon { opacity: 1; }
+
+    .bm-overlay {
+      position: fixed; inset: 0; background: #fff; z-index: 300;
+      display: none; opacity: 0; filter: blur(24px);
+      transition: opacity 0.55s ease, filter 0.55s ease;
+    }
+    .bm-overlay.active { display: block; }
+    .bm-overlay.active.visible { opacity: 1; filter: blur(0px); }
+    .bm-overlay iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .bm-close {
+      position: absolute; top: 18px; left: 18px; z-index: 301;
+      display: flex; align-items: center; gap: 7px;
+      padding: 10px 16px; border-radius: 999px; cursor: pointer;
+      border: 0; background: rgba(255,255,255,0.94); color: #999;
+      font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      box-shadow: 0 0 0 1px rgba(17,17,17,0.09), 0 10px 24px -18px rgba(17,17,17,0.5);
+      transition: color 0.25s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .bm-close:hover { color: #111; transform: translateX(-3px); }
     /* ====================== Fullscreen Video Player ====================== */
     .video-player-overlay {
       position: fixed; inset: 0; background: #000; z-index: 300;
@@ -130,11 +160,17 @@
       .blueprint-wrapper { width: 100vw; height: 100vh; }
       .icon { width: 11vw; min-width: 42px; max-width: 56px; }
       .icon.video-icon { width: 28vw; min-width: 105px; max-width: 140px; }
+      .icon.bodymap-icon { width: 26vw; min-width: 98px; max-width: 132px; }
+      .icon.bodymap-icon::after { font-size: 8px; bottom: -15px; letter-spacing: 2px; }
+      .bm-close { top: 12px; left: 12px; padding: 9px 13px; font-size: 9px; }
       body.state1 .icon.tier1, body.state2 .icon.tier1, body.state2 .icon.tier2 { opacity: 0.7; }
       .modal-content { padding: 36px 24px; }
       .globe-svg { height: 280px; }
     }
   </style>
+  <!-- Vercel Web Analytics -->
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body class="state0">
   <audio id="sndIntro" src="assets/skm-intro.wav" preload="auto"></audio>
@@ -158,6 +194,12 @@
     <video id="skmVideoPlayer" class="video-player" playsinline controls></video>
     <button class="video-close" id="videoPlayerClose" aria-label="close">×</button>
     <div class="video-zoom-hint">scroll / pinch out to close</div>
+  </div>
+
+  <!-- ====================== Body Map ====================== -->
+  <div class="bm-overlay" id="bmOverlay">
+    <button class="bm-close" id="bmClose" aria-label="close">← close</button>
+    <iframe id="bmFrame" title="Body Map" allow="clipboard-write; autoplay"></iframe>
   </div>
 
   <div class="modal-overlay" id="gloveModal">
@@ -256,12 +298,14 @@
       { name: 'glove',     img: 'assets/glove.png',     count: 10, region: { xMin: 0.02, xMax: 0.32, yMin: 0.30, yMax: 0.70 }, color: '#555' },
       { name: 'accessory', img: 'assets/accessory.png', count: 10, region: { xMin: 0.68, xMax: 0.98, yMin: 0.30, yMax: 0.70 }, color: '#6fb5ff' },
       { name: 'headset',   img: 'assets/headset.png',   count: TRACKS.length, region: { xMin: 0.20, xMax: 0.80, yMin: 0.05, yMax: 0.28 }, color: '#6fd86f' },
-      { name: 'video',     img: 'assets/video-icon.png', count: 1, region: { xMin: 0.50, xMax: 0.50, yMin: 0.90, yMax: 0.90 }, color: '#ff5a5a' }
+      { name: 'video',     img: 'assets/video-icon.png', count: 1, region: { xMin: 0.19, xMax: 0.19, yMin: 0.905, yMax: 0.905 }, color: '#ff5a5a' },
+      { name: 'bodymap',   img: 'assets/bodymap.png',    count: 1, region: { xMin: 0.50, xMax: 0.50, yMin: 0.895, yMax: 0.895 }, color: '#111' }
     ] : [
       { name: 'glove',     img: 'assets/glove.png',     count: 33, region: { xMin: 0.05, xMax: 0.40, yMin: 0.25, yMax: 0.80 }, color: '#555' },
       { name: 'accessory', img: 'assets/accessory.png', count: 33, region: { xMin: 0.60, xMax: 0.95, yMin: 0.25, yMax: 0.80 }, color: '#6fb5ff' },
       { name: 'headset',   img: 'assets/headset.png',   count: TRACKS.length, region: { xMin: 0.25, xMax: 0.75, yMin: 0.05, yMax: 0.35 }, color: '#6fd86f' },
-      { name: 'video',     img: 'assets/video-icon.png', count: 1, region: { xMin: 0.50, xMax: 0.50, yMin: 0.88, yMax: 0.88 }, color: '#ff5a5a' }
+      { name: 'video',     img: 'assets/video-icon.png', count: 1, region: { xMin: 0.325, xMax: 0.325, yMin: 0.885, yMax: 0.885 }, color: '#ff5a5a' },
+      { name: 'bodymap',   img: 'assets/bodymap.png',    count: 1, region: { xMin: 0.50, xMax: 0.50, yMin: 0.875, yMax: 0.875 }, color: '#111' }
     ];
 
     function buildIcons() {
@@ -301,6 +345,9 @@
           if (cat.name === 'video') {
             div.classList.add('video-icon');
           }
+          if (cat.name === 'bodymap') {
+            div.classList.add('bodymap-icon');
+          }
           div.style.left = (xn * 100) + '%';
           div.style.top = (yn * 100) + '%';
           const delay = (Math.random() * 0.5).toFixed(2);
@@ -308,9 +355,16 @@
           div.dataset.category = cat.name;
           div.addEventListener('click', e => { e.stopPropagation(); handleIconClick(cat, div); });
 
-          const img = document.createElement('img');
-          img.src = cat.img; img.alt = cat.name;
-          div.appendChild(img);
+          if (cat.name === 'bodymap') {
+            const cv = document.createElement('canvas');
+            cv.className = 'bm-mini';
+            div.appendChild(cv);
+            initBodymapMini(cv);
+          } else {
+            const img = document.createElement('img');
+            img.src = cat.img; img.alt = cat.name;
+            div.appendChild(img);
+          }
           itemsLayer.appendChild(div);
           icons.push(div);
 
@@ -367,7 +421,98 @@
       if (cat.name === 'glove')  { document.getElementById('gloveModal').classList.add('active'); renderGlobe(); return; }
       if (cat.name === 'headset') { playTrack(parseInt(el.dataset.trackIdx, 10), el); return; }
       if (cat.name === 'video') { openVideoPlayer(); return; }
+      if (cat.name === 'bodymap') { openBodyMap(); return; }
     }
+
+    // ===== Body Map mini icon — 도는 링 미리보기 =====
+    const BM_BODY_D = new Path2D("M501.4 0.0C488.1 -0.2 473.7 1.9 461.2 6.4C448.6 10.9 436.4 18.2 426.2 26.8C416.1 35.5 407.0 46.8 400.4 58.4C393.8 70.0 390.1 83.5 386.6 96.5C383.2 109.5 382.4 123.6 379.7 136.4C377.0 149.2 371.3 160.8 370.3 173.1C369.3 185.3 369.9 198.3 373.6 210.0C377.3 221.8 387.4 231.7 392.3 243.5C397.3 255.2 401.9 267.4 403.2 280.5C404.5 293.6 404.2 309.7 400.1 321.9C396.1 334.1 388.2 344.9 378.7 353.6C369.3 362.2 355.7 368.0 343.6 373.8C331.4 379.6 318.6 384.0 305.8 388.3C293.0 392.6 279.5 395.1 266.8 399.6C254.0 404.2 241.3 408.8 229.6 415.6C217.9 422.4 206.5 431.0 196.8 440.5C187.1 450.0 178.2 461.1 171.2 472.6C164.2 484.2 158.9 496.7 154.9 509.6C150.9 522.6 148.6 536.4 147.4 550.2C146.1 564.0 147.2 578.5 147.4 592.6C147.5 606.6 148.9 620.6 148.3 634.5C147.7 648.4 145.6 662.0 143.9 675.8C142.2 689.6 139.8 703.3 137.9 717.1C136.0 730.9 134.7 745.0 132.4 758.6C130.0 772.2 127.4 785.7 123.8 798.8C120.1 811.8 114.9 824.3 110.4 837.0C105.9 849.7 100.6 862.1 96.7 875.1C92.9 888.1 89.6 901.3 87.3 915.0C85.1 928.6 84.1 942.8 83.1 957.0C82.0 971.2 82.0 985.7 81.1 1000.0C80.3 1014.2 79.6 1028.5 78.0 1042.4C76.5 1056.4 74.6 1070.2 72.1 1083.8C69.7 1097.3 68.6 1111.7 63.4 1123.6C58.3 1135.4 49.5 1144.7 41.3 1154.9C33.2 1165.1 21.3 1173.4 14.6 1184.5C7.8 1195.7 1.7 1210.6 0.6 1222.0C-0.5 1233.4 4.8 1243.9 8.1 1253.0C11.4 1262.0 19.6 1266.7 20.5 1276.4C21.4 1286.2 16.2 1299.1 13.4 1311.4C10.6 1323.8 3.5 1339.9 3.7 1350.4C3.9 1361.0 8.9 1373.3 14.7 1374.8C20.4 1376.2 32.2 1364.5 38.2 1359.1C44.2 1353.7 48.5 1340.9 50.9 1342.5C53.3 1344.1 50.5 1359.3 52.5 1368.9C54.5 1378.5 57.7 1396.6 62.9 1400.2C68.1 1403.8 78.6 1396.0 83.7 1390.6C88.9 1385.3 90.7 1368.9 93.8 1368.1C96.9 1367.3 97.8 1381.8 102.5 1385.9C107.3 1390.0 116.7 1397.1 122.2 1392.8C127.8 1388.4 132.3 1368.5 136.0 1359.8C139.6 1351.1 139.4 1342.5 144.0 1340.5C148.5 1338.4 157.9 1349.9 163.3 1347.5C168.7 1345.1 174.1 1336.6 176.2 1326.0C178.4 1315.4 175.9 1298.2 176.0 1284.0C176.2 1269.9 177.3 1255.3 177.2 1241.1C177.1 1226.9 175.5 1212.5 175.6 1198.7C175.7 1184.9 175.6 1171.5 177.8 1158.3C179.9 1145.1 184.4 1132.2 188.5 1119.4C192.6 1106.5 197.4 1093.9 202.2 1081.3C207.1 1068.7 212.4 1056.3 217.5 1043.9C222.6 1031.4 228.2 1019.1 233.0 1006.5C237.8 993.9 242.6 981.3 246.4 968.3C250.2 955.3 253.3 942.0 255.9 928.4C258.4 914.9 259.5 900.8 261.5 887.0C263.5 873.2 265.1 858.1 267.7 845.8C270.3 833.6 273.7 817.5 277.1 813.5C280.6 809.5 285.2 813.9 288.7 821.8C292.2 829.7 296.3 847.4 298.2 860.8C300.1 874.2 300.6 888.4 300.2 902.3C299.9 916.2 297.0 930.1 295.9 944.1C294.8 958.1 294.4 972.3 293.5 986.3C292.5 1000.4 291.6 1014.2 290.2 1028.1C288.9 1042.0 286.7 1055.7 285.1 1069.7C283.6 1083.6 282.8 1097.9 281.1 1111.8C279.5 1125.7 277.3 1139.4 275.3 1153.1C273.3 1166.9 271.0 1180.5 269.0 1194.3C267.1 1208.1 265.1 1221.8 263.3 1235.7C261.6 1249.6 260.0 1263.5 258.7 1277.6C257.4 1291.6 256.3 1305.7 255.6 1320.0C254.9 1334.3 254.5 1348.9 254.6 1363.2C254.6 1377.6 255.2 1392.1 256.1 1406.3C256.9 1420.5 258.2 1434.6 259.7 1448.6C261.3 1462.5 263.3 1476.3 265.5 1490.0C267.7 1503.6 270.1 1517.2 272.9 1530.7C275.7 1544.1 278.9 1557.3 282.2 1570.6C285.5 1583.8 289.5 1596.7 292.7 1610.0C295.9 1623.3 299.1 1636.5 301.3 1650.2C303.5 1663.9 304.8 1677.9 305.9 1692.0C307.1 1706.1 308.0 1720.5 308.3 1734.8C308.7 1749.1 308.8 1763.7 308.1 1777.9C307.4 1792.0 305.7 1806.1 304.1 1820.0C302.5 1833.9 299.8 1847.4 298.4 1861.4C297.0 1875.4 296.0 1889.8 295.9 1904.0C295.8 1918.3 296.4 1932.8 297.6 1946.9C298.8 1961.0 300.9 1974.7 303.1 1988.4C305.3 2002.1 308.0 2015.5 310.8 2029.0C313.6 2042.4 316.8 2055.7 319.8 2069.0C322.8 2082.3 325.8 2095.7 328.8 2109.0C331.9 2122.4 335.2 2135.6 338.0 2149.0C340.8 2162.4 343.6 2175.9 345.6 2189.6C347.6 2203.4 349.1 2217.4 350.1 2231.5C351.1 2245.6 351.4 2260.0 351.5 2274.2C351.6 2288.4 351.5 2302.8 350.5 2316.8C349.5 2330.8 348.6 2345.0 345.5 2358.3C342.4 2371.5 337.2 2384.0 331.7 2396.3C326.2 2408.6 317.3 2419.9 312.6 2432.1C307.8 2444.4 301.8 2458.9 303.4 2469.7C304.9 2480.6 312.5 2491.1 322.1 2497.3C331.6 2503.4 347.5 2505.2 360.4 2506.7C373.3 2508.2 387.7 2509.5 399.5 2506.1C411.3 2502.7 422.9 2495.7 431.2 2486.5C439.5 2477.3 444.4 2463.3 449.5 2451.0C454.5 2438.7 456.5 2424.9 461.3 2412.7C466.2 2400.4 475.3 2389.5 478.7 2377.4C482.0 2365.3 482.4 2353.2 481.5 2340.3C480.6 2327.3 475.8 2313.6 473.5 2300.0C471.1 2286.4 469.3 2272.5 467.3 2258.8C465.3 2245.0 462.2 2231.5 461.3 2217.5C460.4 2203.6 461.1 2189.3 461.9 2175.2C462.7 2161.1 464.5 2147.1 466.0 2133.1C467.4 2119.1 468.9 2105.1 470.9 2091.4C472.8 2077.6 475.4 2064.1 477.6 2050.4C479.8 2036.7 482.5 2023.2 483.9 2009.2C485.4 1995.3 486.3 1980.9 486.5 1966.6C486.7 1952.3 486.3 1937.7 485.4 1923.5C484.4 1909.4 482.3 1895.5 480.6 1881.7C478.8 1867.9 475.4 1854.3 474.7 1840.6C474.1 1827.0 474.8 1813.3 476.7 1799.8C478.6 1786.4 483.5 1773.5 486.3 1760.0C489.1 1746.6 491.9 1733.1 493.6 1719.3C495.4 1705.5 496.1 1691.3 496.8 1677.0C497.4 1662.8 497.3 1648.3 497.3 1633.9C497.3 1619.4 497.3 1604.7 496.8 1590.4C496.4 1576.0 495.0 1561.9 494.5 1547.7C494.0 1533.6 493.7 1519.6 494.1 1505.5C494.5 1491.4 496.1 1477.3 496.8 1463.0C497.4 1448.7 497.8 1434.2 498.0 1419.7C498.3 1405.2 498.2 1390.5 498.1 1376.0C498.0 1361.4 497.2 1344.8 497.6 1332.4C497.9 1320.0 499.1 1304.1 500.2 1301.5C501.3 1298.8 503.7 1306.7 504.3 1316.4C504.9 1326.1 504.1 1345.1 504.0 1359.5C503.9 1373.9 503.8 1388.5 503.9 1402.9C504.0 1417.3 504.0 1431.6 504.5 1445.9C504.9 1460.1 506.2 1474.4 506.8 1488.5C507.4 1502.6 508.2 1516.5 508.0 1530.6C507.8 1544.6 506.4 1558.6 505.8 1572.9C505.3 1587.2 504.9 1601.8 504.8 1616.2C504.6 1630.7 504.5 1645.2 504.8 1659.6C505.2 1674.0 505.4 1688.3 506.7 1702.4C507.9 1716.4 509.6 1730.3 512.2 1743.9C514.7 1757.4 519.3 1770.3 521.8 1783.6C524.4 1797.0 527.3 1810.5 527.7 1824.2C528.1 1837.8 525.6 1851.9 524.1 1865.7C522.5 1879.5 519.8 1893.1 518.3 1907.1C516.9 1921.0 515.6 1935.3 515.3 1949.5C514.9 1963.7 515.4 1978.2 516.4 1992.3C517.5 2006.4 519.6 2020.1 521.7 2033.9C523.7 2047.6 526.4 2061.1 528.6 2074.8C530.7 2088.5 532.8 2102.2 534.5 2116.1C536.3 2130.0 537.9 2143.9 539.0 2158.0C540.2 2172.1 541.6 2186.5 541.4 2200.6C541.2 2214.6 539.4 2228.5 537.6 2242.2C535.9 2256.0 533.2 2269.5 530.8 2283.2C528.5 2296.8 525.7 2310.7 523.7 2324.0C521.8 2337.3 517.6 2350.6 519.2 2363.0C520.8 2375.4 528.7 2386.3 533.5 2398.4C538.3 2410.4 543.4 2422.8 548.0 2435.3C552.7 2447.8 554.7 2462.4 561.4 2473.4C568.1 2484.4 577.8 2495.4 588.5 2501.2C599.2 2506.9 612.7 2507.7 625.7 2508.0C638.6 2508.2 654.7 2506.8 666.2 2502.5C677.7 2498.2 690.0 2491.5 694.8 2482.0C699.6 2472.6 697.9 2457.9 695.0 2445.7C692.0 2433.6 682.9 2421.6 677.1 2409.4C671.4 2397.2 664.5 2385.4 660.4 2372.5C656.2 2359.7 654.0 2346.0 652.3 2332.2C650.6 2318.4 650.5 2304.0 650.2 2289.7C649.9 2275.5 650.0 2261.0 650.6 2246.8C651.3 2232.5 652.4 2218.3 654.1 2204.4C655.7 2190.5 658.2 2176.9 660.8 2163.4C663.4 2149.9 666.7 2136.7 669.6 2123.3C672.6 2110.0 675.6 2096.6 678.6 2083.3C681.6 2069.9 684.8 2056.7 687.8 2043.3C690.7 2029.9 693.7 2016.6 696.1 2003.0C698.5 1989.4 700.8 1975.7 702.4 1961.8C704.0 1947.9 705.1 1933.7 705.5 1919.5C706.0 1905.3 705.9 1890.8 704.9 1876.7C704.0 1862.6 701.6 1848.9 699.9 1835.1C698.1 1821.2 695.6 1807.6 694.5 1793.5C693.3 1779.5 693.0 1765.0 693.0 1750.7C692.9 1736.4 693.5 1721.9 694.4 1707.7C695.2 1693.5 696.4 1679.4 698.2 1665.5C700.1 1651.7 702.6 1638.2 705.5 1624.8C708.4 1611.4 712.4 1598.5 715.8 1585.3C719.1 1572.1 722.6 1558.9 725.6 1545.6C728.6 1532.2 731.2 1518.7 733.6 1505.1C736.0 1491.5 738.4 1477.9 740.2 1464.1C742.0 1450.2 743.5 1436.3 744.6 1422.1C745.7 1408.0 746.5 1393.7 746.9 1379.4C747.2 1365.1 747.1 1350.6 746.7 1336.4C746.3 1322.1 745.3 1307.8 744.2 1293.7C743.1 1279.6 741.8 1265.5 740.3 1251.6C738.8 1237.6 736.9 1223.8 735.0 1210.0C733.1 1196.2 730.8 1182.5 728.8 1168.8C726.7 1155.0 724.6 1141.3 722.9 1127.5C721.1 1113.6 719.9 1099.5 718.4 1085.6C716.9 1071.6 715.2 1057.6 713.7 1043.7C712.1 1029.9 710.2 1016.3 709.1 1002.5C708.0 988.6 708.1 974.6 707.1 960.6C706.1 946.6 704.0 932.7 703.1 918.7C702.3 904.7 701.1 890.3 702.1 876.5C703.1 862.7 705.8 846.2 709.0 835.7C712.1 825.1 717.2 813.5 721.0 813.4C724.8 813.3 729.0 824.5 732.0 834.9C734.9 845.3 736.7 862.1 738.7 875.9C740.7 889.6 741.7 903.8 743.9 917.5C746.2 931.1 748.9 944.6 752.4 957.8C755.8 970.9 760.1 983.7 764.7 996.4C769.3 1009.1 774.8 1021.4 780.0 1033.9C785.1 1046.3 790.6 1058.6 795.6 1071.2C800.6 1083.7 805.4 1096.3 809.8 1109.0C814.2 1121.8 819.2 1134.6 822.0 1147.7C824.8 1160.7 826.0 1173.8 826.5 1187.4C826.9 1201.0 824.7 1215.0 824.5 1229.1C824.4 1243.2 825.4 1257.7 825.5 1272.0C825.6 1286.3 823.9 1302.4 825.2 1314.7C826.5 1327.0 828.8 1341.2 833.5 1345.8C838.2 1350.5 848.4 1341.6 853.6 1342.6C858.8 1343.6 861.0 1344.5 864.6 1352.1C868.2 1359.7 869.9 1381.6 875.0 1388.2C880.2 1394.8 890.1 1395.1 895.4 1391.9C900.7 1388.6 903.6 1370.5 906.7 1368.9C909.8 1367.3 909.5 1376.7 914.0 1382.2C918.5 1387.7 928.1 1402.5 933.9 1401.9C939.6 1401.3 946.0 1387.7 948.8 1378.5C951.6 1369.3 948.5 1350.4 950.6 1346.7C952.7 1343.0 955.9 1351.7 961.6 1356.4C967.4 1361.1 979.0 1375.6 985.0 1375.1C991.0 1374.7 997.3 1363.7 997.8 1353.7C998.3 1343.7 991.2 1327.5 988.2 1315.1C985.1 1302.7 979.0 1289.3 979.4 1279.3C979.9 1269.3 987.6 1264.2 991.0 1255.2C994.4 1246.1 1000.4 1236.3 999.7 1225.0C999.0 1213.6 993.4 1198.4 986.9 1187.0C980.4 1175.7 969.0 1167.1 960.8 1157.0C952.6 1146.8 943.1 1137.8 937.7 1126.1C932.3 1114.4 930.8 1100.3 928.2 1086.8C925.6 1073.4 923.7 1059.5 922.1 1045.6C920.6 1031.6 919.9 1017.3 919.0 1003.1C918.2 988.9 918.1 974.3 917.1 960.1C916.1 946.0 915.2 931.8 913.0 918.1C910.8 904.4 907.8 891.0 904.1 878.0C900.3 865.0 895.0 852.6 890.5 839.8C886.0 827.1 880.7 814.8 876.9 801.7C873.1 788.7 870.4 775.2 867.9 761.7C865.5 748.1 864.3 734.0 862.3 720.2C860.4 706.4 858.1 692.7 856.4 678.9C854.6 665.2 852.4 651.5 851.7 637.6C851.0 623.8 852.1 609.8 852.2 595.7C852.3 581.6 853.6 566.9 852.5 552.9C851.5 539.0 849.5 525.0 845.7 512.0C842.0 499.0 836.8 486.4 830.0 474.8C823.2 463.2 814.5 452.1 805.0 442.5C795.5 432.9 784.3 424.2 772.7 417.2C761.2 410.2 748.5 405.3 735.8 400.7C723.2 396.0 709.6 393.4 696.8 389.2C684.0 384.9 671.1 380.7 658.9 375.1C646.6 369.5 633.1 363.9 623.3 355.5C613.6 347.1 605.0 336.7 600.5 324.7C596.0 312.7 595.3 296.6 596.3 283.5C597.3 270.3 601.7 257.6 606.5 245.8C611.4 233.9 621.4 224.0 625.4 212.2C629.3 200.5 631.0 187.7 630.3 175.5C629.6 163.3 623.8 151.8 621.1 139.2C618.4 126.5 617.3 112.5 613.9 99.5C610.5 86.5 607.2 72.9 600.9 61.1C594.5 49.4 585.8 37.8 575.9 28.9C566.0 20.0 553.9 12.4 541.5 7.6C529.1 2.8 514.8 0.2 501.4 0.0Z");
+    const BM_BODY_W = 1000, BM_BODY_H = 2508;
+
+    function initBodymapMini(cv) {
+      const N = 59;                      // 스튜디오 도안 수와 동일
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const SIZE = 220;
+      cv.width = SIZE * dpr; cv.height = SIZE * dpr;
+      const c = cv.getContext('2d');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let spin = 0, last = 0, running = true;
+
+      function draw() {
+        c.setTransform(dpr, 0, 0, dpr, 0, 0);
+        c.clearRect(0, 0, SIZE, SIZE);
+        const cx = SIZE / 2, cy = SIZE / 2;
+        const R = SIZE * 0.44;
+
+        for (let i = 0; i < N; i++) {
+          const a = spin + (i / N) * Math.PI * 2 - Math.PI / 2;
+          const hue = Math.round((i / N) * 360);
+          const x = cx + Math.cos(a) * R, y = cy + Math.sin(a) * R;
+          c.fillStyle = 'hsl(' + hue + ' 62% 52%)';
+          c.beginPath(); c.arc(x, y, 1.8, 0, Math.PI * 2); c.fill();
+          if (i % 4 === 0) {
+            c.strokeStyle = 'hsla(' + hue + ', 62%, 52%, 0.5)';
+            c.lineWidth = 0.7;
+            c.beginPath();
+            c.moveTo(cx + Math.cos(a) * (R - 7), cy + Math.sin(a) * (R - 7));
+            c.lineTo(cx + Math.cos(a) * (R - 2.5), cy + Math.sin(a) * (R - 2.5));
+            c.stroke();
+          }
+        }
+        c.strokeStyle = 'rgba(17,17,17,0.10)'; c.lineWidth = 0.6;
+        c.beginPath(); c.arc(cx, cy, R, 0, Math.PI * 2); c.stroke();
+
+        const k = (SIZE * 0.62) / BM_BODY_H;
+        c.save();
+        c.translate(cx - BM_BODY_W * k / 2, cy - BM_BODY_H * k / 2);
+        c.scale(k, k);
+        c.strokeStyle = '#111'; c.lineWidth = 1.9 / k;
+        c.lineJoin = c.lineCap = 'round';
+        c.stroke(BM_BODY_D);
+        c.restore();
+      }
+
+      function frame(now) {
+        if (!running) return;
+        const dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
+        last = now;
+        if (!reduced) spin += 0.10 * dt;
+        draw();
+        requestAnimationFrame(frame);
+      }
+      draw();
+      if (!reduced) requestAnimationFrame(frame);
+      document.addEventListener('visibilitychange', () => {
+        running = !document.hidden;
+        if (running && !reduced) { last = 0; requestAnimationFrame(frame); }
+      });
+    }
+
+    // ===== Body Map =====
+    const bmOverlay = document.getElementById('bmOverlay');
+    const bmFrame = document.getElementById('bmFrame');
+
+    function openBodyMap() {
+      if (window.va) va('event', { name: 'bodymap_open' });
+      if (!bmFrame.src) bmFrame.src = 'bodymap/index.html';
+      bmOverlay.classList.add('active');
+      document.body.classList.add('bm-open');
+      requestAnimationFrame(() => requestAnimationFrame(() => bmOverlay.classList.add('visible')));
+    }
+    function closeBodyMap() {
+      if (!bmOverlay.classList.contains('active')) return;
+      bmOverlay.classList.remove('visible');
+      setTimeout(() => {
+        bmOverlay.classList.remove('active');
+        document.body.classList.remove('bm-open');
+      }, 560);
+    }
+    document.getElementById('bmClose').addEventListener('click', closeBodyMap);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeBodyMap(); });
+    // 바디맵은 휠로 확대하는 도구라 스크롤로는 닫지 않는다 — 전역 핸들러로 새지만 않게 막는다
+    bmOverlay.addEventListener('wheel', (e) => { e.stopPropagation(); }, { passive: true });
+    bmOverlay.addEventListener('touchmove', (e) => { e.stopPropagation(); }, { passive: true });
+    // 주소에 #bodymap 이 있으면 바로 열기 (인스타 링크용)
+    if (location.hash === '#bodymap') window.addEventListener('load', openBodyMap);
 
     // ===== Fullscreen video player =====
     const VIDEO_SRC = 'assets/video/showcase.mp4';
@@ -591,6 +736,7 @@
     // ===== Events =====
     let wheelLock = false;
     window.addEventListener('wheel', (e) => {
+      if (document.body.classList.contains('bm-open')) return;
       if (e.target.closest('.modal-overlay')) return;
       e.preventDefault();
       if (wheelLock) return;
@@ -609,6 +755,7 @@
       }
     }, { passive: true });
     window.addEventListener('touchmove', (e) => {
+      if (document.body.classList.contains('bm-open')) return;
       if (e.touches.length === 2 && touchStartDist > 0) {
         const dx = e.touches[0].clientX - e.touches[1].clientX;
         const dy = e.touches[0].clientY - e.touches[1].clientY;
