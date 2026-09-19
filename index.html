@@ -49,6 +49,11 @@
     .icon.bodymap-icon:hover::after { color: #111; }
     body.state1 .icon.bodymap-icon, body.state2 .icon.bodymap-icon { opacity: 1; }
 
+    /* ====================== Voicing ====================== */
+    .icon.voicing-icon { width: 10vw; min-width: 96px; max-width: 150px; z-index: 60; }
+    body.state1 .icon.voicing-icon, body.state2 .icon.voicing-icon { opacity: 1; }
+    .vc-overlay { background: #E7E7E7; }
+
     .bm-overlay {
       position: fixed; inset: 0; background: #fff; z-index: 300;
       display: none; opacity: 0; filter: blur(24px);
@@ -162,6 +167,7 @@
       .icon.video-icon { width: 28vw; min-width: 105px; max-width: 140px; }
       .icon.bodymap-icon { width: 26vw; min-width: 98px; max-width: 132px; }
       .icon.bodymap-icon::after { font-size: 8px; bottom: -15px; letter-spacing: 2px; }
+      .icon.voicing-icon { width: 20vw; min-width: 76px; max-width: 100px; }
       .bm-close { top: 12px; left: 12px; padding: 9px 13px; font-size: 9px; }
       body.state1 .icon.tier1, body.state2 .icon.tier1, body.state2 .icon.tier2 { opacity: 0.7; }
       .modal-content { padding: 36px 24px; }
@@ -200,6 +206,12 @@
   <div class="bm-overlay" id="bmOverlay">
     <button class="bm-close" id="bmClose" aria-label="close">← close</button>
     <iframe id="bmFrame" title="Body Map" allow="clipboard-write; autoplay"></iframe>
+  </div>
+
+  <!-- ====================== Voicing ====================== -->
+  <div class="bm-overlay vc-overlay" id="vcOverlay">
+    <button class="bm-close" id="vcClose" aria-label="close">← close</button>
+    <iframe id="vcFrame" title="Voicing" allow="microphone; autoplay; clipboard-write"></iframe>
   </div>
 
   <div class="modal-overlay" id="gloveModal">
@@ -299,13 +311,15 @@
       { name: 'accessory', img: 'assets/accessory.png', count: 10, region: { xMin: 0.68, xMax: 0.98, yMin: 0.30, yMax: 0.70 }, color: '#6fb5ff' },
       { name: 'headset',   img: 'assets/headset.png',   count: TRACKS.length, region: { xMin: 0.20, xMax: 0.80, yMin: 0.05, yMax: 0.28 }, color: '#6fd86f' },
       { name: 'video',     img: 'assets/video-icon.png', count: 1, region: { xMin: 0.19, xMax: 0.19, yMin: 0.905, yMax: 0.905 }, color: '#ff5a5a' },
-      { name: 'bodymap',   img: 'assets/bodymap.png',    count: 1, region: { xMin: 0.50, xMax: 0.50, yMin: 0.895, yMax: 0.895 }, color: '#111' }
+      { name: 'bodymap',   img: 'assets/bodymap.png',    count: 1, region: { xMin: 0.50, xMax: 0.50, yMin: 0.895, yMax: 0.895 }, color: '#111' },
+      { name: 'voicing',   img: 'voicing.png',           count: 1, region: { xMin: 0.81, xMax: 0.81, yMin: 0.905, yMax: 0.905 }, color: '#ff5a5a' }
     ] : [
       { name: 'glove',     img: 'assets/glove.png',     count: 33, region: { xMin: 0.05, xMax: 0.40, yMin: 0.25, yMax: 0.80 }, color: '#555' },
       { name: 'accessory', img: 'assets/accessory.png', count: 33, region: { xMin: 0.60, xMax: 0.95, yMin: 0.25, yMax: 0.80 }, color: '#6fb5ff' },
       { name: 'headset',   img: 'assets/headset.png',   count: TRACKS.length, region: { xMin: 0.25, xMax: 0.75, yMin: 0.05, yMax: 0.35 }, color: '#6fd86f' },
       { name: 'video',     img: 'assets/video-icon.png', count: 1, region: { xMin: 0.325, xMax: 0.325, yMin: 0.885, yMax: 0.885 }, color: '#ff5a5a' },
-      { name: 'bodymap',   img: 'assets/bodymap.png',    count: 1, region: { xMin: 0.50, xMax: 0.50, yMin: 0.875, yMax: 0.875 }, color: '#111' }
+      { name: 'bodymap',   img: 'assets/bodymap.png',    count: 1, region: { xMin: 0.50, xMax: 0.50, yMin: 0.875, yMax: 0.875 }, color: '#111' },
+      { name: 'voicing',   img: 'voicing.png',           count: 1, region: { xMin: 0.675, xMax: 0.675, yMin: 0.885, yMax: 0.885 }, color: '#ff5a5a' }
     ];
 
     function buildIcons() {
@@ -347,6 +361,9 @@
           }
           if (cat.name === 'bodymap') {
             div.classList.add('bodymap-icon');
+          }
+          if (cat.name === 'voicing') {
+            div.classList.add('voicing-icon');
           }
           div.style.left = (xn * 100) + '%';
           div.style.top = (yn * 100) + '%';
@@ -422,6 +439,7 @@
       if (cat.name === 'headset') { playTrack(parseInt(el.dataset.trackIdx, 10), el); return; }
       if (cat.name === 'video') { openVideoPlayer(); return; }
       if (cat.name === 'bodymap') { openBodyMap(); return; }
+      if (cat.name === 'voicing') { openVoicing(); return; }
     }
 
     // ===== Body Map mini icon — 도는 링 미리보기 =====
@@ -524,6 +542,32 @@
     bmOverlay.addEventListener('touchmove', (e) => { e.stopPropagation(); }, { passive: true });
     // 주소에 #bodymap 이 있으면 바로 열기 (인스타 링크용)
     if (location.hash === '#bodymap') window.addEventListener('load', openBodyMap);
+
+    // ===== Voicing 오버레이 =====
+    const vcOverlay = document.getElementById('vcOverlay');
+    const vcFrame = document.getElementById('vcFrame');
+    function openVoicing() {
+      if (window.va) va('event', { name: 'voicing_open' });
+      if (typeof stopCurrentTrack === 'function') stopCurrentTrack();   // 사이트 트랙 끄고 들어감
+      if (!vcFrame.src) vcFrame.src = 'voicing.html';
+      vcOverlay.classList.add('active');
+      document.body.classList.add('bm-open');
+      requestAnimationFrame(() => requestAnimationFrame(() => vcOverlay.classList.add('visible')));
+    }
+    function closeVoicing() {
+      if (!vcOverlay.classList.contains('active')) return;
+      vcOverlay.classList.remove('visible');
+      try { vcFrame.contentWindow.postMessage({ skm: 'stop' }, '*'); } catch (_) {}
+      setTimeout(() => {
+        vcOverlay.classList.remove('active');
+        document.body.classList.remove('bm-open');
+      }, 560);
+    }
+    document.getElementById('vcClose').addEventListener('click', closeVoicing);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVoicing(); });
+    vcOverlay.addEventListener('wheel', (e) => { e.stopPropagation(); }, { passive: true });
+    vcOverlay.addEventListener('touchmove', (e) => { e.stopPropagation(); }, { passive: true });
+    if (location.hash === '#voicing') window.addEventListener('load', openVoicing);
 
     // ===== Fullscreen video player =====
     const VIDEO_SRC = 'assets/video/showcase.mp4';
