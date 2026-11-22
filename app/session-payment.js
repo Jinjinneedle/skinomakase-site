@@ -18,7 +18,8 @@ function open(bookingId){
    const p=await api.sessionPayment(bookingId);if(!active())return;
    if(!p){content.replaceChildren(el('p',text('아직 예약금 안내가 등록되지 않았어요. 스튜디오와 대화에서 도안·가격·일정을 조율해 주세요. 승인 후 이곳에서 PayNow QR을 확인할 수 있어요.','Deposit instructions are not ready yet. Discuss your design, price and appointment in the conversation. The PayNow QR will appear here after approval.')));return;}
    const amount=n=>`SGD ${new Intl.NumberFormat(window.SKMLanguage?.locale||'en').format(n)}`;
-   const heading=el('h2',p.studio),status=el('p',p.deposit_paid?text('예약금 입금 확인됨','Deposit confirmed'):text('스튜디오 예약금 안내','Studio deposit'));
+   const heading=el('h2'),status=el('p',p.deposit_paid?text('예약금 입금 확인됨','Deposit confirmed'):text('스튜디오 예약금 안내','Studio deposit'));
+   heading.append(window.SKMStudioLink?window.SKMStudioLink(p.studio):document.createTextNode(p.studio));
    const list=el('dl');for(const [label,value] of [[text('총액','Total'),amount(p.total)],[text('예약금','Deposit'),amount(p.deposit)],[p.deposit_paid?text('남은 결제액','Remaining balance'):text('예약금 차감 후 잔금','Balance after deposit'),amount(p.after_deposit)]]){list.append(el('dt',label),el('dd',value));}
    content.replaceChildren(heading,status,list);if(p.appointment)content.append(el('p',new Date(p.appointment).toLocaleString(window.SKMLanguage?.locale||'en',{timeZone:'Asia/Singapore'})+' · Singapore time'));
    if(!p.deposit_paid){

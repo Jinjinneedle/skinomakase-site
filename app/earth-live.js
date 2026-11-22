@@ -8,7 +8,7 @@ export function mountEarthLive({root,layer,vector,R,cities,selectedCity,focusPoi
  const ko=()=>window.SKMLanguage?.code==='ko',say=(kr,en)=>ko()?kr:en;
  const el=(tag,text,className)=>{const n=document.createElement(tag);if(text)n.textContent=text;if(className)n.className=className;return n;};
  const app=root.querySelector('.earth-app'),dock=root.querySelector('.survey-dock');
- const toggle=el('button','LIVE');toggle.type='button';toggle.setAttribute('aria-expanded','false');dock.append(toggle);
+ const toggle=el('button','LIVE');toggle.type='button';toggle.dataset.survey='live';toggle.setAttribute('aria-expanded','false');dock.append(toggle);
  const panel=el('section',null,'earth-live-panel');panel.hidden=true;panel.setAttribute('aria-label','Live map');app.append(panel);
  const head=el('header'),title=el('strong','LIVE'),close=el('button','×');close.type='button';close.setAttribute('aria-label','Close live map');head.append(title,close);panel.append(head);
  const tabs=el('nav'),body=el('div',null,'earth-live-body');panel.append(tabs,body);

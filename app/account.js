@@ -44,6 +44,7 @@ function requestCard(r){
  const head=el('header',null,'session-card-head'),info=el('div');
  info.append(el('small',journey.city(r)||'SKINOMAKASE','serial'),el('strong','#'+r.code,'serial'));
  head.append(info,el('span',state.title,'session-badge'));card.append(head);
+ window.SKMStudioInfo?.(r.id).then(name=>{if(name&&card.isConnected){const line=el('p',null,'session-studio');line.append(window.SKMStudioLink(name));head.after(line);}}).catch(()=>{});
  if(!state.closed){
   const steps=el('ol',null,'session-steps');steps.setAttribute('aria-label',local('진행 상태','Progress'));
   [local('접수','Request'),local('예약금','Deposit'),local('일정','Schedule'),local('확정','Confirmed')].forEach((label,i)=>{

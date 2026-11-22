@@ -98,6 +98,7 @@ function show(id){
  const J=window.SKMSessionJourney,phase=J.phase(r),sg=J.city(r)==='SINGAPORE',ended=J.closed(r),root=$('detail');
  const heading=el('header',null,'detail-head'),name=el('div');
  name.append(el('small',window.SKMStudioAdmin.label(J.city(r))+' · #'+r.code),el('h2',r.name));
+ const studioName=window.SKMStudioAdmin.record(J.city(r))?.studio_name;if(studioName)name.append(window.SKMStudioLink(studioName));
  heading.append(name,button('닫기',()=>root.close()));root.replaceChildren(heading,el('p',J.describe(r,'ko').title,'booking-state'));error('');
  const next=el('section',null,'detail-next');
  const titles={new:'요청 확인 후 승인',deposit:'입금 확인',date:'방문 일정 확정',scheduled:'방문 준비',done:'완료된 세션',declined:'종료된 요청',cancelled:'취소된 요청'};

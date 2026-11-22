@@ -367,7 +367,7 @@ function zoom(value){state.zoom=clamp(value,.75,2.6);wake();save();}
 function reset(){stopShake();earthLive.dismissSatellite();clearTarget();Object.assign(state,{lon:current.lon+(((oceanHome.lon-current.lon+180)%360+360)%360-180),lat:oceanHome.lat,zoom:1,cityFocus:false});closeMusic();gloveDirect.setOpen(false);bookingPanel.hidden=true;root.querySelector('.earth-extra-menu').hidden=true;syncCityLayout();bend.tx=bend.ty=0;wake();save();}
 function focusEngraving(){Object.assign(state,{lon:current.lon+(((stamp.lon-current.lon+180)%360+360)%360-180),lat:stamp.lat,zoom:1.55});wake();save();}
 root.querySelector('[data-view="in"]').addEventListener('click',()=>zoom(state.zoom*1.25));root.querySelector('[data-view="out"]').addEventListener('click',()=>zoom(state.zoom/1.25));root.querySelector('[data-view="reset"]').addEventListener('click',reset);root.querySelector('.earth-brand').addEventListener('click',openHomeConversation);
-root.querySelector('.earth-brand').setAttribute('aria-label','로그인 · 내 대화');
+root.querySelector('.earth-brand').setAttribute('aria-label','Message');
 root.querySelector('.earth-zoom').addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();state.lon+=e.key==='ArrowRight'?18:-18;wake();save();}});
 function blocked(target){return target.closest('.earth-zoom,.earth-tilt,.earth-message');}
 stage.addEventListener('wheel',e=>{if(blocked(e.target))return;e.preventDefault();zoom(state.zoom*Math.exp(-clamp(e.deltaY*(e.deltaMode===1?16:1),-100,100)*.003));},{passive:false});
@@ -455,10 +455,11 @@ const logoImage=root.querySelector('.earth-logo img');if(logoImage){if(logoImage
 // Keep all navigation on the existing SKM origin so customer sessions remain intact.
 const T=key=>window.SKMLanguage?.t(key)||key;
 async function openHomeConversation(){
- const button=root.querySelector('.earth-brand');button.disabled=true;closeMusic();status.textContent=T('checkingLogin');
- try{await window.SKMEnterHome(window.SKMBooking,!!window.webkit?.messageHandlers?.skmAuth);await window.SKMTheme?.refresh();status.textContent='';if(window.SKMTheme?.eligible)await window.SKMTheme.openConversation();else{root.querySelector('.earth-city-panel').scrollIntoView({block:'nearest',behavior:reduced?'instant':'smooth'});}}
- catch(error){status.textContent=error.code==='native-only'?error.message:T('loginFailed');}finally{button.disabled=false;}
+ const button=root.querySelector('.earth-brand');button.disabled=true;closeMusic();
+ try{await window.SKMEnterHome(window.SKMBooking,!!window.webkit?.messageHandlers?.skmAuth);status.textContent='';window.openAppPage('app/messages.html');}
+ catch(error){status.textContent=T('loginFailed');}finally{button.disabled=false;}
 }
+
 function openTattoo(city){closeMusic();gloveDirect.setOpen(false);bookingPanel.hidden=true;sessionStorage.setItem('skm-booking-city-v1',JSON.stringify({id:city.id,label:city.label}));window.openBodyMap();}
 function updateLanguage(){const code=window.SKMLanguage?.code||'ko';root.querySelector('.earth-language span').textContent=code.toUpperCase();root.querySelector('.earth-language').setAttribute('aria-label',T('language'));root.querySelector('.earth-account').setAttribute('aria-label','SKINOMAKASE SESSION');renderFeatures(cities.find(c=>c.id===state.selected));}
 root.querySelector('.earth-language').addEventListener('click',()=>document.getElementById('skm-language-button')?.click());

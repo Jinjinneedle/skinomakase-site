@@ -117,6 +117,9 @@ window.SKM_BOOKING = {
   }));}
   window.SKMBooking={
     version:1,ready:!!(base&&key),session,signInGoogle,finishSignIn,
+    messageInbox:()=>authenticated('/rest/v1/rpc/skm_message_inbox',{method:'POST',body:{}}),
+    async translationStatus(){const r=await fetch('https://www.skinomakase.com/api/chat-translate',{signal:AbortSignal.timeout(8000)});return r.ok?await r.json():{enabled:false};},
+  async translateMessages(payload){const access=await token();const response=await fetch('https://www.skinomakase.com/api/chat-translate',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+access},body:JSON.stringify(payload),signal:AbortSignal.timeout(25000)});const value=await response.json();if(!response.ok)throw fail(value.error||'translation unavailable',response.status);return value;},
     verifiedAppUser:()=>authenticated('/rest/v1/rpc/skm_verified_app_user',{method:'POST',body:{}}),
     notificationThread:id=>authenticated('/rest/v1/rpc/skm_notification_thread',{method:'POST',body:{p_thread:id}}),
     markContactRead:(id,message)=>authenticated('/rest/v1/rpc/skm_mark_contact_read',{method:'POST',body:{p_thread:id,p_message:message}}),

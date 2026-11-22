@@ -30,7 +30,7 @@ const G=k=>window.SKMGloveText(k),el=(tag,value,cls)=>{const e=document.createEl
 const city=q.get('city'),zones={'1835848':'Asia/Seoul','1850147':'Asia/Tokyo','1853909':'Asia/Tokyo','2643743':'Europe/London','2988507':'Europe/Paris','6167865':'America/Toronto','6173331':'America/Vancouver','6077243':'America/Toronto','5368361':'America/Los_Angeles','5128581':'America/New_York','1819729':'Asia/Hong_Kong','1880252':'Asia/Singapore'};
 const names={'1835848':'Seoul','1850147':'Tokyo','1853909':'Osaka','2643743':'London','2988507':'Paris','6167865':'Toronto','6173331':'Vancouver','6077243':'Montréal','5368361':'Los Angeles','5128581':'New York','1819729':'Hong Kong','1880252':'Singapore'};
 const root=document.querySelector('#content'),status=document.querySelector('#status'),head=document.querySelector('#heading');
-let version=0,timer=null,uid=()=>api.session()?.user?.id||null;
+let translation=null,version=0,timer=null,uid=()=>api.session()?.user?.id||null;
 function button(label,fn,cls='row'){const b=el('button',label,cls);b.type='button';b.onclick=async()=>{b.disabled=true;try{await fn();}catch(e){error(e);}finally{b.disabled=false;}};return b;}
 const call=(action,p={})=>api.community(action,p);
 function error(e){status.textContent=e.message==='contact blocked'?t('blocked'):e.status===404?t('pending'):G('error');}
@@ -51,7 +51,7 @@ function confirmAction(label,description){
 function field(f,label,type='text'){const l=el('label',label),input=el('input');input.type=type;input.required=true;l.append(input);f.append(l);return input;}
 function visit(view,extra={}){const params=new URLSearchParams({view,...extra});location.href='community.html?'+params;}
 async function show(){
- clearInterval(timer);const run=++version,user=uid(),ok=()=>version===run&&uid()===user;
+ translation?.stop();translation=null;clearInterval(timer);const run=++version,user=uid(),ok=()=>version===run&&uid()===user;
  const view=q.get('view')||'inbox';
  root.replaceChildren();document.body.classList.remove('studio-thread');document.querySelector('.studio-head')?.remove();status.textContent='';
  document.querySelector('#inbox').textContent=t('inbox');document.querySelector('#profile').textContent=t('profile');
@@ -80,11 +80,11 @@ async function show(){
    const f=el('form'),input=el('textarea'),send=el('button',t('send'),'primary');
    input.placeholder=t('message');input.setAttribute('aria-label',t('message'));input.required=true;input.maxLength=2000;
    const controls=el('div',null,'safety-controls');
-   let last=null,cid=null,draft='',revision=0,paused=true;
+   let last=null,cid=null,draft='',revision=0,paused=true,currentMessages=[];const toolbar=el('div',null,'skm-chat-toolbar');root.append(toolbar);translation=window.SKMTranslation?.mount({container:toolbar,kind:'thread',id,changed:()=>{last=null;read().catch(error);}});
    f.hidden=true;
    function messageBubble(m,peer){
     const bubble=el('div',null,'bubble'+(m.mine?' mine':''));
-    bubble.append(el('span',m.body));
+    const text=el('span',m.body);bubble.append(text);translation?.render(text,m);
     if(peer&&!m.mine)bubble.append(button(t('report'),async()=>{
      if(!await confirmAction(t('report'),t('reportNotice'))||!ok())return;
      await call('report',{id,message:m.id});
@@ -101,7 +101,7 @@ async function show(){
       document.body.classList.add('studio-thread');
       const banner=el('div',null,'studio-head'),logo=el('span',null,'studio-mark'),img=el('img');
       img.src='logo-transparent.png';img.alt='SKINOMAKASE';logo.append(img);
-      banner.append(logo,button(window.SKMLanguage.t('close'),()=>{location.href='account.html';},'desk-close'));
+      banner.append(logo,button(window.SKMLanguage.t('close'),()=>{location.href='messages.html';},'desk-close'));
       head.before(banner);
     }
     head.textContent=studio?'#'+String(id).slice(0,8).toUpperCase():data.label;const state=JSON.stringify([data.messages.map(m=>m.id),paused,!!data.blocked_by_me]);
@@ -120,9 +120,9 @@ async function show(){
       },'safety-action'));
      }
     }
-    log.replaceChildren(...data.messages.map(m=>messageBubble(m,peer)));
+    currentMessages=data.messages;log.replaceChildren(...data.messages.map(m=>messageBubble(m,peer)));translation?.update(currentMessages);
     if(studio&&!data.messages.length)log.append(el('p',window.SKMLanguage.t('chatEmpty'),'desk-empty'));
-    if(atBottom){log.scrollTop=log.scrollHeight;if(!document.hidden&&data.messages.length)api.markContactRead?.(id,data.messages.at(-1).id).catch(()=>{});}
+    if(atBottom){log.scrollTop=log.scrollHeight;if(!document.hidden&&data.messages.length)api.markContactRead?.(id,data.messages.at(-1).id).then(()=>{if(parent!==window)parent.postMessage({skm:'messages-read'},location.origin==='null'?'*':location.origin);window.dispatchEvent(new Event('skm-messages-read'));}).catch(()=>{});}
    }
    f.append(input,send);root.append(controls,log,f);await read();if(!ok())return;
    f.onsubmit=async e=>{e.preventDefault();const value=input.value.trim();if(!value||paused||send.disabled||!ok())return;

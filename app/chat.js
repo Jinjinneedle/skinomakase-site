@@ -17,7 +17,7 @@ function linkedText(node,text){
  }
  node.append(document.createTextNode(text.slice(start)));
 }
-function open({bookingId,code,admin=false,draft='',onClose=null}){
+function open({bookingId,code,admin=false,draft='',studio='',onClose=null}){
  if(current)current.close();
  const api=window.SKMBooking,dialog=el('dialog',null,'skm-chat'),head=el('header');
  const brand=el('div',null,'skm-chat-brand'),mark=el('button',null,'skm-terminal-logo'),logo=el('img');
@@ -30,10 +30,12 @@ function open({bookingId,code,admin=false,draft='',onClose=null}){
  const older=el('button',T('older')),list=el('div',null,'skm-chat-list'),form=el('form'),label=el('label'),input=el('textarea'),send=el('button',T('send')),status=el('p',T('loading'),'skm-chat-status');
  older.type='button';older.hidden=true;list.setAttribute('aria-label',T('chatHistory'));list.setAttribute('role','log');list.setAttribute('aria-live','polite');
  input.maxLength=4000;input.rows=3;input.placeholder=T('placeholder');input.disabled=true;input.setAttribute('aria-label',T('messageLabel'));
- send.type='submit';send.disabled=true;status.setAttribute('role','status');label.append(input);form.append(label,send);dialog.append(head,payment,older,list,form,status);document.body.append(dialog);
+ send.type='submit';send.disabled=true;status.setAttribute('role','status');label.append(input);form.append(label,send);const toolbar=el('div',null,'skm-chat-toolbar');dialog.append(head,toolbar,payment,older,list,form,status);document.body.append(dialog);
  const viewport=window.visualViewport;
  const resize=()=>{dialog.classList.toggle('compact',(viewport?.height||innerHeight)<600);dialog.style.setProperty('--chat-viewport',(viewport?.height||innerHeight)+'px');dialog.style.setProperty('--chat-offset',(viewport?.offsetTop||0)+'px');};
  resize();viewport?.addEventListener('resize',resize);viewport?.addEventListener('scroll',resize);
+ const translation=window.SKMTranslation?.mount({container:toolbar,kind:'booking',id:bookingId,changed:()=>render(false)});
+ if(studio)toolbar.prepend(window.SKMStudioLink(studio));else window.SKMStudioInfo?.(bookingId).then(name=>{if(name&&!stopped)toolbar.prepend(window.SKMStudioLink(name));}).catch(()=>{});
  let stopped=false,loading=false,sending=false,ready=false,key='',pending=null,items=new Map(),timer=null,userId='';
  const state=()=>{try{return JSON.parse(localStorage.getItem(key)||'{}');}catch(_){return {};}};
  const saveState=()=>{try{localStorage.setItem(key,JSON.stringify({draft:input.value,pending}));}catch(_){}};
@@ -45,8 +47,9 @@ function open({bookingId,code,admin=false,draft='',onClose=null}){
   for(const m of sorted){
    const mine=m.sender_role===(admin?'admin':'customer'),card=el('article',null,mine?'skm-chat-message mine':'skm-chat-message');
    const name=el('strong',m.sender_role==='admin'?'SKINOMAKASE':admin?T('customer'):T('me')),body=el('p');linkedText(body,m.body);
-   const time=el('time',new Date(m.created_at).toLocaleString(window.SKMLanguage?.locale||'ko-KR'));time.dateTime=m.created_at;card.append(name,body,time);list.append(card);
+   const time=el('time',new Date(m.created_at).toLocaleString(window.SKMLanguage?.locale||'ko-KR'));time.dateTime=m.created_at;card.append(name,body,time);translation?.render(body,{...m,mine});list.append(card);
   }
+  translation?.update(sorted.map(m=>({...m,mine:m.sender_role===(admin?'admin':'customer')})));
   if(scroll||nearBottom)list.scrollTop=list.scrollHeight;else list.scrollTop=top+Math.max(0,list.scrollHeight-previous);
  }
  const merge=rows=>{for(const m of rows)items.set(m.id,m);};
@@ -56,7 +59,7 @@ function open({bookingId,code,admin=false,draft='',onClose=null}){
   try{
    const rows=await api.messages(bookingId,cursor);if(stopped||!activeUser())return;
    merge(rows);if(rows.length||!ready)render(!ready);if(rows.length&&api.sessionPayment&&window.SKMSessionPayment)api.sessionPayment(bookingId).then(p=>{if(!stopped&&activeUser())payment.hidden=!p;}).catch(()=>{});if(!ready||mode==='older')older.hidden=rows.length<100;
-   if(!document.hidden&&mode!=='older'&&list.scrollHeight-list.scrollTop-list.clientHeight<90)api.markBookingRead?.(bookingId,Math.max(0,...[...items.values()].map(m=>m.sequence))).catch(()=>{});
+   if(!document.hidden&&mode!=='older'&&list.scrollHeight-list.scrollTop-list.clientHeight<90)api.markBookingRead?.(bookingId,Math.max(0,...[...items.values()].map(m=>m.sequence))).then(()=>{window.dispatchEvent(new Event('skm-messages-read'));if(parent!==window)parent.postMessage({skm:'messages-read'},location.origin==='null'?'*':location.origin);}).catch(()=>{});
    ready=true;input.disabled=!!pending;send.disabled=false;status.textContent=pending?T('retryNotice'):'';
    send.textContent=pending?T('retry'):T('send');
   }catch(e){if(!stopped)status.textContent=e.status===401?T('relogin'):e.status===404?T('chatUnavailable'):T('chatLoadError');}
@@ -77,7 +80,7 @@ function open({bookingId,code,admin=false,draft='',onClose=null}){
  };
  older.onclick=()=>load('older');
  const onVisible=()=>{if(!document.hidden&&dialog.open)load();};
- function cleanup(){if(stopped)return;stopped=true;if(timer)clearInterval(timer);document.removeEventListener('visibilitychange',onVisible);viewport?.removeEventListener('resize',resize);viewport?.removeEventListener('scroll',resize);dialog.remove();if(current?.dialog===dialog)current=null;onClose?.();}
+ function cleanup(){if(stopped)return;stopped=true;translation?.stop();if(timer)clearInterval(timer);document.removeEventListener('visibilitychange',onVisible);viewport?.removeEventListener('resize',resize);viewport?.removeEventListener('scroll',resize);dialog.remove();if(current?.dialog===dialog)current=null;onClose?.();}
  const dismiss=()=>{
    if(dialog.classList.contains('leaving'))return;
    if(matchMedia('(prefers-reduced-motion: reduce)').matches){dialog.close();return;}
