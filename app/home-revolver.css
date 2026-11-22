@@ -1,0 +1,176 @@
+body{background:#171717!important}.blueprint-wrapper{visibility:hidden!important;pointer-events:none!important}#home-revolver{position:absolute;width:min(94vw,480px,70svh);aspect-ratio:1;left:50%;top:50%;transform:translate(-50%,-50%);z-index:40;touch-action:none;user-select:none;-webkit-user-select:none}.revolver-wheel{position:absolute;inset:0;transform:rotate(var(--rotation,0deg));transition:transform .28s cubic-bezier(.16,1.35,.35,1)}.grabbing .revolver-wheel{transition:transform .1s cubic-bezier(.2,.8,.3,1)}.revolver-wheel>svg{position:absolute;width:100%;height:100%;inset:0;pointer-events:none}.revolver-icon{position:absolute;width:20%;height:20%;padding:10px;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%) rotate(calc(-1 * var(--rotation,0deg)));border:0;background:none;cursor:grab;touch-action:none;outline:none;transition:transform .28s cubic-bezier(.16,1.35,.35,1)}.grabbing .revolver-icon{transition:transform .1s}.revolver-art{display:block;width:100%;height:100%;filter:none;opacity:1;transition:filter .75s ease,opacity .75s ease;pointer-events:none}.revolver-art img,.revolver-art canvas{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}.revolver-icon.held .revolver-art,.revolver-icon:focus-visible .revolver-art{filter:blur(0px);opacity:1}.revolver-icon:focus-visible{outline:2px solid #575757;outline-offset:-7px;border-radius:50%}.revolver-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:24%;pointer-events:none;opacity:.75}.revolver-center img{display:block;width:100%;height:auto}.revolver-index{position:absolute;left:calc(50% - 2px);top:-16px;width:4px;height:8px;border-radius:1px;background:#b4b5b1}.revolver-status{position:absolute;top:calc(100% + 28px);left:0;width:100%;text-align:center;color:#aaa;font:11px -apple-system,sans-serif;min-height:16px;letter-spacing:.06em}.detent .revolver-index{animation:revolver-click .16s ease-out}@keyframes revolver-click{0%{transform:translateY(3px);background:#fff}100%{transform:translateY(0);background:#b4b5b1}}#skm-player{background:#202020!important;border:1px solid #3a3a3a!important;box-shadow:none!important;color:#bbb}#skm-player #skm-track{color:#ddd}#skm-player .player-buttons button{box-shadow:none!important;background:#303030!important;border-color:#454545!important;color:#ddd}#skm-player #skm-play{background:#eee!important;color:#222!important}#skm-player .player-cap{color:#aaa}@media(prefers-reduced-motion:reduce){.revolver-wheel,.revolver-icon,.revolver-art{transition:none}.detent .revolver-index{animation:none}}@media(max-height:600px){#home-revolver{width:min(65vw,62svh);top:62%}.revolver-status{top:calc(100% + 8px)}}
+/* Soft grey surround, white rotating surface. */
+body{background:#e4e5e7!important}.revolver-wheel>svg g{fill:#fafaf9}.revolver-index{background:#8f959d}.revolver-status{color:#717982}#skm-player{background:#e9eaec!important;border-color:#f7f7f7!important;color:#616972}#skm-player #skm-track{color:#3f4852}#skm-player .player-cap{color:#81878f}#skm-player .player-buttons button{background:#f6f6f6!important;border-color:#fff!important;color:#444}#skm-player #skm-play{background:#404852!important;color:#fff!important}
+.revolver-connections{pointer-events:none}.revolver-connections line{stroke-width:1.15;stroke-linecap:round;opacity:.68;vector-effect:non-scaling-stroke}
+.revolver-icon{width:18%;height:18%}.revolver-art,.revolver-icon.held .revolver-art{filter:none!important;opacity:1!important}#skm-music-sheet{width:min(88vw,360px);max-height:85svh;padding:22px;border:1px solid #fff;border-radius:24px;background:#e9eaec;box-shadow:0 20px 70px #0002;pointer-events:auto;color:#333}#skm-music-sheet::backdrop{background:#0005}#skm-music-sheet:not([open]){display:none}#skm-music-sheet #skm-player{position:static!important;width:100%!important;max-height:none!important;left:auto!important;top:auto!important;padding:12px 0 0;border:0!important;border-radius:0;pointer-events:auto}.music-sheet-close{width:44px;height:44px;border:0;background:transparent;font-size:24px!important;color:#4e5762;padding:0;text-align:left}.bm-overlay{filter:none!important}
+
+/* The screen only wakes while turning the menu. */
+#revolver-preview{position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 25px);width:min(60vw,258px);height:124px;transform:translate(-50%,-6px);opacity:0;visibility:hidden;pointer-events:none;overflow:hidden;border-radius:20px;border:1px solid #fff;background:#eff0f1;box-shadow:3px 5px 12px #aeb2b740,-3px -3px 10px #ffffffb0;z-index:45;transition:opacity .2s,transform .2s,visibility .2s}
+#revolver-preview.visible{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.revolver-preview-content{position:absolute;inset:0;overflow:hidden;container-type:inline-size}
+.revolver-preview-content iframe{position:absolute;border:0;width:640px;height:308px;left:50%;top:0;transform:translateX(-50%) scale(.4);transform-origin:top center;pointer-events:none;opacity:0;transition:opacity .15s}
+.revolver-preview-content iframe.loaded{opacity:1}
+.revolver-preview-label{position:absolute;bottom:7px;left:10px;background:#f6f6f6e8;border-radius:4px;padding:3px 6px;color:#454c54;font:9px -apple-system,sans-serif}
+.revolver-preview-page .blueprint-wrapper,.revolver-preview-page .viewport,.revolver-preview-page #skm-settings,.revolver-preview-page #app-toolbar{display:none!important}
+.revolver-preview-page #skm-music-sheet{margin:4px auto!important;padding:8px!important;box-shadow:none!important}
+.revolver-preview-page .modal-content{max-height:95vh!important;transform:scale(.75);transform-origin:center}
+.revolver-preview-page .modal-close,.revolver-preview-page .music-sheet-close{display:none!important}
+@media(max-height:650px){#revolver-preview{height:100px;top:calc(env(safe-area-inset-top) + 12px)}}
+@media(prefers-reduced-motion:reduce){#revolver-preview,.revolver-preview-content iframe{transition:none}}
+
+@media(min-height:651px){#home-revolver{top:57%}}
+/* Centered resting logo, cached full-screen previews, and a folding flower. */
+#home-revolver{position:fixed!important;top:50%!important;left:50%!important;width:min(94vw,480px,72svh)!important}
+.revolver-wheel{transition:transform .28s cubic-bezier(.16,1.35,.35,1),opacity .65s;transform:scale(1) rotate(var(--rotation,0deg));transform-origin:50% 50%}
+.sleeping .revolver-wheel{transform:scale(.05) rotate(var(--rotation,0deg));opacity:0;pointer-events:none}
+.revolver-center{pointer-events:auto;cursor:pointer;opacity:1;z-index:2;transition:transform .7s cubic-bezier(.2,.8,.2,1);-webkit-tap-highlight-color:transparent}
+.sleeping .revolver-center{transform:translate(-50%,-50%) scale(1.65)}
+.sleeping .revolver-index,.sleeping .revolver-status{opacity:0}.revolver-index{transition:opacity .4s}
+.revolver-art{transition:filter .24s ease,opacity .24s ease!important}
+#home-revolver.focusing .revolver-icon:not(.held) .revolver-art{filter:blur(4px)!important;opacity:.38!important}
+#home-revolver.focusing .revolver-icon.held .revolver-art{filter:none!important;opacity:1!important}
+.revolver-connections line{opacity:.55;stroke-width:1}
+#revolver-preview{position:fixed!important;inset:0!important;left:0!important;top:0!important;width:100%!important;height:100%!important;transform:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;z-index:0!important;background:#e4e5e7;opacity:0;transition:opacity .3s!important}
+#revolver-preview.visible{opacity:1;transform:none!important}
+#revolver-preview>img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;opacity:.68}
+#revolver-preview:after{content:'';position:absolute;inset:0;background:#e4e5e744;pointer-events:none}
+#home-background-video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none}
+#home-background-video:not([src]){display:none}
+.viewport{background:transparent!important}
+#skm-music-sheet{box-sizing:border-box;width:min(calc(100vw - 40px),360px)!important;max-height:calc(100dvh - 48px)!important;margin:auto!important;overflow:auto}
+.modal-overlay{box-sizing:border-box;padding:max(20px,env(safe-area-inset-top)) 20px max(20px,env(safe-area-inset-bottom))!important;overflow:auto}
+.modal-overlay .modal-content{box-sizing:border-box;width:min(100%,420px)!important;max-width:420px!important;max-height:calc(100dvh - 56px)!important;overflow:auto!important;padding:24px!important;border-radius:24px!important;margin:auto!important}
+.modal-content input,.modal-content textarea{box-sizing:border-box;max-width:100%}.modal-content .globe-svg{width:100%;height:auto;max-height:42dvh}
+@media(prefers-reduced-motion:reduce){.revolver-wheel,.revolver-center,.revolver-art,#revolver-preview{transition:none!important}}
+#revolver-preview>img{opacity:.9;transform:scale(1.18)}#revolver-preview:after{background:#e4e5e71f}
+#home-revolver.focusing .revolver-wheel>svg>g:first-child{fill:#fafaf9e8}
+#home-background{position:fixed;inset:0;z-index:0;background:#e4e5e7;pointer-events:none;overflow:hidden}#home-background video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transition:opacity .18s linear}#home-background video.active{opacity:1}#home-background:after{content:'';position:absolute;inset:0;background:#0000000d;pointer-events:none}
+.sleeping .revolver-center{filter:drop-shadow(0 0 2px #fff8) drop-shadow(0 0 16px #fff7)}
+/* Overscan also removes the narrow black mattes baked into supplied clips. */
+#home-background video{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:50% 50%!important;transform:scale(1.16);transform-origin:center}
+/* Light rotary menu: no petal surface, no full-screen preview or blur. */
+#home-revolver .revolver-art,#home-revolver.focusing .revolver-icon:not(.held) .revolver-art,#home-revolver.focusing .revolver-icon.held .revolver-art{filter:none!important;opacity:1!important;transition:none!important}
+#home-revolver .revolver-wheel>svg{filter:none!important}.revolver-connections line{opacity:.85}
+#revolver-preview{inset:auto!important;top:calc(env(safe-area-inset-top) + 18px)!important;left:50%!important;width:min(64vw,258px)!important;height:min(18svh,124px)!important;transform:translateX(-50%)!important;z-index:45!important;border:1px solid #ffffffa0!important;border-radius:16px!important;background:#e4e5e7!important;box-shadow:0 3px 12px #0002!important;transition:opacity .15s!important}
+#revolver-preview.visible{transform:translateX(-50%)!important}
+#revolver-preview>img{object-fit:contain!important;opacity:1!important;transform:none!important}
+#revolver-preview:after{display:none!important}
+/* Center the visible mark rather than the old square image's asymmetric margins. */
+#home-revolver .revolver-center{position:absolute;left:50%;top:50%;width:24%;min-width:0;max-width:none;aspect-ratio:1020/507;background:none!important;box-shadow:none!important;filter:none!important;transform:translate(-50%,-50%)}
+.revolver-logo-crop{position:relative;display:block;width:100%;height:100%;overflow:hidden;transform-origin:50% 50%}
+#home-revolver .revolver-logo-crop img{position:absolute;display:block;width:122.941176%;min-width:0!important;max-width:none!important;height:auto;left:-12.45098%;top:-77.90927%;margin:0;background:none!important;box-shadow:none!important;filter:none!important}
+#home-revolver.sleeping .revolver-center{transform:translate(-50%,-50%) scale(1.65);filter:none!important}
+#home-revolver.sleeping .revolver-logo-crop{animation:skm-logo-breathe 5.5s ease-in-out infinite}
+@keyframes skm-logo-breathe{0%,100%{transform:scale(.96)}50%{transform:scale(1.04)}}
+@media(prefers-reduced-motion:reduce){#home-revolver.sleeping .revolver-logo-crop{animation:none}}
+.revolver-icon.top-selected{outline:1px solid #ffffff70;outline-offset:-7px;border-radius:12px}.revolver-index{background:#fff;width:3px;height:7px}
+/* Larger sculpted icons and feathered, directly usable previews. */
+#home-revolver .revolver-icon{width:23%;height:23%;padding:5px}
+#home-revolver .revolver-icon .revolver-art,#home-revolver.focusing .revolver-icon .revolver-art{filter:drop-shadow(0 1px 1px #ffffffd9) drop-shadow(0 5px 3px #0007) drop-shadow(0 10px 9px #0004)!important;transform:scale(1);transition:transform .2s ease!important}
+#home-revolver .top-selected .revolver-art{transform:scale(1.1)}
+#home-revolver .revolver-icon.top-selected{outline:0}
+#home-revolver .revolver-icon.locked .revolver-art,#home-revolver.focusing .revolver-icon.locked .revolver-art{filter:blur(1.4px) grayscale(.65) drop-shadow(0 3px 4px #0004)!important;opacity:.75!important}
+.revolver-icon.locked:after{content:'▣';position:absolute;right:8%;bottom:9%;font-size:13px;color:#fff;text-shadow:0 1px 4px #000}
+#revolver-preview{width:min(86vw,380px)!important;height:min(24svh,190px)!important;top:calc(env(safe-area-inset-top) + 8px)!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;overflow:visible}
+#revolver-preview>img{mask-image:radial-gradient(ellipse at center,#000 42%,transparent 74%);-webkit-mask-image:radial-gradient(ellipse at center,#000 42%,transparent 74%);object-fit:cover!important}
+#revolver-preview.interactive{pointer-events:auto}
+#revolver-preview [hidden]{display:none!important}
+.revolver-inline-music,.revolver-available{position:absolute;inset:0;isolation:isolate;padding:20px 28px;box-sizing:border-box}
+.revolver-inline-music:before,.revolver-available:before{content:'';position:absolute;inset:-8px;z-index:-1;background:radial-gradient(ellipse at center,#e9eaecfa 40%,#e9eaecbb 60%,transparent 76%);pointer-events:none}
+#revolver-music #skm-player{position:static!important;width:100%!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;color:#30343b!important;pointer-events:auto;transform:none!important}
+#revolver-music #skm-player .player-cap{display:none}
+#revolver-music #skm-track{width:100%;font-size:12px;background:transparent!important;color:#242a30!important;border:0}
+#revolver-music .player-buttons{display:flex;justify-content:center;gap:18px}
+#revolver-music .player-buttons button{min-width:44px;min-height:44px;border:0!important;background:#f5f5f5b0!important;color:#252a30!important;box-shadow:0 3px 7px #0002,inset 0 1px #fff!important}
+#revolver-music .player-times{font-size:10px;display:flex;justify-content:space-between}
+#revolver-music #skm-seek{width:100%;accent-color:#59636c}
+.revolver-available{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-decoration:none;color:#20262d;font:11px -apple-system,sans-serif;letter-spacing:.18em}
+.revolver-available strong{font-size:30px;letter-spacing:-.03em;font-weight:500}
+/* Local contrast follows the open menu without covering the moving footage. */
+#home-revolver:before{content:'';position:absolute;inset:-2%;border-radius:50%;background:radial-gradient(ellipse,#c9ccd05c 0%,#c9ccd04d 39%,#c9ccd033 54%,#c9ccd012 65%,transparent 74%);pointer-events:none;opacity:1;transition:opacity .7s ease;z-index:-1}
+#home-revolver.sleeping:before{opacity:0}
+#home-revolver .revolver-connections line{stroke-width:1.5;opacity:.95}
+#home-revolver .revolver-status{color:#f5f5f5;text-shadow:0 1px 5px #000,0 1px 12px #000;font-size:12px}
+
+#home-revolver .revolver-status{display:none!important}
+#home-revolver .revolver-connections line[data-category="relay"]{filter:blur(1.4px);opacity:.55}
+
+/* Three stable zones: preview, rotary menu, and transport. */
+#revolver-preview{width:min(74vw,320px)!important;height:min(19svh,150px)!important;top:calc(env(safe-area-inset-top) + 16px)!important;overflow:hidden;border-radius:8px!important;mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent),linear-gradient(to bottom,transparent,#000 8%,#000 92%,transparent);mask-composite:intersect;-webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent),linear-gradient(to bottom,transparent,#000 8%,#000 92%,transparent);-webkit-mask-composite:source-in}
+#revolver-preview>img{mask-image:none!important;-webkit-mask-image:none!important;object-fit:cover!important}
+.revolver-available:before{inset:0;background:#c8ccd04d;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.revolver-available{padding:12px;gap:8px;color:#fff;text-shadow:0 1px 4px #0008}
+.revolver-available strong{font-size:25px}
+#revolver-music{position:fixed;inset:auto;left:50%;bottom:calc(env(safe-area-inset-bottom) + 20px);transform:translateX(-50%);width:min(82vw,350px);padding:15px 20px;z-index:45;pointer-events:auto}
+#revolver-music[hidden]{display:none!important}
+#revolver-music:before{inset:-3px;background:radial-gradient(ellipse,#d5d8dcaf 35%,#d5d8dc60 62%,transparent 77%)}
+body:has(.app-overlay.active,.bm-overlay.active,.modal-overlay.active,.vc-overlay.active,.video-overlay.active) #revolver-music{visibility:hidden;pointer-events:none}
+@media(max-height:600px){#revolver-preview{height:17svh!important;top:6px!important}#revolver-music{bottom:4px;padding:5px 18px}#revolver-music .player-times{display:none}#revolver-music .player-buttons button{min-height:36px}}
+
+#revolver-clock{position:fixed;top:calc(env(safe-area-inset-top) + 30px);left:50%;transform:translateX(-50%);z-index:44;color:#eee;font:300 clamp(34px,8vw,48px)/1.2 -apple-system,BlinkMacSystemFont,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.04em;text-shadow:0 2px 12px #0007;pointer-events:none}
+body:has(#home-revolver.sleeping) #revolver-clock,body:has(#revolver-preview.visible) #revolver-clock,body:has(.app-overlay.active,.bm-overlay.active,.modal-overlay.active,.vc-overlay.active,.video-overlay.active) #revolver-clock{visibility:hidden}
+#revolver-music:not([hidden]){animation:revolver-player-rise .45s cubic-bezier(.16,1,.3,1) both}
+@keyframes revolver-player-rise{from{opacity:0;transform:translate(-50%,calc(100% + 40px))}to{opacity:1;transform:translate(-50%,0)}}
+@media(prefers-reduced-motion:reduce){#revolver-music:not([hidden]){animation:none}}
+/* Feather the upper and lower surfaces into footage without a white plate. */
+#revolver-preview{mask-image:linear-gradient(to right,transparent,#000 15%,#000 85%,transparent),linear-gradient(to bottom,transparent,#000 18%,#000 82%,transparent);-webkit-mask-image:linear-gradient(to right,transparent,#000 15%,#000 85%,transparent),linear-gradient(to bottom,transparent,#000 18%,#000 82%,transparent)}
+.revolver-available:before{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+#revolver-music:before{inset:-25px;background:radial-gradient(ellipse,#9099a026 0%,#9099a018 38%,#9099a009 58%,transparent 78%);filter:blur(12px)}
+#revolver-music #skm-player,#revolver-music #skm-track{color:#f3f3f3!important;text-shadow:0 1px 4px #000b;background:transparent!important}
+#revolver-music #skm-track option{color:#222;background:#eee;text-shadow:none}
+#revolver-music .player-times{color:#eee;text-shadow:0 1px 4px #000b}
+#revolver-music .player-buttons button{background:#c5cbd040!important;color:#fff!important;box-shadow:0 3px 9px #0002,inset 0 1px #ffffff26!important;text-shadow:0 1px 3px #0008}
+#revolver-music #skm-seek{accent-color:#ccd1d5}
+#revolver-clock{width:min(74vw,320px);text-align:center;pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none;cursor:ew-resize}
+#revolver-clock .clock-city{display:block;font-size:11px;font-weight:400;letter-spacing:.08em;line-height:1.5;margin-bottom:5px}
+#revolver-clock time{display:block}
+#revolver-clock:focus-visible{outline:1px solid #ffffff70;outline-offset:6px;border-radius:8px}
+/* An uneven feather replaces the rectangular fade; transport blurs the footage itself. */
+#revolver-preview{overflow:visible;border-radius:0!important;mask-image:url('preview-feather.svg');-webkit-mask-image:url('preview-feather.svg');mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-composite:add;-webkit-mask-composite:source-over}
+#revolver-preview>img{border-radius:0;opacity:.94!important}
+#revolver-music:before{inset:-30px -38px;background:rgba(79,88,100,.23);filter:none;backdrop-filter:blur(20px) saturate(.8);-webkit-backdrop-filter:blur(20px) saturate(.8);mask-image:url('preview-feather.svg');-webkit-mask-image:url('preview-feather.svg');mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat}
+/* Broad transparency falloff removes the remaining bright preview edge. */
+#revolver-preview{mask-image:url('preview-dissolve.svg');-webkit-mask-image:url('preview-dissolve.svg')}
+#revolver-preview>img{opacity:.84!important}
+/* Compact transport: previous, play/pause, next. */
+#revolver-music #skm-track,#revolver-music #skm-seek,#revolver-music .player-cap,#revolver-music .player-times{display:none!important}
+#revolver-music{width:min(68vw,270px);padding:12px 20px}
+#revolver-music .player-buttons{margin:0!important;gap:22px}
+#revolver-music .player-buttons button{width:44px;height:44px;padding:0!important}
+#revolver-music #skm-audio-error{font-size:11px;line-height:1.4;text-align:center}
+/* Unreleased voicing keeps a softly blurred connection. */
+#home-revolver .revolver-connections line[data-category="voicing"]{filter:blur(1.4px);opacity:.55}
+/* A barely visible memory of the original petal surface. */
+#home-revolver:before{inset:-5%;border-radius:0;background:rgba(214,218,224,.13);mask-image:url('menu-petal-haze.svg');-webkit-mask-image:url('menu-petal-haze.svg');mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+
+#revolver-music{bottom:calc(env(safe-area-inset-bottom) + 42px)}
+@media(max-height:600px){#revolver-music{bottom:calc(env(safe-area-inset-bottom) + 16px)}}
+#revolver-music #skm-now-playing{display:block;margin:0 0 10px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#f3f3f3;font:11px/1.5 -apple-system,sans-serif;letter-spacing:.02em;text-shadow:0 1px 5px #000a}
+.spinning .revolver-wheel,.spinning .revolver-icon{transition:transform .06s linear!important}
+#world-country-picker{display:block;max-width:100%;width:auto;margin:0 auto;padding:0 5px;background:transparent;border:0;border-radius:0;color:inherit;text-shadow:inherit;font:inherit;text-align:center;text-align-last:center;appearance:none;-webkit-appearance:none;cursor:pointer}#world-country-picker option{background:#eee;color:#222;text-shadow:none}
+
+/* Transparent ornament replaces the petal haze without a rectangular plate. */
+#home-revolver:before{inset:-5%;background:url("menu-ornament-transparent.png") center/contain no-repeat;mask-image:none;-webkit-mask-image:none;backdrop-filter:none;-webkit-backdrop-filter:none;filter:blur(.35px);opacity:.24}
+#home-revolver.sleeping:before{opacity:0}
+
+/* Keep ornament on the wheel so drag, inertia and folding share one transform. */
+#home-revolver:before{display:none}
+#home-revolver .revolver-wheel:before{content:'';position:absolute;inset:-5%;background:url("menu-ornament-transparent.png") center/contain no-repeat;filter:blur(.35px);opacity:.24;pointer-events:none;z-index:-1}
+
+/* Continuous motion while spinning; ease into the last detent only on release. */
+#home-revolver .revolver-wheel,#home-revolver .revolver-icon{transition:transform .45s cubic-bezier(.22,1,.36,1),opacity .65s}
+#home-revolver.grabbing .revolver-wheel,#home-revolver.grabbing .revolver-icon{transition:transform .04s linear}
+#home-revolver.spinning .revolver-wheel,#home-revolver.spinning .revolver-icon{transition:none!important}
+@media(prefers-reduced-motion:reduce){#home-revolver .revolver-wheel,#home-revolver .revolver-icon{transition:none}}
+
+/* Icons orbit in a separate, non-rotating layer: their artwork always stays upright. */
+#home-revolver .revolver-orbit{position:absolute;inset:0;pointer-events:none;transform:scale(1);transition:transform .65s,opacity .65s}
+#home-revolver .revolver-orbit .revolver-icon{pointer-events:auto;transition:none!important;will-change:transform}
+#home-revolver .revolver-wheel{transition:opacity .65s!important;will-change:transform}
+#home-revolver.sleeping .revolver-orbit{transform:scale(.05);opacity:0;pointer-events:none}
+#home-revolver.sleeping .revolver-icon{pointer-events:none}
+#home-revolver .revolver-wheel:before{filter:none}
+@media(prefers-reduced-motion:reduce){#home-revolver .revolver-orbit{transition:none}}
+
+/* Align the transparent center opening (626, 637.5 on a 1254 square) to the logo pivot. */
+#home-revolver .revolver-wheel:before{transform:translate(.079745%,-.837321%)}

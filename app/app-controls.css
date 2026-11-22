@@ -1,0 +1,28 @@
+/* Original Xcode layout; only the headset area becomes a player. */
+#itemsLayer .icon[data-category="headset"]{display:none!important}
+#itemsLayer .icon>img{filter:drop-shadow(0 3px 3px #0002) drop-shadow(0 -1px 1px #fff8)!important}
+#itemsLayer .icon canvas{filter:drop-shadow(0 2px 2px #0002)}
+#skm-controls{position:fixed;inset:0;z-index:55;pointer-events:none;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#383838}
+#skm-controls *{box-sizing:border-box}#skm-controls button,#skm-controls input,#skm-controls select{pointer-events:auto;font:inherit}
+#skm-controls button{cursor:pointer}#skm-controls :focus-visible{outline:2px solid #777;outline-offset:3px}
+#skm-player{position:absolute;top:calc(env(safe-area-inset-top) + 25px);left:7%;width:86%;max-height:32%;padding:17px 18px 14px;background:linear-gradient(140deg,#f1f1f1,#dedede);border:1px solid #fff;border-radius:27px;box-shadow:5px 7px 16px #aaa4,-4px -4px 12px #ffffffc0;pointer-events:auto}.player-cap{display:flex;justify-content:space-between;font:8px ui-monospace,monospace;letter-spacing:2px;color:#777;margin-bottom:12px}.player-cap i{width:5px;height:5px;display:inline-block;background:#c85b4f;border-radius:50%;margin-right:5px}#skm-track{display:block;width:100%;border:0;background:transparent;color:#383838;font-size:17px!important;letter-spacing:-.3px;padding:3px 0;white-space:nowrap;text-overflow:ellipsis}#skm-seek{width:100%;height:18px;accent-color:#777;margin:12px 0 0;cursor:pointer}.player-times{display:flex;justify-content:space-between;font:9px ui-monospace,monospace;color:#777}.player-buttons{display:flex;justify-content:center;gap:20px;align-items:center;margin-top:8px}.player-buttons button{height:35px;width:35px;border:1px solid #ffffffaa;border-radius:50%;background:linear-gradient(145deg,#f5f5f5,#ddd);color:#555;box-shadow:2px 3px 6px #bdbdbd,-2px -2px 7px #fff;font-size:15px!important}.player-buttons #skm-play{height:44px;width:44px;background:#555;color:#fafafa;border:1px solid #666}.player-buttons button:active{box-shadow:inset 2px 2px 5px #0002}#skm-audio-error{font-size:10px;color:#a44738;margin:8px 0 0}
+
+#skm-player{top:calc(env(safe-area-inset-top) + 25px);left:12%;width:76%;border-radius:22px}
+body.bm-open #skm-controls{visibility:hidden}
+@media(min-width:600px){#skm-controls{max-width:430px;left:50%;transform:translateX(-50%)}}
+@media(max-height:700px){#skm-player{top:14px;padding:10px 15px}.player-cap{margin-bottom:5px}#skm-seek{margin-top:5px}.player-buttons{margin-top:2px}}
+/* Compact player, retaining track selection and transport controls. */
+#skm-player{left:20%;width:60%;padding:10px 12px 9px;border-radius:17px}
+#skm-player .player-cap{font-size:7px;letter-spacing:1px;margin-bottom:5px}
+#skm-player #skm-track{font-size:13px!important;padding:1px 0}
+#skm-player #skm-seek{height:14px;margin:5px 0 0}
+#skm-player .player-times{font-size:8px}
+#skm-player .player-buttons{gap:13px;margin-top:4px}
+#skm-player .player-buttons button{width:28px;height:28px;font-size:13px!important}
+#skm-player .player-buttons #skm-play{width:34px;height:34px}
+/* Sculpted icon edges and a soft contact shadow, without button cards. */
+body.state2 #itemsLayer .icon{opacity:1!important}
+#itemsLayer .icon>img{filter:drop-shadow(0 -1px 0 #ffffff) drop-shadow(1px 1px 0 #7778) drop-shadow(1px 2px 0 #8886) drop-shadow(0 7px 5px #0003)!important;transform:perspective(500px) rotateX(8deg)}
+#itemsLayer .icon canvas{filter:drop-shadow(0 -1px 0 #fff) drop-shadow(1px 2px 0 #9998) drop-shadow(0 6px 5px #0003)}
+#itemsLayer .icon::before{content:'';position:absolute;width:54%;height:8%;bottom:-9%;left:23%;border-radius:50%;background:#00000012;filter:blur(5px);pointer-events:none}
+#itemsLayer .icon:active>img{transform:translateY(3px);filter:drop-shadow(0 2px 2px #0003)!important}

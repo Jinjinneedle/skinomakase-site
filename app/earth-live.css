@@ -1,0 +1,59 @@
+#skm-earth-preview .earth-live-panel{position:absolute;z-index:40;left:28px;right:28px;bottom:calc(env(safe-area-inset-bottom) + 80px);max-height:61%;display:flex;flex-direction:column;padding:16px;background:#101517f2;border:1px solid #65727666;border-radius:18px;color:#e3e8e5;backdrop-filter:blur(20px);box-shadow:0 15px 60px #0007;animation:skm-live-enter .24s ease both}
+#skm-earth-preview .earth-live-panel[hidden]{display:none}
+#skm-earth-preview .earth-live-panel header{display:flex;justify-content:space-between;align-items:center;min-height:34px;flex-shrink:0}
+#skm-earth-preview .earth-live-panel header strong{font:11px ui-monospace,monospace;letter-spacing:.15em}
+#skm-earth-preview .earth-live-panel button{border:0;background:none;color:inherit;font:inherit;cursor:pointer;min-height:44px}
+#skm-earth-preview .earth-live-panel header button{font-size:23px;min-width:44px}
+#skm-earth-preview .earth-live-panel nav{display:flex;border-bottom:1px solid #ffffff24;gap:8px;flex-shrink:0}
+#skm-earth-preview .earth-live-panel nav button{flex:1;font-size:10px;color:#88948e}
+#skm-earth-preview .earth-live-panel nav button[aria-pressed=true]{color:#fff;border-bottom:1px solid #df584b}
+#skm-earth-preview .earth-live-body{overflow:auto;overscroll-behavior:contain;min-height:0;padding-top:10px;scrollbar-width:thin}
+#skm-earth-preview .earth-live-row{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;padding:11px 2px!important;border-bottom:1px solid #ffffff14!important;text-decoration:none;color:#e3e8e5;font-size:11px;min-height:44px}
+#skm-earth-preview .earth-live-row small{font-size:9px;color:#9aaba2;text-align:right}
+#skm-earth-preview .earth-live-body input,#skm-earth-preview .earth-live-body select{box-sizing:border-box;width:100%;min-height:44px;border:1px solid #63716b55;border-radius:8px;background:#212728;color:#eff1ec;font:12px inherit;padding:10px;margin:4px 0}
+#skm-earth-preview .earth-live-note{font-size:10px;line-height:1.6;color:#a2ada7;margin:10px 0}
+#skm-earth-preview .earth-live-source{display:inline-block;color:#a2ada7;font-size:9px;padding:13px 0;text-decoration:none}
+#skm-earth-preview.feature-open .earth-live-panel{display:none}
+#skm-earth-preview .earth-satellite-pin{position:absolute;transform:translate(-50%,-50%);width:44px;height:44px;border:0;background:none;color:#83e8ed;display:grid;place-items:center;pointer-events:auto;padding:0;z-index:1;cursor:pointer}
+#skm-earth-preview .earth-satellite-pin[hidden]{display:none}
+#skm-earth-preview .earth-satellite-pin span{font:20px Arial;text-shadow:0 0 8px #73d9e8}
+#skm-earth-preview .earth-satellite-pin small{position:absolute;left:31px;top:16px;font:8px Arial;white-space:nowrap;max-width:95px;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 4px #000}
+#skm-earth-preview .earth-pin{z-index:3}
+@keyframes skm-live-enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){#skm-earth-preview .earth-live-panel{animation:none}}
+@media(min-width:800px){#skm-earth-preview .earth-live-panel{left:auto;right:48px;width:330px;max-height:65%}}
+#skm-earth-preview .earth-radio-mini{position:absolute;z-index:41;top:calc(env(safe-area-inset-top) + 112px);left:28px;right:28px;max-width:350px;margin:0 auto;display:flex;align-items:center;gap:6px;padding:3px 8px 3px 14px;color:#e6ece9;background:#101719e8;border:1px solid #65727655;border-radius:12px;backdrop-filter:blur(18px);box-shadow:0 8px 28px #0005;animation:skm-live-enter .2s ease both}
+#skm-earth-preview .earth-radio-mini[hidden],#skm-earth-preview .earth-orbit-detail[hidden]{display:none}
+#skm-earth-preview .earth-radio-mini button,#skm-earth-preview .earth-orbit-detail button{border:0;background:none;color:inherit;cursor:pointer;min-width:44px;min-height:44px;font:12px ui-monospace,monospace}
+#skm-earth-preview .earth-radio-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;text-align:left;justify-content:center;padding:6px 0}
+#skm-earth-preview .earth-radio-info strong{font:11px Arial,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#skm-earth-preview .earth-radio-info small{font:8px ui-monospace,monospace;color:#9ea9a3;letter-spacing:.06em}
+#skm-earth-preview .earth-radio-mini[data-status=playing] small{color:#9cc9af}
+#skm-earth-preview .earth-radio-mini[data-status=error] small{color:#f19f91}
+#skm-earth-preview .earth-live-row[aria-pressed=true]{color:#9fe5d0}
+#skm-earth-preview .earth-orbit-detail{position:absolute;z-index:35;left:28px;right:28px;bottom:calc(env(safe-area-inset-bottom) + 86px);padding:10px 16px 12px;background:#10191ded;border:1px solid #7ecbd34d;backdrop-filter:blur(18px);color:#e1f2f1;border-radius:14px;box-shadow:0 14px 50px #0005;animation:skm-live-enter .24s ease both}
+#skm-earth-preview .earth-orbit-detail header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#skm-earth-preview .earth-orbit-detail header strong{font:12px ui-monospace,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#skm-earth-preview .earth-orbit-detail header button{font-size:22px;margin-right:-9px}
+#skm-earth-preview .earth-orbit-metrics{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:6px 0 12px}
+#skm-earth-preview .earth-orbit-metrics div{display:flex;flex-direction:column;gap:5px}
+#skm-earth-preview .earth-orbit-metrics small{font:8px ui-monospace,monospace;color:#8da8ad;letter-spacing:.06em}
+#skm-earth-preview .earth-orbit-metrics strong{font:18px ui-monospace,monospace;font-weight:400}
+#skm-earth-preview .earth-orbit-actions{display:flex;gap:9px;border-top:1px solid #8bcdd52b}
+#skm-earth-preview .earth-orbit-actions button{flex:1;text-align:left;color:#9fdbde;font-size:10px}
+#skm-earth-preview .earth-orbit-actions button[aria-pressed=true]{color:#fff}
+#skm-earth-preview .earth-orbit-detail .earth-live-note{margin:4px 0;font-size:8px}
+#skm-earth-preview .earth-orbit-trail{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+#skm-earth-preview .earth-orbit-trail path{fill:none;stroke:#84d8df;stroke-width:1;stroke-dasharray:3 5;opacity:.65}
+#skm-earth-preview .earth-satellite-pin.is-selected span{text-shadow:0 0 13px #89f6ff;color:white}
+#skm-earth-preview.feature-open .earth-orbit-detail,#skm-earth-preview.feature-open .earth-radio-mini{display:none}
+@media(min-width:800px){#skm-earth-preview .earth-orbit-detail{left:auto;right:48px;width:330px}.earth-radio-mini{max-width:350px}}
+@media(prefers-reduced-motion:reduce){#skm-earth-preview .earth-radio-mini,#skm-earth-preview .earth-orbit-detail{animation:none}}
+
+#skm-earth-preview.city-focus .earth-radio-mini{top:auto;bottom:calc(env(safe-area-inset-bottom) + 86px)}
+#skm-earth-preview.city-focus.radio-active .earth-live-panel{bottom:calc(env(safe-area-inset-bottom) + 150px);max-height:calc(100% - 280px)}
+#skm-earth-preview .earth-radio-countries[hidden]{display:none}
+#skm-earth-preview .earth-space-cameras{border-top:1px solid #8bcdd52b;margin-top:8px}
+#skm-earth-preview .earth-space-cameras:empty{display:none}
+#skm-earth-preview .earth-space-cameras .earth-live-row{font-size:10px}
+#skm-earth-preview .earth-orbit-detail{max-height:calc(100% - 290px);overflow:auto;overscroll-behavior:contain}

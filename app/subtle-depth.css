@@ -1,0 +1,28 @@
+/* Original typography, palette, positions and sizes stay unchanged. */
+.bm-close,.video-close{box-shadow:0 3px 9px #00000014,inset 0 1px 0 #ffffff70}
+.modal-content{box-shadow:inset 0 1px 0 #ffffffa0,0 10px 28px #00000012!important}
+.pill,.power,.go,.langpick-list button,.chips button,button.primary,#shelter-setup button{box-shadow:inset 0 1px 0 #ffffff18,0 3px 7px #00000015}
+.field,.lane{box-shadow:inset 0 1px 2px #00000012,0 1px 0 #ffffff16}
+.pill:active,.power:active,.go:active,.chips button:active,button.primary:active{box-shadow:inset 0 2px 5px #00000022}
+#itemsLayer .icon>img{filter:drop-shadow(0 3px 3px #00000016)}
+/* Navigation: bare, consistently sized glyphs with an invisible 44px hit area. */
+.bm-close,.video-close,button.x,button.tray-x{
+  box-sizing:border-box!important;width:44px!important;height:44px!important;
+  min-width:44px!important;min-height:44px!important;padding:0!important;
+  border:0!important;border-radius:0!important;background:transparent!important;
+  box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif!important;
+  font-weight:300!important;line-height:1!important;letter-spacing:0!important;
+  text-shadow:none!important;transform:none!important;
+}
+.bm-close{left:12px!important;color:#222!important;font-size:0!important}
+.bm-close::before{content:'←'!important;font-family:-apple-system,BlinkMacSystemFont,sans-serif!important;font-size:24px!important;font-weight:300!important;line-height:1!important;color:inherit!important}
+.video-close,button.x,button.tray-x{font-size:27px!important}
+.video-close{right:12px!important;color:#fff!important}
+.bm-close:hover,.video-close:hover,button.x:hover{background:transparent!important;transform:none!important}
+.bm-close:active,.video-close:active,button.x:active{opacity:.5!important}
+.bm-close:focus-visible,.video-close:focus-visible,button.x:focus-visible{outline:2px solid currentColor!important;outline-offset:0!important}
+/* The monochrome voicing surface sits behind the shared back button. */
+#vcOverlay.active #vcClose{color:#eeeeec!important;background:transparent!important}
+#vcOverlay.active #vcClose{color:#4e5762!important}

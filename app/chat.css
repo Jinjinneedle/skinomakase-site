@@ -1,0 +1,63 @@
+/* SKM terminal: red on black, with a short entrance and a quiet moving brand mark. */
+.skm-chat{--signal:#ff454d;--muted:#f17c80;box-sizing:border-box;width:calc(100% - 20px);max-width:600px;height:calc(var(--chat-viewport,100dvh) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 28px);max-height:850px;min-height:0;position:fixed;top:calc(var(--chat-offset,0px) + env(safe-area-inset-top) + 14px);bottom:auto;left:0;right:0;margin:0 auto;border:1px solid #b72b33;border-radius:2px;padding:18px;background:#080809;color:var(--signal);overflow:hidden;font-family:Menlo,Consolas,monospace;box-shadow:0 0 34px #e01b251a;color-scheme:dark}
+.skm-chat[open]{display:flex;flex-direction:column;gap:12px;animation:skm-terminal-open .24s ease-out}
+.skm-chat::backdrop{background:#000b;backdrop-filter:blur(5px)}
+.skm-chat header{position:relative;display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;flex-shrink:0;padding-bottom:14px;border-bottom:1px solid #76262c}
+.skm-chat h2{font:600 17px/1.4 Menlo,Consolas,monospace;margin:0;letter-spacing:.02em;overflow-wrap:anywhere}
+.skm-chat header small{grid-column:1/-1;color:var(--muted);font:11px/1.4 Menlo,Consolas,monospace;letter-spacing:.12em}
+.skm-chat .skm-chat-brand{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:9px;height:40px}
+.skm-chat-brand>span:last-child{font:10px/1.5 Menlo,Consolas,monospace;letter-spacing:.16em}
+.skm-chat .skm-terminal-logo{position:relative;display:block;width:77px;aspect-ratio:1020/507;overflow:hidden;animation:skm-signal-drift 7s ease-in-out infinite}
+.skm-terminal-logo img{position:absolute;width:122.941176%;max-width:none;left:-12.45098%;top:-77.90927%;filter:invert(25%) sepia(96%) saturate(2435%) hue-rotate(332deg) brightness(114%) contrast(100%)}
+.skm-chat button{border:1px solid #a62b34;background:#160b0d;color:var(--signal);border-radius:2px;font-family:inherit;cursor:pointer;box-shadow:none}
+.skm-chat button:disabled{opacity:.5;cursor:default}
+.skm-chat button:focus-visible,.skm-chat textarea:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+.skm-chat header button{font-size:12px;padding:10px 12px;min-height:44px;max-width:150px;overflow-wrap:anywhere}
+.skm-chat-list{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:14px;padding:8px 0;-webkit-overflow-scrolling:touch;scrollbar-color:#a62b34 #080809;scrollbar-width:thin}
+.skm-chat-message{box-sizing:border-box;flex-shrink:0;align-self:flex-start;max-width:91%;padding:12px 14px;background:#100b0d;border:1px solid #542126;border-left:2px solid #ec3c46;border-radius:1px}
+.skm-chat-message.mine{align-self:flex-end;background:#1c0e12;border-left:1px solid #542126;border-right:2px solid var(--signal)}
+.skm-chat-message strong{font-size:11px;line-height:1.5;letter-spacing:.08em;display:block}
+.skm-chat-message strong::before{content:'> ';opacity:.65}
+.skm-chat-message p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;line-height:1.65;margin:8px 0;color:#ff6269}
+.skm-chat-message time{display:block;color:var(--muted);font-size:10px;line-height:1.5}
+.skm-chat-message a{color:#ff858a;text-decoration:underline;text-underline-offset:3px}
+.skm-chat form{display:flex;gap:8px;align-items:flex-end;flex-shrink:0;margin:0;border-top:1px solid #76262c;padding-top:12px}
+.skm-chat label{flex:1;min-width:0;font-size:11px;line-height:1.4;margin:0;color:var(--muted)}
+.skm-chat textarea{box-sizing:border-box;width:100%;height:88px;max-height:140px;min-height:60px;resize:none;font:16px/1.45 Menlo,Consolas,monospace;margin:6px 0 0;padding:10px;background:#100b0d;border:1px solid #76262c;border-radius:1px;color:#ff6269;caret-color:#ff858a}
+.skm-chat textarea::placeholder{color:#db747b;opacity:1}
+.skm-chat form button{padding:12px 10px;max-width:35%;min-height:44px;font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.skm-chat-status{font-size:11px;line-height:1.5;margin:0;min-height:17px;flex-shrink:0;color:var(--muted);overflow-wrap:anywhere}
+.skm-chat-empty{color:var(--muted);font-size:13px;line-height:1.7;padding:18px 6px}
+.skm-chat>button{padding:8px;font-size:12px;min-height:44px;flex-shrink:0}
+.skm-chat>button[hidden]{display:none}
+.chat-open{display:block;margin-top:18px;width:100%}
+@keyframes skm-terminal-open{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes skm-signal-drift{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(-2px);opacity:.75}}
+@media(max-height:600px){.skm-chat{padding:12px;gap:8px}.skm-chat .skm-chat-brand{display:none}.skm-chat header{padding-bottom:8px}.skm-chat textarea{height:62px}.skm-chat form{padding-top:8px}}
+@media(prefers-reduced-motion:reduce){.skm-chat[open],.skm-chat .skm-terminal-logo{animation:none}}
+
+/* A software keyboard shrinks the visual viewport without changing media queries. */
+.skm-chat.compact{height:calc(var(--chat-viewport) - env(safe-area-inset-top) - 20px);padding:12px;gap:8px}.skm-chat.compact .skm-chat-brand{display:none}.skm-chat.compact header{padding-bottom:8px}.skm-chat.compact textarea{height:62px}.skm-chat.compact form{padding-top:8px}.skm-chat-status:empty{display:none}
+
+
+/* Studio correspondence on white paper, including the compact keyboard layout. */
+html .skm-chat{--signal:#ab1424;--muted:#8e444a;background:#fff;color:var(--signal);border-color:#eac4c8;box-shadow:none;color-scheme:light}
+html .skm-chat[open]{animation:skm-desk-appear .28s ease-out both}
+html .skm-chat::backdrop{background:#fff;backdrop-filter:none;animation:skm-desk-appear .28s ease-out both}
+.skm-chat.leaving{pointer-events:none}
+.skm-chat header,.skm-chat form{background:#fff;border-color:#dca1a9}
+html dialog.skm-chat[open] .skm-chat-brand{display:flex;grid-column:1/-1;margin:0}
+html .skm-chat :is(button,textarea){color:var(--signal)!important;background:#fff!important;border-color:#ca6975!important}
+html .skm-chat button.skm-terminal-logo{background:transparent!important;border:none!important;border-radius:0;padding:0;box-shadow:none!important}
+html .skm-chat .skm-terminal-logo img{filter:brightness(0) saturate(100%) invert(14%) sepia(98%) saturate(2900%) hue-rotate(337deg);visibility:visible}
+.skm-chat .skm-terminal-logo::after{display:none}
+html .skm-chat .skm-chat-close{border:0;background:transparent!important;text-decoration:underline;text-underline-offset:.25em}
+.skm-chat .skm-chat-list{scrollbar-color:#d7989d #fff}
+.skm-chat .skm-chat-message,.skm-chat .skm-chat-message.mine{color:var(--signal);border:0;border-left:2px solid var(--signal);border-radius:0;background:#fff5f5}
+.skm-chat .skm-chat-message.mine{border:0;border-right:2px solid var(--signal);background:#fff}
+.skm-chat .skm-chat-message :is(p,a){color:var(--signal)}
+.skm-chat .skm-chat-message time,.skm-chat .skm-chat-empty{color:var(--muted)}
+.skm-chat textarea::placeholder{color:var(--muted)!important}
+.skm-chat textarea{caret-color:var(--signal)!important}
+@keyframes skm-desk-appear{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){html .skm-chat[open],html .skm-chat::backdrop{animation:none}}

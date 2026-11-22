@@ -1,0 +1,134 @@
+/* Customer surfaces share the website's white paper. Artwork retains its colours. */
+html[data-skm-paper]{color-scheme:light;--paper:#fff;--bg:#fff;--ink:#191919;--dim:#686868;--mute:#777;--muted:#777;--line:#d5d5d5;--pill:#f4f4f4}
+html[data-skm-paper=page],html[data-skm-paper=page] body{background:#fff!important;color:#191919!important}
+html[data-skm-paper=page] body{animation:skm-paper-in .45s ease both}
+html[data-skm-paper=page] :is(main,.wrap,.stage,.app,.langpick,.intro,.intro-body,.langpick-body,.sheet-card,.request-card,#shelter-setup,#bodymap-flower,#flower-booking-overlay,#preview,.graphic-screen,#canvas){background-color:#fff!important;color:#191919!important}
+html[data-skm-paper=page] :is(button:not(.sw):not(.swatch):not([data-hex]),input,textarea,select,.field,.langmenu,#bar,#zones,.petal-hub,.petal-choice):not(:where(.skm-chat *, .studio-thread *)){background-color:#fff!important;color:#222!important;border-color:#d4d4d4!important;box-shadow:none!important}
+html[data-skm-paper=page] :is(button.on,button[aria-pressed=true],button.primary,#go.on,.go.on):not(:where(.skm-chat *, .studio-thread *)){background:#222!important;color:#fff!important;border-color:#222!important}
+html[data-skm-paper=page] :is(input,textarea,select){accent-color:#333;caret-color:#222}
+html[data-skm-paper=page] :is(input,textarea)::placeholder{color:#858585!important}
+html[data-skm-paper=page] :is(#login .mark img,.petal-choice img,.graphic-screen img){filter:none!important}
+html[data-skm-paper=page] #bar .t.on{background:#ededed!important;color:#222!important}
+html[data-skm-paper=page] #mb-next::before{background:#222!important}
+html[data-skm-paper=page] #bodymap-flower .graphic-screen{background:#fff!important}
+html[data-skm-paper=page] #preview img{background:transparent!important}
+html[data-skm-paper=page] .flash{background:#111}
+html[data-skm-paper=page] .morse b.lit{background:#111;color:#fff}
+html[data-skm-paper=page] #terrain-map{background:#fff}
+html[data-skm-paper=page] .leaflet-tile-pane{filter:grayscale(1)}
+html[data-skm-paper=page] :is(.map-controls button,#map-status,.leaflet-control-attribution){background:#ffffffed!important;color:#444!important;border-color:#ddd!important}
+html[data-skm-paper=page] .map-controls button[aria-pressed=true]{background:#222!important;color:#fff!important}
+html[data-skm-paper=page] :is(.map-compass,.leaflet-control-attribution a){color:#444!important}
+
+/* One full-screen fade for the globe's music, gloves and Explore menu. */
+#skm-earth-preview{transition:background-color .55s ease}
+#skm-earth-preview.feature-open{background:#fff;overflow-y:hidden}
+#skm-earth-preview .earth-white-wash{position:fixed;inset:0;z-index:38;background:#fff;opacity:0;pointer-events:none;transition:opacity .55s cubic-bezier(.22,.61,.36,1)}
+#skm-earth-preview.feature-open .earth-white-wash{opacity:1;pointer-events:auto}
+#skm-earth-preview .earth-header button{transition:color .4s ease}
+#skm-earth-preview .earth-header img{transition:filter .4s ease}
+#skm-earth-preview.feature-open .earth-header{z-index:45}
+#skm-earth-preview.feature-open .earth-header button{color:#333}
+#skm-earth-preview.feature-open .earth-logo img,#skm-earth-preview.feature-open .earth-language img{filter:none}
+#skm-earth-preview.feature-open .earth-language img{mix-blend-mode:multiply}
+#skm-earth-preview .earth-drop-panel:not([hidden]),#skm-earth-preview .earth-extra-menu:not([hidden]){animation:skm-paper-in .45s ease .2s both}
+#skm-earth-preview .earth-music-panel,#skm-earth-preview .earth-booking-panel,#skm-earth-preview .earth-extra-menu{position:absolute;z-index:40;top:64px;bottom:auto;left:0;right:0;width:100%;max-width:none;height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 64px);max-height:none;margin:0;padding:17px 24px 30px;background:transparent;color:#222;border:0;border-radius:0;box-shadow:none;overflow:auto;overscroll-behavior:contain}
+#skm-earth-preview .earth-music-panel:not([hidden]){display:flex;flex-direction:column}
+#skm-earth-preview .earth-music-panel header span,#skm-earth-preview .earth-track-info>span,#skm-earth-preview .earth-track-info>p{display:none}
+#skm-earth-preview .earth-music-panel header h2{font:11px/1.3 'Helvetica Neue',-apple-system,sans-serif;letter-spacing:.3px;color:#444;margin:0}
+#skm-earth-preview .earth-music-body{margin:auto;width:100%;max-width:380px;padding:30px 0}
+#skm-earth-preview .earth-record{background:none}
+#skm-earth-preview .earth-record svg{color:#222}
+#skm-earth-preview .earth-track-info h3{color:#222;font-size:23px}
+#skm-earth-preview .earth-music-seek{accent-color:#333}
+#skm-earth-preview .earth-music-time{color:#666}
+#skm-earth-preview .earth-music-play{color:#222;background:#fff;border-color:#ccc}
+#skm-earth-preview .earth-music-error{color:#a52c2c}
+#skm-earth-preview.city-focus .earth-extra-menu{left:0;right:0;bottom:auto;box-shadow:none}
+#skm-earth-preview .earth-extra-menu{grid-template-columns:1fr 1fr;align-content:center;gap:28px 16px}
+#skm-earth-preview .earth-extra-heading{position:absolute;left:24px;right:18px;top:17px;padding:0;color:#555;letter-spacing:1px}
+#skm-earth-preview .earth-extra-menu button{background:none;color:#222;border:0;border-radius:0;min-height:72px;font-size:12px;letter-spacing:1px}
+#skm-earth-preview .earth-extra-menu .earth-extra-close{min-height:44px}
+
+/* Existing iframe and video routes retain their behavior, with paper behind their fade. */
+html[data-skm-paper=shell] body.bm-open #skm-earth-preview{visibility:visible;pointer-events:none}
+html[data-skm-paper=shell] :is(.bm-overlay,.app-overlay,.app-overlay.light,.vc-overlay,.video-player-overlay,.video-player){background:#fff!important;filter:none!important}
+html[data-skm-paper=shell] .bm-overlay,html[data-skm-paper=shell] .video-player-overlay{transition:opacity .55s ease!important}
+html[data-skm-paper=shell] :is(.bm-close,.video-close){background:#fff!important;color:#222!important;border-color:#ddd!important}
+html[data-skm-paper=shell] .video-zoom-hint{color:#666}
+html[data-skm-paper=shell] .video-player{transform:none!important}
+html[data-skm-paper=shell] .modal-overlay{background:#fff!important;backdrop-filter:none!important}
+html[data-skm-paper=shell] .modal-overlay.active{animation:skm-paper-in .55s ease both}
+html[data-skm-paper=shell] .modal-content{background:#fff!important;border:0!important;box-shadow:none!important;animation:none!important}
+html[data-skm-paper] #skm-language-dialog{background:#fff!important;color:#222!important;border-color:#ddd!important}
+html[data-skm-paper] #skm-language-dialog::backdrop{background:#fff;animation:skm-paper-in .55s ease both}
+
+/* Both booking conversations and glove conversations follow the same paper palette. */
+
+#skm-earth-preview .glove-direct-sheet,#skm-earth-preview .glove-direct-sheet[data-view=chat]{background:#fff;color:#222;border-color:#ddd;box-shadow:none}
+#skm-earth-preview .glove-direct-sheet[open]{animation:skm-paper-in .35s ease both}
+#skm-earth-preview .glove-direct-sheet::backdrop{background:#ffffffeb;backdrop-filter:blur(4px);animation:skm-paper-in .4s ease both}
+#skm-earth-preview .glove-direct-sheet[data-view] :is(.glove-direct-header,.glove-chat-compose){border-color:#ddd}
+#skm-earth-preview .glove-direct-sheet[data-view] :is(.glove-direct-status,.glove-chat-owner,.glove-chat-owner small,.glove-chat-empty,.glove-large-art,.glove-unavailable){color:#666}
+#skm-earth-preview .glove-chat-message{background:#f5f5f5;border-color:#ddd;color:#222}
+#skm-earth-preview .glove-chat-message time{color:#777}
+#skm-earth-preview .glove-chat-compose textarea{background:#fff;border-color:#ccc;color:#222;outline-color:#666}
+#skm-earth-preview .glove-chat-compose button{background:#222;color:#fff}
+#skm-earth-preview .glove-location-placeholder{background:repeating-linear-gradient(0deg,transparent 0 28px,#eee 29px 30px),repeating-linear-gradient(90deg,transparent 0 38px,#eee 39px 40px);border-color:#ddd;color:#666}
+#skm-earth-preview .glove-primary{background:#222;color:#fff}
+@keyframes skm-paper-in{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){html[data-skm-paper] *,html[data-skm-paper] *::backdrop,#skm-earth-preview{animation-duration:0s!important;animation-delay:0s!important;transition-duration:0s!important;transition-delay:0s!important}}
+
+html[data-skm-paper=shell] .bm-overlay iframe{transition:opacity .25s ease}
+html[data-skm-paper=shell] .bm-overlay iframe[data-paper-loading]{opacity:0}
+@media(prefers-reduced-motion:reduce){html[data-skm-paper=shell] .bm-overlay iframe{transition:none}}
+
+html[data-skm-paper=shell] .modal-close{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 14px;margin-left:8px;border:0;background:#fff;color:#555;cursor:pointer;font:11px ui-monospace,monospace}
+
+#skm-onboarding{box-sizing:border-box;width:min(100% - 28px,460px);max-height:calc(100dvh - 40px - env(safe-area-inset-top) - env(safe-area-inset-bottom));padding:24px;border:1px solid #ddd;border-radius:4px;background:#fff;color:#222;font:15px/1.6 -apple-system,BlinkMacSystemFont,sans-serif;overflow:auto}
+#skm-onboarding::backdrop{background:#ffffffed;backdrop-filter:blur(8px)}
+#skm-onboarding header,#skm-onboarding footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#skm-onboarding header>span{font:10px ui-monospace,monospace;letter-spacing:2px}
+#skm-onboarding button{min-height:44px;padding:10px 14px;background:none;border:0;color:#333;font:inherit;cursor:pointer}
+#skm-onboarding select{margin-top:20px;max-width:100%;min-height:44px;padding:8px 12px;border:1px solid #ddd;background:#fff;color:#222;font:16px -apple-system,sans-serif}
+#skm-onboarding main{padding:24px 0 16px}#skm-onboarding h1{font-size:26px;line-height:1.25;font-weight:500;margin:14px 0;outline:none}#skm-onboarding p{margin:0;min-height:80px;overflow-wrap:anywhere;color:#666}
+#skm-onboarding [data-count]{font:10px ui-monospace,monospace;color:#888;letter-spacing:2px}#skm-onboarding [data-next]{margin-left:auto;background:#222;color:#fff;border-radius:2px}#skm-onboarding [hidden]{display:none}
+#skm-tour-replay{width:100%;margin-top:16px;border-top:1px solid #7776!important;text-align:left;display:flex;align-items:center;gap:10px}
+#skm-tour-replay .tour-book{width:22px;height:22px;stroke-width:1.5}
+#skm-earth-preview .earth-header #skm-tour-launch{position:absolute;right:calc(max(18px,env(safe-area-inset-right)) + 46px);top:50%;transform:translateY(-50%);width:44px;height:44px;color:#dce5ed}
+#skm-earth-preview:is(.city-focus,.feature-open) #skm-tour-launch{display:none}
+#skm-onboarding .tour-scene{display:flex;align-items:center;justify-content:center;gap:18px;height:110px;margin:0 0 20px;color:#23292d}
+#skm-onboarding .tour-scene svg{display:block;flex:none}
+#skm-onboarding .tour-subject{width:62px;height:62px;stroke-width:1.35}
+#skm-onboarding .tour-connector{width:26px;height:26px;stroke-width:1.3;color:#515961}
+#skm-onboarding .tour-action{width:54px;height:54px;position:relative;display:grid;place-items:center;color:#213f55}
+#skm-onboarding .tour-action-ink{width:46px;height:46px;stroke-width:1.6}
+#skm-onboarding .tour-swipe{position:absolute;top:-16px;left:8px;width:38px;height:22px;stroke-width:1.65}
+#skm-onboarding [data-count],#skm-onboarding [data-copy]{color:#3b4248}
+#skm-onboarding[data-step="5"] .tour-action-ink{fill:currentColor;stroke-width:1.4}
+@media(prefers-reduced-motion:no-preference){
+ #skm-onboarding[open][data-step="0"] .tour-action-ink{animation:tour-drag 1.5s ease-in-out 2}
+ #skm-onboarding[open]:not([data-step="0"]) .tour-action-ink{animation:tour-reveal .42s ease-out both}
+ @keyframes tour-drag{0%,100%{transform:translateX(-6px) rotate(-5deg)}50%{transform:translateX(7px) rotate(3deg)}}
+ @keyframes tour-reveal{from{opacity:.2;transform:translateX(-5px)}to{opacity:1;transform:none}}
+}
+@media(max-height:600px){#skm-onboarding{padding:16px}#skm-onboarding main{padding-top:12px}#skm-onboarding .tour-scene{height:66px;margin:4px 0 8px}#skm-onboarding h1{font-size:22px}}
+
+/* Native iOS 17.5+ and current browsers animate both sides of menu changes. */
+@supports (transition-behavior: allow-discrete){
+ @media(prefers-reduced-motion:no-preference){
+  #skm-earth-preview :is(.earth-drop-panel,.earth-extra-menu,.earth-city-panel),html dialog:not(.skm-chat),html details::details-content{
+   transition:opacity .28s ease,display .28s allow-discrete,overlay .28s allow-discrete,content-visibility .28s allow-discrete;
+  }
+  #skm-earth-preview :is(.earth-drop-panel,.earth-extra-menu,.earth-city-panel)[hidden],html dialog:not([open]),html details:not([open])::details-content{opacity:0}
+  @starting-style{
+   #skm-earth-preview :is(.earth-drop-panel,.earth-extra-menu,.earth-city-panel):not([hidden]),html dialog[open],html details[open]::details-content{opacity:0}
+  }
+ }
+}
+@media(prefers-reduced-motion:no-preference){
+ @view-transition{navigation:auto}
+ ::view-transition-old(root){animation:skm-page-away .22s ease-in both}
+ ::view-transition-new(root){animation:skm-paper-in .3s ease-out both}
+ @keyframes skm-page-away{to{opacity:0}}
+}

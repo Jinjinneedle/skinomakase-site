@@ -1,0 +1,258 @@
+import { deg2rad, xpdotp } from './constants.js';
+import { days2mdhms, jday } from './ext.js';
+import { sgp4init } from './propagation/sgp4init.js';
+function initSatrec(satrec, opsmode) {
+    sgp4init(satrec, {
+        opsmode,
+        satn: satrec.satnum,
+        epoch: satrec.jdsatepoch - 2433281.5,
+        xbstar: satrec.bstar,
+        xecco: satrec.ecco,
+        xargpo: satrec.argpo,
+        xinclo: satrec.inclo,
+        xmo: satrec.mo,
+        xno: satrec.no,
+        xnodeo: satrec.nodeo,
+    });
+}
+/* -----------------------------------------------------------------------------
+ *
+ *                           function twoline2satrec
+ *
+ *  this function converts the two line element set character string data to
+ *    variables and initializes the sgp4 variables. several intermediate varaibles
+ *    and quantities are determined. note that the result is a structure so multiple
+ *    satellites can be processed simultaneously without having to reinitialize. the
+ *    verification mode is an important option that permits quick checks of any
+ *    changes to the underlying technical theory. this option works using a
+ *    modified tle file in which the start, stop, and delta time values are
+ *    included at the end of the second line of data. this only works with the
+ *    verification mode. the catalog mode simply propagates from -1440 to 1440 min
+ *    from epoch and is useful when performing entire catalog runs.
+ *
+ *  author        : david vallado                  719-573-2600    1 mar 2001
+ *
+ *  inputs        :
+ *    longstr1    - first line of the tle
+ *    longstr2    - second line of the tle
+ *    typerun     - type of run                    verification 'v', catalog 'c',
+ *                                                 manual 'm'
+ *    typeinput   - type of manual input           mfe 'm', epoch 'e', dayofyr 'd'
+ *    opsmode     - mode of operation afspc or improved 'a', 'i'
+ *    whichconst  - which set of constants to use  72, 84
+ *
+ *  outputs       :
+ *    satrec      - structure containing all the sgp4 satellite information
+ *
+ *  coupling      :
+ *    getgravconst-
+ *    days2mdhms  - conversion of days to month, day, hour, minute, second
+ *    jday        - convert day month year hour minute second into julian date
+ *    sgp4init    - initialize the sgp4 variables
+ *
+ *  references    :
+ *    norad spacetrack report #3
+ *    vallado, crawford, hujsak, kelso  2006
+ --------------------------------------------------------------------------- */
+/**
+ * Return a Satellite imported from two lines of TLE data.
+ *
+ * Provide the two TLE lines as strings `tleLine1` and `tleLine2`,
+ * and select which standard set of gravitational constants you want
+ * by providing `gravity_constants`:
+ *
+ * `sgp4.propagation.wgs72` - Standard WGS 72 model
+ * `sgp4.propagation.wgs84` - More recent WGS 84 model
+ * `sgp4.propagation.wgs72old` - Legacy support for old SGP4 behavior
+ *
+ * Normally, computations are made using various recent improvements
+ * to the algorithm.  If you want to turn some of these off and go
+ * back into "afspc" mode, then set `afspc_mode` to `True`.
+ */
+export function twoline2satrec(longstr1, longstr2) {
+    const opsmode = 'i';
+    const error = 0;
+    const satnum = longstr1.substring(2, 7);
+    const epochyr = Number(longstr1.substring(18, 20));
+    const epochdays = Number(longstr1.substring(20, 32));
+    let ndot = Number(longstr1.substring(33, 43));
+    let nddot = Number(`${longstr1.substring(44, 45)}.${longstr1.substring(45, 50)}E${longstr1.substring(50, 52)}`);
+    const bstar = Number(`${longstr1.substring(53, 54)}.${longstr1.substring(54, 59)}E${longstr1.substring(59, 61)}`);
+    // satrec.satnum = longstr2.substring(2, 7);
+    // ---- find standard orbital elements ----
+    const inclo = Number(longstr2.substring(8, 16)) * deg2rad;
+    const nodeo = Number(longstr2.substring(17, 25)) * deg2rad;
+    const ecco = Number(`.${longstr2.substring(26, 33).replace(/\s/g, '0')}`);
+    const argpo = Number(longstr2.substring(34, 42)) * deg2rad;
+    const mo = Number(longstr2.substring(43, 51)) * deg2rad;
+    // ---- find no, ndot, nddot ----
+    const no = Number(longstr2.substring(52, 63)) / xpdotp;
+    // satrec.nddot= satrec.nddot * Math.pow(10.0, nexp);
+    // satrec.bstar= satrec.bstar * Math.pow(10.0, ibexp);
+    // ---- convert to sgp4 units ----
+    ndot /= xpdotp * 1440.0; // ? * minperday
+    nddot /= xpdotp * 1440.0 * 1440;
+    // ----------------------------------------------------------------
+    // find sgp4epoch time of element set
+    // remember that sgp4 uses units of days from 0 jan 1950 (sgp4epoch)
+    // and minutes from the epoch (time)
+    // ----------------------------------------------------------------
+    // ---------------- temp fix for years from 1957-2056 -------------------
+    // --------- correct fix will occur when year is 4-digit in tle ---------
+    const year = epochyr < 57 ? epochyr + 2000 : epochyr + 1900;
+    const mdhmsResult = days2mdhms(year, epochdays);
+    const { mon, day, hr, minute, sec } = mdhmsResult;
+    const jdsatepoch = jday(year, mon, day, hr, minute, sec);
+    const satrec = {
+        error,
+        satnum,
+        epochyr,
+        epochdays,
+        ndot,
+        nddot,
+        bstar,
+        inclo,
+        nodeo,
+        ecco,
+        argpo,
+        mo,
+        no,
+        jdsatepoch,
+    };
+    //  ---------------- initialize SGP4 model -------------------
+    initSatrec(satrec, opsmode);
+    return satrec;
+}
+/* -----------------------------------------------------------------------------
+ *
+ *                           function json2satrec
+ *
+ *  this function converts the OMM json data to variables and initializes the sgp4
+ *    variables. several intermediate varaibles and quantities are determined. note
+ *    that the result is a structure so multiple satellites can be processed
+ *    simultaneously without having to reinitialize. the verification mode is an
+ *    important option that permits quick checks of any changes to the underlying
+ *    technical theory. this option works using a modified tle file in which the
+ *    start, stop, and delta time values are included at the end of the second line
+ *    of data. this only works with the verification mode. the catalog mode simply
+ *    propagates from -1440 to 1440 min from epoch and is useful when performing
+ *    entire catalog runs.
+ *
+ *  author        : Hariharan Vitaladevuni                   18 Aug 2023
+ *                  Theodore Kruczek                         19 Aug 2023
+ *
+ *  inputs        :
+ *    jsonobj     - OMM json data
+ *    opsmode     - mode of operation afspc or improved 'a', 'i'. Default: 'i'.
+ *
+ *  outputs       :
+ *    satrec      - structure containing all the sgp4 satellite information
+ *
+ *  coupling      :
+ *    days2mdhms  - conversion of days to month, day, hour, minute, second
+ *    jday        - convert day month year hour minute second into julian date
+ *    sgp4init    - initialize the sgp4 variables
+ *
+ *  warning       : the epoch date in OMM format is more accurate than TLE format!
+ *                  this will result in extremely close, but different
+ *                  position/velocity values. Depending on your use case, it may
+ *                  be better to use twoline2satrec, but for the average user this
+ *                  will provide comparable results.
+ *
+ *  references    :
+ *    https://celestrak.org/NORAD/documentation/gp-data-formats.php
+ --------------------------------------------------------------------------- */
+export function json2satrec(jsonobj, opsmode = 'i') {
+    const error = 0;
+    const satnum = jsonobj.NORAD_CAT_ID.toString();
+    const epochStr = jsonobj.EPOCH.endsWith('Z')
+        ? jsonobj.EPOCH
+        : `${jsonobj.EPOCH}Z`;
+    const epoch = new Date(epochStr);
+    // Date keeps milliseconds only; CelesTrak and Space-Track write microseconds, so keep the rest of the fraction
+    const fractionDigits = /\.(\d+)Z$/.exec(epochStr)?.[1] ?? '';
+    const beyondMs = fractionDigits.length > 3
+        ? Number(`0.${fractionDigits.slice(3)}`) / 1000
+        : 0; // seconds beyond the milliseconds
+    const year = epoch.getUTCFullYear();
+    const epochyr = Number(year.toString().slice(-2));
+    const epochdays = (epoch.valueOf() - new Date(Date.UTC(year, 0, 1, 0, 0, 0)).valueOf()) /
+        (86400 * 1000) +
+        beyondMs / 86400 +
+        1;
+    let ndot = Number(jsonobj.MEAN_MOTION_DOT);
+    let nddot = Number(jsonobj.MEAN_MOTION_DDOT);
+    // ---- convert to sgp4 units ----
+    ndot /= xpdotp * 1440.0; // ? * minperday
+    nddot /= xpdotp * 1440.0 * 1440;
+    const bstar = Number(jsonobj.BSTAR);
+    const inclo = Number(jsonobj.INCLINATION) * deg2rad;
+    const nodeo = Number(jsonobj.RA_OF_ASC_NODE) * deg2rad;
+    const ecco = Number(jsonobj.ECCENTRICITY);
+    const argpo = Number(jsonobj.ARG_OF_PERICENTER) * deg2rad;
+    const mo = Number(jsonobj.MEAN_ANOMALY) * deg2rad;
+    const no = Number(jsonobj.MEAN_MOTION) / xpdotp;
+    // ----------------------------------------------------------------
+    // find sgp4epoch time of element set
+    // remember that sgp4 uses units of days from 0 jan 1950 (sgp4epoch)
+    // and minutes from the epoch (time)
+    // ----------------------------------------------------------------
+    const mdhmsResult = days2mdhms(year, epochdays);
+    const { mon, day, hr, minute, sec } = mdhmsResult;
+    const jdsatepoch = jday(year, mon, day, hr, minute, sec);
+    const satrec = {
+        error,
+        satnum,
+        epochyr,
+        epochdays,
+        ndot,
+        nddot,
+        bstar,
+        inclo,
+        nodeo,
+        ecco,
+        argpo,
+        mo,
+        no,
+        jdsatepoch,
+    };
+    //  ---------------- initialize SGP4 model -------------------
+    initSatrec(satrec, opsmode);
+    return satrec;
+}
+/**
+ * Converts a TLE catalog number field to a number, decoding the Alpha-5 form.
+ *
+ * Catalog numbers above 99999 are written in a TLE's five-character field as
+ * Alpha-5: a leading letter A-Z, skipping I and O, stands for 10-33 in the
+ * ten-thousands place, so `'A0000'` is 100000 and `'Z9999'` is 339999.
+ *
+ * A blank or whitespace-only field gives `NaN`, not the 0 that `Number()`
+ * would return for it. Any other field goes through `Number()`: a five-digit
+ * field gives its number, and so does anything else `Number()` accepts, such
+ * as a space-padded `'    5'` (5) or `'1e3'` (1000); a field starting with I
+ * or O, or a malformed one such as `'a0404'`, `'A000'` or `'AA000'`, gives
+ * `NaN`.
+ *
+ * `twoline2satrec` keeps the field as written in `satrec.satnum`; this function
+ * does not change that, it only converts a field when the caller wants a number.
+ */
+export function alpha5ToNumber(field) {
+    if (field.trim() === '')
+        return Number.NaN;
+    const c = field[0];
+    if (c !== undefined &&
+        c >= 'A' &&
+        c <= 'Z' &&
+        c !== 'I' &&
+        c !== 'O' &&
+        /^\d{4}$/.test(field.slice(1))) {
+        let tens = c.charCodeAt(0) - 65 + 10;
+        if (c > 'I')
+            tens -= 1;
+        if (c > 'O')
+            tens -= 1;
+        return tens * 10000 + Number(field.slice(1));
+    }
+    return Number(field);
+}

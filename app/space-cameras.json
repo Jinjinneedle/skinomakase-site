@@ -1,0 +1,18 @@
+[
+  {
+    "id": "iss-earth-hd",
+    "name": "ISS · Earth view HD",
+    "norad": "25544",
+    "publisher": "NASA",
+    "video": "ROboUHfPUrU",
+    "source": "https://www.nasa.gov/live/"
+  },
+  {
+    "id": "iss-station-live",
+    "name": "ISS · Station camera",
+    "norad": "25544",
+    "publisher": "NASA",
+    "video": "M3HKLzjvKPc",
+    "source": "https://www.nasa.gov/live/"
+  }
+]

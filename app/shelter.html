@@ -1,0 +1,214 @@
+<!doctype html>
+<html data-skm-paper="page" lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Shelter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
+<style>
+  :root { --bg:#e3e3e3; --ink:#222; --mute:#8a8a8a; --line:#5a5a5a; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html, body { height:100%; margin:0; background:var(--bg); color:var(--ink); font-family:"Space Mono", ui-monospace, monospace; overflow:hidden; }
+  .wrap { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+  svg { width:100vw; height:100vw; max-width:560px; max-height:560px; display:block; font-family:"Space Mono", ui-monospace, monospace; }
+  text { fill:var(--ink); }
+  .cap { font-size:15px; letter-spacing:.16em; fill:#555; }
+  .mi { font-size:11.5px; letter-spacing:.08em; fill:#7a7a7a; }
+  .vb { font-size:22px; font-weight:700; letter-spacing:-.01em; }
+  .vs { font-size:12.5px; letter-spacing:.06em; fill:#444; }
+  .hdg { font-size:36px; font-weight:700; letter-spacing:-.02em; }
+  .ln { stroke:var(--line); fill:none; }
+  .lt { stroke:#8f8f8f; fill:none; }
+  .tape line { stroke:#5a5a5a; }
+  .tape text { font-size:11px; letter-spacing:.1em; fill:#666; }
+  .trk { cursor:pointer; }
+  .trk rect { fill:none; stroke:#6a6a6a; stroke-width:1.2; }
+  .trk .in { transform-box:fill-box; transform-origin:center; transform:rotate(45deg); }
+  .trk circle { fill:#3a3a3a; }
+  .trk text { font-size:11px; letter-spacing:.08em; fill:#6e6e6e; text-anchor:middle; }
+  .trk text.nm { fill:#333; }
+  .trk.n1 rect { stroke:#1a1a1a; stroke-width:1.8; }
+  .trk.sel rect { stroke:#000; stroke-width:2.2; } .trk.sel text { fill:#000; }
+  .btn { cursor:pointer; }
+  .btn rect { fill:#ededed; stroke:#6a6a6a; stroke-width:1.2; }
+  .btn text { font-size:12px; text-anchor:middle; dominant-baseline:central; fill:#444; }
+  .status { font-size:13px; letter-spacing:.1em; fill:#444; text-anchor:middle; }
+  .status.warn { fill:#b3261e; }
+</style>
+<link rel="stylesheet" href="shelter-map.css">
+<link rel="stylesheet" href="subtle-depth.css">
+<link rel="stylesheet" href="session-theme.css?v=1"><link rel="stylesheet" href="feature-paper.css?v=1"><link rel="stylesheet" href="studio-tone.css?v=11da9c45cf3f"><link rel="stylesheet" href="web-mobile.css?v=20261122"></head>
+<body>
+<div class="wrap">
+<svg id="v" viewBox="0 0 720 720" aria-hidden="true">
+  <!-- 위: 방위 · 좌우 대피소 1·2 -->
+  <text x="264" y="56" class="cap" text-anchor="middle">APC</text>
+  <text x="456" y="56" class="cap" text-anchor="middle">LDS</text>
+  <g id="hdgBox" class="btn"><rect x="322" y="30" width="76" height="40" rx="2"></rect><text id="hdg" x="360" y="51" class="hdg">---</text><path d="M352 70 L360 78 L368 70 Z" style="fill:#333"></path></g>
+  <text id="l1" x="38" y="50" class="vb">-- KM</text>
+  <text id="l2" x="38" y="70" class="vs">—</text>
+  <text id="l3" x="38" y="88" class="mi">---° / --</text>
+  <text id="r1" x="682" y="50" class="vb" text-anchor="end">-- KM</text>
+  <text id="r2" x="682" y="70" class="vs" text-anchor="end">—</text>
+  <text id="r3" x="682" y="88" class="mi" text-anchor="end">---° / --</text>
+
+  <!-- 나침반 테이프 (폰을 돌리면 흐른다) -->
+  <path id="arcTrack" class="ln" style="stroke-width:1.4"></path>
+  <g id="tape" class="tape"></g>
+  <text id="lat" x="360" y="166" class="mi" text-anchor="middle">--.----</text>
+  <text id="lon" x="146" y="210" class="mi" text-anchor="middle">---.----</text>
+  <text id="acc" x="579" y="210" class="mi" text-anchor="middle">±--M</text>
+
+  <!-- 탐지 반경 조절: 양쪽 S 버튼 -->
+  <g id="rngDn" class="btn"><rect x="234" y="250" width="26" height="26" rx="2"></rect><text x="247" y="263">−</text></g>
+  <g id="rngUp" class="btn"><rect x="460" y="250" width="26" height="26" rx="2"></rect><text x="473" y="263">+</text></g>
+  <line x1="272" y1="272" x2="448" y2="272" class="lt" style="stroke-width:1"></line>
+  <rect x="304" y="238" width="6" height="6" style="fill:none;stroke:#8f8f8f;stroke-width:1"></rect>
+  <rect x="410" y="238" width="6" height="6" style="fill:none;stroke:#8f8f8f;stroke-width:1"></rect>
+  <text id="rng" x="360" y="263" class="mi" text-anchor="middle">RNG 2 KM</text>
+
+  <!-- 시야 콘 + 중앙선 + 탐지 반경 점선 + 나 -->
+  <path id="cone" class="lt" style="stroke-width:1"></path>
+  <line x1="360" y1="134" x2="360" y2="596" class="ln" style="stroke-width:1.2"></line>
+  <path id="ring" class="ln" style="stroke-width:1.2;stroke-dasharray:6 6"></path>
+  <g id="tracks"></g>
+  <path d="M348 620 L360 602 L372 620 Z" style="fill:#111"></path>
+
+  <!-- 아래 -->
+  <text id="bl1" x="38" y="668" class="mi">SRC —</text>
+  <text id="bl2" x="38" y="686" class="mi">SET —</text>
+  <text id="br1" x="682" y="668" class="mi" text-anchor="end">GPS —</text>
+  <text id="br2" x="682" y="686" class="mi" text-anchor="end">UPD --:--</text>
+  <text id="status" x="360" y="686" class="status">:: Locating ::</text>
+  <text id="addr" x="360" y="706" class="mi" text-anchor="middle"></text>
+</svg>
+</div>
+<script src="shelters.js"></script>
+<script src="shelter-i18n.js"></script>
+<script src="shelter-regions.js"></script>
+<script src="shelter-onboarding.js"></script>
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+  const haptic = k => { try { window.SKMApp && SKMApp.haptic(k); } catch (e) {} };
+  const inApp = !!window.SKMApp;
+  const S = window.SKM_SHELTERS || [], SRC = window.SKM_SHELTERS_SRC || '—';
+  const toRad = d => d * Math.PI / 180, pad2 = n => String(n).padStart(2, '0'), pad3 = n => String(n).padStart(3, '0');
+  const hav = (a, b, c, d) => { const p = toRad(c - a), q = toRad(d - b), s = Math.sin(p / 2) ** 2 + Math.cos(toRad(a)) * Math.cos(toRad(c)) * Math.sin(q / 2) ** 2; return 2 * 6371 * Math.asin(Math.sqrt(s)); };
+  const brgTo = (a, b, c, d) => { const y = Math.sin(toRad(d - b)) * Math.cos(toRad(c)), x = Math.cos(toRad(a)) * Math.sin(toRad(c)) - Math.sin(toRad(a)) * Math.cos(toRad(c)) * Math.cos(toRad(d - b)); return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360; };
+  const fmtKm = km => km < 1 ? Math.round(km * 1000) + ' M' : km.toFixed(km < 10 ? 1 : 0) + ' KM';
+  const walk = km => Math.max(1, Math.round(km / 4.5 * 60)) + 'M';
+  const short = (n, k) => n.replace(/\s*\(.*?\)\s*/g, '').slice(0, k || 12);
+
+  // ── 기하: 나 = (360,613), 위 호 중심 (360,782) 반지름 649 (사진의 곡률), 탐지 반경 = 화면 300px ──
+  const SELF = { x: 360, y: 613 }, ARC = { cx: 360, cy: 782, r: 649 }, RING_PX = 300;
+  const RANGES = [0.5, 1, 2, 3, 5, 10]; let rangeIx = 2;   // 기본 2 km (걸어서 갈 수 있는 거리)
+  const arcPt = (deg, r) => [ARC.cx + Math.sin(toRad(deg)) * (r || ARC.r), ARC.cy - Math.cos(toRad(deg)) * (r || ARC.r)];
+  (function () {
+    const [x0, y0] = arcPt(-34), [x1, y1] = arcPt(34);
+    $('#arcTrack').setAttribute('d', `M${x0.toFixed(1)} ${y0.toFixed(1)} A${ARC.r} ${ARC.r} 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)}`);
+    $('#cone').setAttribute('d', 'M360 300 L184 416 M360 300 L536 416 M178 412 l6 6 m0 -6 l-6 6 M530 412 l6 6 m0 -6 l-6 6');
+    const [rx0, ry0] = [SELF.x - RING_PX, SELF.y], [rx1, ry1] = [SELF.x + RING_PX, SELF.y];
+    $('#ring').setAttribute('d', `M${rx0} ${ry0} A${RING_PX} ${RING_PX} 0 0 1 ${rx1} ${ry1}`);
+  })();
+  // 나침반 테이프: 현재 방위 ±60° 를 호 ±34° 에 펼친다
+  function drawTape(h) {
+    const g = $('#tape'); g.innerHTML = '';
+    const start = Math.ceil((h - 60) / 5) * 5;
+    for (let d = start; d <= h + 60; d += 5) {
+      const rel = (d - h) / 60 * 34;
+      const big = d % 30 === 0, mid = d % 15 === 0;
+      const [x1, y1] = arcPt(rel, ARC.r), [x2, y2] = arcPt(rel, ARC.r + (big ? 16 : mid ? 11 : 6));
+      g.appendChild(el('line', { x1: x1.toFixed(1), y1: y1.toFixed(1), x2: x2.toFixed(1), y2: y2.toFixed(1), style: 'stroke-width:' + (big ? 1.6 : 1) }));
+      if (big) {
+        const dd = ((d % 360) + 360) % 360, [tx, ty] = arcPt(rel, ARC.r + 30);
+        const t = el('text', { x: tx.toFixed(1), y: ty.toFixed(1), 'text-anchor': 'middle', transform: `rotate(${rel.toFixed(1)} ${tx.toFixed(1)} ${ty.toFixed(1)})` });
+        t.textContent = dd === 0 ? 'N' : dd === 90 ? 'E' : dd === 180 ? 'S' : dd === 270 ? 'W' : pad3(dd); g.appendChild(t);
+      }
+    }
+  }
+  drawTape(0);
+
+  // ── 데이터 ──
+  let pos = null, heading = null, near = [], sel = -1, permDenied = false;
+  function compute() {
+    if (!pos) return;
+    const rng = RANGES[rangeIx];
+    near = S.filter(r => Math.abs(r[1]-pos.lat)<=0.3 && Math.abs(r[2]-pos.lon)<=0.4).map(r => ({ name: r[0], lat: r[1], lon: r[2], typ: r[3], addr: r[4] || '', km: hav(pos.lat, pos.lon, r[1], r[2]) })).filter(t => t.km <= 30).sort((a, b) => a.km - b.km).slice(0, 5).map(t => Object.assign(t, { brg: brgTo(pos.lat, pos.lon, t.lat, t.lon) }));
+    const a = near[0], b = near[1];
+    $('#l1').textContent = a ? fmtKm(a.km) : '-- KM'; $('#l2').textContent = a ? short(a.name) : '—'; $('#l3').textContent = a ? pad3(Math.round(a.brg)) + '° / ' + walk(a.km) : '---° / --';
+    $('#r1').textContent = b ? fmtKm(b.km) : '-- KM'; $('#r2').textContent = b ? short(b.name) : '—'; $('#r3').textContent = b ? pad3(Math.round(b.brg)) + '° / ' + walk(b.km) : '---° / --';
+    const inRange = near.filter(t => t.km <= rng).length;
+    if (sel < 0) setStatus(near.length ? window.shelterText('st_within').replace('{r}',rng).replace('{n}',inRange) : window.shelterText('st_nodata'));
+    $('#bl1').textContent = 'SRC ' + SRC; $('#bl2').textContent = 'SET ' + rng + ' KM';
+    $('#br2').textContent = 'UPD ' + pad2(new Date().getHours()) + ':' + pad2(new Date().getMinutes());
+    draw();
+  }
+  function draw() {
+    const box = $('#tracks'); box.innerHTML = '';
+    const rng = RANGES[rangeIx], h = heading == null ? 0 : heading;
+    const placed = [];
+    near.forEach((t, i) => {
+      let rel = ((t.brg - h + 540) % 360) - 180;                            // -180..180, 0 = 정면
+      const behind = Math.abs(rel) > 105;
+      if (behind) rel = rel > 0 ? 105 : -105;                               // 뒤쪽은 좌·우 아래 끝으로
+      // 가까운 것도 뭉치지 않게 √ 로 펼치고, 최소 반경을 준다
+      const f = Math.min(1, t.km / rng);
+      let r = (0.22 + 0.78 * Math.sqrt(f)) * RING_PX;
+      if (t.km > rng) r = RING_PX * 1.12;                                   // 반경 밖이면 점선 호 바깥
+      let a = toRad(rel), x = SELF.x + Math.sin(a) * r, y = SELF.y - Math.cos(a) * r;
+      for (let guard = 0; guard < 24; guard++) {                            // 겹치면 바깥쪽으로 밀어낸다
+        const hit = placed.find(p => Math.hypot(p.x - x, p.y - y) < 86);
+        if (!hit) break;
+        r += 30; x = SELF.x + Math.sin(a) * r; y = SELF.y - Math.cos(a) * r;
+        if (y < 320) { a += (rel >= 0 ? 0.24 : -0.24); r = (0.22 + 0.78 * Math.sqrt(f)) * RING_PX; x = SELF.x + Math.sin(a) * r; y = SELF.y - Math.cos(a) * r; }   // 위 컨트롤 줄 밑으로
+      }
+      placed.push({ x, y });
+      const cx = Math.max(84, Math.min(636, x)), cy = Math.max(320, Math.min(566, y));   // 라벨이 잘리지 않게
+      const g = el('g', { class: 'trk' + (i === 0 ? ' n1' : '') + (i === sel ? ' sel' : ''), transform: `translate(${cx.toFixed(1)} ${cy.toFixed(1)})` });
+      g.appendChild(el('rect', { x: -19, y: -19, width: 38, height: 38 }));
+      g.appendChild(el('rect', { class: 'in', x: -9, y: -9, width: 18, height: 18 }));
+      g.appendChild(el('circle', { cx: 22, cy: -20, r: 2.5 }));
+      const lb = el('text', { y: -28 }); lb.textContent = (behind ? '↓ ' : '') + 'trk.0' + (i + 1); g.appendChild(lb);
+      const b = el('text', { y: 36, class: 'nm' }); b.textContent = fmtKm(t.km); g.appendChild(b);
+      const c = el('text', { y: 52 }); c.textContent = short(t.name, 10); g.appendChild(c);
+      g.appendChild(el('rect', { x: -32, y: -40, width: 64, height: 84, style: 'fill:transparent;stroke:none' }));   // 손가락용 히트
+      g.addEventListener('click', () => { sel = sel === i ? -1 : i; haptic('selection'); if (sel >= 0) { setStatus(':: ' + short(t.name, 18) + ' · ' + fmtKm(t.km) + ' · ' + pad3(Math.round(t.brg)) + '° ::'); $('#addr').textContent = (t.addr || '').slice(0, 40); } else { $('#addr').textContent = ''; compute(); } draw(); });
+      box.appendChild(g);
+    });
+  }
+  function setStatus(s, warn) { const st = $('#status'); st.textContent = s; st.classList.toggle('warn', !!warn); }
+  function onPos(lat, lon, alt, acc) {
+    pos = { lat, lon }; permDenied = false;
+    window.dispatchEvent(new CustomEvent('shelter-position', {detail: {lat,lon}}));
+    $('#lat').textContent = lat.toFixed(4); $('#lon').textContent = lon.toFixed(4); $('#acc').textContent = '±' + Math.round(acc || 0) + 'M'; $('#br1').textContent = 'GPS ±' + Math.round(acc || 0) + 'M';
+    compute();
+  }
+  window.addEventListener('message', e => {
+    const d = e.data; if (!d) return;
+    if (d.skm === 'tilt' && typeof d.h === 'number' && d.h >= 0) { heading = d.h; $('#hdg').textContent = pad3(Math.round(heading)); drawTape(heading); draw(); }
+    if (d.skm === 'loc') onPos(d.lat, d.lon, d.alt, d.acc);
+    if (d.skm === 'locdenied') { permDenied = true; setStatus(window.shelterText('st_off'), true); }
+    if (d.skm === 'stop') { if (browserWatch !== null) { navigator.geolocation.clearWatch(browserWatch); browserWatch=null; } try { window.SKMApp && SKMApp.location && SKMApp.location('stop'); } catch (_) {} }
+  });
+  $('#status').addEventListener('click', () => { if (permDenied && window.SKMApp && SKMApp.location) SKMApp.location('settings'); else if (inApp) SKMApp.location('start'); });
+  $('#hdgBox').addEventListener('click', () => { haptic('light'); sel = -1; if (inApp) SKMApp.location('start'); compute(); });
+  $('#rngDn').addEventListener('click', () => { rangeIx = Math.max(0, rangeIx - 1); haptic('selection'); $('#rng').textContent = 'RNG ' + RANGES[rangeIx] + ' KM'; compute(); });
+  $('#rngUp').addEventListener('click', () => { rangeIx = Math.min(RANGES.length - 1, rangeIx + 1); haptic('selection'); $('#rng').textContent = 'RNG ' + RANGES[rangeIx] + ' KM'; compute(); });
+  $('#bl1').textContent = 'SRC ' + SRC; $('#bl2').textContent = 'SET ' + RANGES[rangeIx] + ' KM';
+  let browserWatch = null;
+  window.startRadar = function () {
+    if (browserWatch !== null) navigator.geolocation.clearWatch(browserWatch);
+    setStatus(window.shelterText('st_locating'));
+  if (inApp && window.SKMApp.location) { SKMApp.location('start'); setTimeout(() => { if (!pos && !permDenied) setStatus(window.shelterText('st_wait')); }, 8000); }
+  else if (navigator.geolocation) { browserWatch = navigator.geolocation.watchPosition(p => onPos(p.coords.latitude, p.coords.longitude, p.coords.altitude, p.coords.accuracy), () => { permDenied = true; setStatus(window.shelterText('st_noloc'), true); }, { enableHighAccuracy: true, maximumAge: 10000, timeout: 20000 }); }
+  };
+  window.setupShelter();
+})();
+</script>
+<script src="shelter-map.js"></script>
+<script src="session-theme-state.js?v=1"></script><script src="session-theme.js?v=1"></script><script src="screen-insets.js"></script></body>
+</html>

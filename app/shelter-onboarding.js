@@ -1,0 +1,14 @@
+(() => {
+const I=SKM_SHELTER_I18N,K='skm-shelter-region',ACK='2026-09-22-v1';let lang=I.ui[localStorage.getItem('skm-lang')]?localStorage.getItem('skm-lang'):'en',region=localStorage.getItem(K),overlay,chip,footer;
+const text=k=>I.ui[lang][k];window.shelterText=text;
+const name=r=>r.name[lang]||r.name.en;
+function e(tag,txt){const n=document.createElement(tag);if(txt)n.textContent=txt;return n;}
+function btn(txt,fn){const b=e('button',txt);b.onclick=fn;return b;}
+function step(n){overlay.replaceChildren();overlay.hidden=false;const keys=['step_lang','step_country','step_city','step_notice'];overlay.append(e('h2',String(n+1).padStart(2,'0')+' / '+text(keys[n])));if(n>0)overlay.append(btn('←',()=>step(n-1)));
+if(n===0){for(const l of I.langs)overlay.append(btn(I.lang_names[l],()=>{lang=l;localStorage.setItem('skm-lang',l);step(1);}));}
+if(n===1){overlay.append(btn(name(I.countries[0]),()=>step(2)),e('p',text('more_soon')));}
+if(n===2){for(const r of I.countries[0].regions){const count=(window.SKM_SHELTERS||[]).filter(s=>window.shelterRegionFor(s[4],I.countries[0].regions)===r.id).length;overlay.append(btn(name(r)+' · '+count.toLocaleString(),()=>{region=r.id;localStorage.setItem(K,region);if(localStorage.getItem('skm-shelter-ack')===ACK)finish();else step(3);}));}}
+if(n===3){overlay.append(e('p',text('notice_body')),e('p',text('source')),btn(text('notice_ok'),()=>{localStorage.setItem('skm-shelter-ack',ACK);finish();}));}}
+function finish(){overlay.hidden=true;const r=I.countries[0].regions.find(r=>r.id===region);chip.textContent=(r?name(r):'KR')+' · KR';footer.textContent=text('notice_line');window.startRadar();window.dispatchEvent(new Event("shelter-region"));}
+window.setupShelter=()=>{const style=e('style');style.textContent='#shelter-setup{position:fixed;inset:0;z-index:50;background:#e3e3e3;padding:64px 24px 30px;overflow:auto;font:14px ui-monospace,monospace}#shelter-setup[hidden]{display:none}#shelter-setup button{display:block;width:100%;text-align:left;background:transparent;border:1px solid #888;padding:14px;margin:9px 0;font:inherit}#shelter-setup p{line-height:1.8}#shelter-region{position:fixed;right:14px;top:14px;z-index:4;padding:9px;background:#e3e3e3;border:1px solid #777;font:11px ui-monospace,monospace}#shelter-notice{position:fixed;bottom:5px;left:5%;width:90%;border:0;background:#e3e3e3;font:10px ui-monospace,monospace;padding:8px}';document.head.append(style);overlay=e('section');overlay.id='shelter-setup';overlay.setAttribute('aria-label','Shelter setup');chip=btn('',()=>{window.SKMApp?.location?.('stop');step(0);});chip.id='shelter-region';footer=btn('',()=>step(3));footer.id='shelter-notice';document.body.append(chip,footer,overlay);if(I.countries[0].regions.some(r=>r.id===region)&&localStorage.getItem('skm-shelter-ack')===ACK)finish();else step(0);};
+})();

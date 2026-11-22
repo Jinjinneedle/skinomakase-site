@@ -1,0 +1,30 @@
+const locales=['ko','en','ja','zh','zh-Hant','ru','fr','es','de','pt','it'];
+const rows={
+ adminChecking:['관리 권한 확인 중…','Checking admin access…'],
+ adminRetry:['관리 확인을 못 했어요. 새로고침해 주세요.','Could not check admin access. Please refresh.'],
+ adminDenied:['관리자로 확인되지 않았어요. 다시 로그인해 주세요.','Admin access was not confirmed. Please sign in again.'],
+ admin:['관리','Admin','管理','管理','管理','Управление','Administration','Administración','Verwaltung','Administração','Gestione'],
+ desk:['내 창구','My desk','マイデスク','我的窗口','我的窗口','Мой кабинет','Mon espace','Mi espacio','Mein Bereich','Meu espaço','Il mio spazio'],
+ market:['경매장','Auctions','オークション','拍卖场','拍賣場','Аукционы','Enchères','Subastas','Auktionen','Leilões','Aste'],
+ requests:['내 세션 요청','My session requests','セッション申請','我的预约','我的預約','Мои заявки','Mes demandes','Mis solicitudes','Meine Anfragen','Meus pedidos','Le mie richieste'],
+ gloves:['보유 장갑','My gloves','所有グローブ','我的手套','我的手套','Мои перчатки','Mes gants','Mis guantes','Meine Handschuhe','Minhas luvas','I miei guanti'],
+ inquiry:["스튜디오 창구", "Studio desk", "スタジオ窓口", "工作室窗口", "工作室窗口", "Связь со студией", "Bureau du studio", "Contacto con el estudio", "Studiokontakt", "Contato com o estúdio", "Contatta lo studio"],
+ profile:['연락 프로필','Contact profile','連絡先','联系资料','聯絡資料','Мой профиль','Profil','Perfil','Kontaktprofil','Perfil','Profilo'],
+ empty:['지금 출품된 장갑이 없어요.','No gloves listed yet.','出品はまだありません。','暂无上架手套。','暫無上架手套。','Пока нет лотов.','Aucun gant en vente.','Aún no hay guantes.','Noch keine Angebote.','Ainda não há lotes.','Nessun lotto.'],
+ offer:['경매에 출품','List for auction','出品する','上架拍卖','上架拍賣','Выставить лот','Mettre aux enchères','Subastar','Zur Auktion anbieten','Leiloar','Metti all’asta'],
+ opening:['시작가','Opening price','開始価格','起拍价','起標價','Начальная цена','Prix initial','Precio inicial','Startpreis','Preço inicial','Prezzo iniziale'],
+ step:['최소 입찰 단위','Bid increment','入札単位','加价幅度','加價幅度','Шаг ставки','Pas des enchères','Incremento','Gebotsschritt','Incremento','Rialzo minimo'],
+ bid:['입찰하기','Place bid','入札する','出价','出價','Сделать ставку','Enchérir','Pujar','Bieten','Dar lance','Offri'],
+ min:['최소 입찰가','Minimum bid','最低入札','最低出价','最低出價','Минимум','Offre minimum','Puja mínima','Mindestgebot','Lance mínimo','Offerta minima'],
+ duration:['기간','Duration','期間','时长','時長','Срок','Durée','Duración','Dauer','Duração','Durata'],
+ current:['현재가','Current price','現在価格','当前价','現價','Текущая цена','Prix actuel','Precio actual','Aktueller Preis','Preço atual','Prezzo attuale'],
+ ends:['마감','Closes','終了','截止','截止','Окончание','Fin','Cierre','Ende','Término','Scadenza'],
+ contact:['구매 문의','Message owner','購入相談','联系卖家','聯絡賣家','Написать владельцу','Contacter','Contactar','Anfragen','Contactar','Contatta'],
+ cancel:['출품 취소','Withdraw listing','出品取消','撤拍','撤拍','Снять лот','Retirer','Retirar','Zurückziehen','Retirar','Ritira'],
+ deliver:['전달 완료','Confirm handover','引き渡し確認','确认交付','確認交付','Подтвердить передачу','Confirmer la remise','Confirmar entrega','Übergabe bestätigen','Confirmar entrega','Conferma consegna'],
+ receive:['수령 후 소유권 이전','Confirm receipt and transfer ownership','受領し所有権を移す','确认收货并过户','確認收貨並移轉','Принять и сменить владельца','Confirmer la réception et le transfert','Confirmar recepción y traspaso','Erhalt und Übertragung bestätigen','Confirmar recebimento e transferência','Conferma ricezione e passaggio'],
+ noCharge:['거래 대금은 당사자끼리 정산해요.','Payment is arranged between buyer and seller.','代金は当事者同士で精算します。','买卖双方自行结算。','交易款項由雙方自行結算。','Оплата по договорённости сторон.','Le paiement se règle entre vous.','El pago se acuerda entre las partes.','Käufer und Verkäufer regeln die Zahlung.','O pagamento é feito entre as partes.','Pagamento concordato tra le parti.'],
+ needProfile:['출품하려면 연락 프로필에 공개 이름을 저장해 주세요.','Save a public name in your contact profile to list.','連絡先に公開名を保存してください。','请先保存公开名称。','請先儲存公開名稱。','Сохраните публичное имя.','Enregistrez votre nom public.','Guarda tu nombre público.','Bitte öffentlichen Namen speichern.','Salve seu nome público.','Salva il nome pubblico.'],
+ linkPending:['서비스 연결 준비 중','Service setup pending','サービス準備中','服务筹备中','服務籌備中','Сервис готовится','Service en préparation','Servicio en preparación','Dienst in Vorbereitung','Serviço em preparação','Servizio in preparazione']
+};
+export const deskText=k=>rows[k]?.[locales.indexOf(window.SKMLanguage?.code)]||rows[k]?.[1]||window.SKMLanguage.t(k);

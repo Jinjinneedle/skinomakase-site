@@ -1,0 +1,170 @@
+/* The full canvas and its controls use the same paper, including the native safe edges. */
+:root{color-scheme:light;--skm-ash:#b9bbc0;--skm-surface:var(--skm-ash);--skm-line:#81878d;--skm-ink:#191d21;--skm-safe-top:env(safe-area-inset-top,0px);--skm-safe-bottom:env(safe-area-inset-bottom,0px);--skm-safe-left:env(safe-area-inset-left,0px);--skm-safe-right:env(safe-area-inset-right,0px)}
+html[data-skm-route=gloves]{--skm-surface:#fff}
+html:not([data-skm-paper=shell]),html:not([data-skm-paper=shell]) body{background:var(--skm-surface)!important;color:var(--skm-ink);--paper:var(--skm-surface);--bg:var(--skm-surface);--case:var(--skm-surface);--line:var(--skm-line);--ink:var(--skm-ink);--pill:var(--skm-surface);--mute:#434b52}
+html:not([data-skm-paper=shell]) body{margin:0;min-height:100dvh}
+html:not([data-skm-paper=shell]) :is(main,.wrap,.stage,.app,.langpick,.intro,.intro-body,.langpick-body,.sheet-card,.request-card,#shelter-setup,#bodymap-flower,#flower-booking-overlay,#preview,.graphic-screen,#canvas,#studio,.morse-deck,.signal-card,.record,.auction,fieldset,.section,.card,.bubble,.status-card,dialog:not(.skm-chat),.tools>div){background:var(--skm-surface)!important}
+html[data-skm-paper=page] :is(button:not(.sw):not(.swatch):not([data-hex]),input:not([type=range]),textarea,select,.field,.langmenu,#bar,#zones,.petal-hub,.petal-choice):not(:where(.skm-chat *, .studio-thread *)){background:var(--skm-surface)!important;border-color:var(--skm-line)!important;box-shadow:none!important}
+html[data-skm-paper=page] :is(button.on,button[aria-pressed=true],button.primary,#go.on,.go.on):not(:where(.skm-chat *, .studio-thread *)){color:#fff!important;background:#25292d!important}
+html[data-skm-paper=page] .morse-deck button#go{background:transparent!important}
+html:not([data-skm-paper=shell]) :is(.skm-chat,.skm-chat header,.skm-chat form,.skm-chat-message.mine,.skm-chat textarea,.skm-chat button){background-color:var(--skm-surface)!important}
+html:not([data-skm-paper=shell]) .skm-chat::backdrop{background:var(--skm-surface)}
+html:not([data-skm-paper=shell]) .skm-chat .skm-terminal-logo{background:transparent!important}
+html[data-skm-paper=shell] :is(.bm-overlay,.app-overlay,.app-overlay.light,.vc-overlay,.video-player-overlay,.video-player,.modal-overlay.active,.modal-overlay.active .modal-content){background:var(--skm-ash)!important}
+html[data-skm-paper=shell] .bm-overlay{inset:0!important;margin:0!important;padding:0!important;box-sizing:border-box}
+html[data-skm-paper=shell] .bm-overlay iframe{display:block;width:100%;height:100%;border:0}
+html[data-skm-paper=shell] :is(.bm-close,.video-close,.modal-close){background:var(--skm-ash)!important}
+html[data-skm-paper=shell] #bmClose{left:auto!important;right:max(8px,var(--skm-safe-right));top:calc(8px + var(--skm-safe-top))!important}
+html[data-skm-paper=shell] #skm-earth-preview{width:auto;height:auto;inset:0;padding:0;border:0;overflow:hidden}
+html[data-skm-paper=shell] #skm-earth-preview :is(.earth-app,.earth-stage){width:100%;height:100%;min-height:0;max-width:none;box-sizing:border-box}
+#skm-earth-preview .feature-heading{display:none}
+html[data-skm-paper=shell] #skm-earth-preview.feature-open{--feature-paper:var(--skm-ash);background:var(--feature-paper)!important}
+html[data-skm-paper=shell] #skm-earth-preview.gloves-open{--feature-paper:#fff}
+html[data-skm-paper=shell] #skm-earth-preview.feature-open :is(.earth-app,.earth-white-wash,.earth-drop-panel,.earth-extra-menu,.glove-direct-sheet){background:var(--feature-paper)!important}
+html[data-skm-paper=shell] #skm-earth-preview .glove-direct-sheet::backdrop{background:#fffffff2}
+html[data-skm-paper=shell] :is(#skm-language-dialog,#skm-onboarding,.nature-window,.nature-picker header){background:var(--skm-ash)!important}
+html[data-skm-paper=shell] #skm-earth-preview.feature-open .earth-header{top:var(--skm-safe-top);height:60px;display:grid;grid-template-columns:56px minmax(0,1fr) 56px;align-items:center;padding:0 max(10px,var(--skm-safe-right)) 0 max(10px,var(--skm-safe-left));gap:0;border:0;background:var(--feature-paper)}
+#skm-earth-preview.feature-open .earth-header :is(.earth-account,.earth-brand){display:none!important}
+#skm-earth-preview.feature-open .earth-header :is(.earth-language,.earth-glove-close){position:static;transform:none;grid-row:1;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;background:transparent}
+#skm-earth-preview.feature-open .earth-header .earth-language{grid-column:1;justify-self:start}
+#skm-earth-preview.feature-open .earth-header .earth-glove-close{grid-column:3;justify-self:end}
+#skm-earth-preview.feature-open .earth-header .feature-heading{grid-row:1;grid-column:2;text-align:center;display:block;color:#282c30;font:500 13px/1.22 -apple-system,sans-serif;letter-spacing:.03em;margin:0;overflow-wrap:anywhere}
+html[data-skm-paper=shell] #skm-earth-preview.feature-open :is(.earth-extra-menu,.earth-booking-panel,.earth-music-panel,.earth-drop-panel.glove-direct-grid:not(.earth-booking-panel):not(.earth-music-panel)){position:absolute;top:calc(var(--skm-safe-top) + 60px);bottom:0;left:0;right:0;height:auto;max-height:none;min-height:0;max-width:none;margin:0;box-sizing:border-box;padding:8px max(16px,var(--skm-safe-right)) max(12px,var(--skm-safe-bottom)) max(16px,var(--skm-safe-left));border:0;border-radius:0}
+#skm-earth-preview.feature-open :is(.glove-direct-grid>header,.earth-extra-heading,.earth-music-panel>header,.earth-booking-panel>header){display:none!important}
+#skm-earth-preview.feature-open .earth-extra-menu{overflow-y:auto;grid-auto-rows:minmax(52px,max-content);align-content:safe center}
+#skm-earth-preview.feature-open .earth-extra-menu [data-extra]{min-width:0;overflow-wrap:anywhere}
+html[data-skm-paper=shell] #skm-earth-preview.gloves-open .earth-drop-grid{overflow:hidden}
+html:not([data-skm-paper=shell]) .desk{padding-top:calc(12px + var(--skm-safe-top));padding-bottom:calc(32px + var(--skm-safe-bottom))}
+html[data-skm-route=community] main,html[data-skm-route=gloves] main{padding-top:calc(60px + var(--skm-safe-top));padding-bottom:calc(25px + var(--skm-safe-bottom))}
+html[data-skm-route=booking] main{padding-top:calc(62px + var(--skm-safe-top))!important;padding-bottom:calc(24px + var(--skm-safe-bottom))!important}
+html[data-skm-route=strobe] .morse-deck{box-sizing:border-box;padding-block-start:calc(62px + var(--skm-safe-top));padding-block-end:max(12px,var(--skm-safe-bottom))}
+
+html[data-skm-route=community] :is(button:not(.primary),input:not([type=checkbox]),textarea,select){background:var(--skm-surface);color:var(--skm-ink);border-color:var(--skm-line)}
+html[data-skm-route=shelter] #map-status{top:calc(63px + var(--skm-safe-top))}
+html[data-skm-route=shelter] .map-compass{top:calc(106px + var(--skm-safe-top))}
+html[data-skm-route=shelter] .map-controls{bottom:calc(34px + var(--skm-safe-bottom));gap:8px;flex-wrap:wrap}
+html[data-skm-route=voicing] .app{padding-top:calc(60px + var(--skm-safe-top));padding-bottom:calc(25px + var(--skm-safe-bottom))}
+html:not([data-skm-paper=shell]) #studio .panel,html:not([data-skm-paper=shell]) #studio .panel-head{background:var(--skm-surface)}
+
+html[data-skm-route=flat] [data-studio-return]{right:calc(62px + var(--skm-safe-right))!important;top:calc(8px + var(--skm-safe-top))!important}
+html[data-skm-route=flat] :is(#mbar,#next){bottom:calc(18px + var(--skm-safe-bottom))!important}
+html[data-skm-route=shelter] #shelter-setup{padding-top:calc(62px + var(--skm-safe-top));padding-bottom:calc(20px + var(--skm-safe-bottom))}
+html:not([data-skm-paper=shell]) .skm-chat{top:calc(var(--chat-offset,0px) + var(--skm-safe-top) + 8px);height:calc(var(--chat-viewport,100dvh) - var(--skm-safe-top) - var(--skm-safe-bottom) - 16px)}
+html[data-skm-route=booking] body{overflow-x:clip}
+html[data-skm-route=booking] body main:has(#booking){background:transparent!important}
+html[data-skm-route=booking] :is(#booking,#done)::before{inset-inline:0;background:var(--skm-surface)}
+html[data-skm-paper=shell]:has(.gloves-open){--dialog-paper:#fff}
+html[data-skm-paper=shell] #skm-language-dialog,html[data-skm-paper=shell] #skm-language-dialog::backdrop,html[data-skm-paper=shell] #skm-onboarding::backdrop{background:var(--dialog-paper,var(--skm-ash))!important}
+
+/* A neutral moulded finish shared by the shell and its embedded feature pages.
+   Leave imagery, LED indicators, ink swatches and map hit areas uncoated. */
+@layer skmMaterial {
+  :root {
+    --skm-ash: #dcddde !important;
+    --skm-line: #a5a7a9 !important;
+    --skm-ink: #292b2d !important;
+    --rubber-face: linear-gradient(152deg,#f7f7f6 0%,#e9eaea 42%,#d7d9da 100%);
+    --rubber-raised: inset 0 1px 1.5px #fffffff0,inset 0 -1px 1.5px #9fa2a57a,
+      0 1.5px 2px #6d707431,0 4px 9px -6px #46484b77;
+    --rubber-well: inset 0 1.5px 3px #666a6d38,inset 0 -1px 1px #ffffffc9;
+    --rubber-sheet: inset 0 1px 1px #ffffffe6,0 8px 20px -10px #65696c55;
+    --rubber-pressed: linear-gradient(150deg,#585b5d,#6a6c6d);
+  }
+  html:not([data-skm-paper=shell]) {--skm-surface:var(--skm-ash);}
+  html[data-skm-route=gloves] {--skm-surface:#f6f6f5 !important;}
+
+  /* One light direction for controls in both the embedded pages and the shell. */
+  :where(html:not([data-skm-paper=shell])) :where(
+    button:not(#login,.petal-choice,.petal-hub,.sw,.swatch,[data-hex],#go,.flower-petal,.skm-terminal-logo,
+      .glove-node,.map-compass,.leaflet-interactive,.glove-direct-slot,.slot,.cell),
+    #studio-home, #flat, .tools summary, #email-login summary, #bar .t, .map-controls button
+  ):not(:where(#swatches *,#sws *,.leaflet-map-pane *,.zones *,#terrain-map *,#keys *,
+    .graphic-screen,.petal-dial *,.skm-chat *,#presets .swatch,.signal-card,#lights *,#swatch *)),
+  html[data-skm-paper=shell] :where(.bm-close,.video-close,.modal-close,#skm-onboarding button,
+    #skm-language-dialog button,.nature-window button,.nature-picker button,.earth-extra-menu button,
+    .earth-music-play,.earth-glove-close,.glove-direct-sheet button,.earth-world,.glove-direct-sheet summary) {
+    background:var(--rubber-face) !important; color:var(--skm-ink) !important;
+    border:1px solid #a6a9ab80 !important; border-radius:14px !important;
+    box-shadow:var(--rubber-raised) !important; text-shadow:none !important;
+  }
+  :where(html:not([data-skm-paper=shell])) :where(input:not([type]),input:is([type=text],[type=email],[type=password],[type=date],[type=number],[type=tel],[type=search],[type=url]),textarea,select,.field),
+  html[data-skm-paper=shell] :where(#skm-onboarding select,#skm-language-dialog select,.glove-direct-sheet :is(input,textarea,select)) {
+    background:linear-gradient(165deg,#d6d8d9,#e7e8e8) !important;color:#292b2d !important;
+    border:1px solid #aaaeb080 !important;border-radius:12px !important;box-shadow:var(--rubber-well) !important;
+  }
+  :where(html:not([data-skm-paper=shell])) :where(button.on,button[aria-pressed=true],button[aria-selected=true],button.primary,.login-option,#studio #next:not(:disabled),#email-submit),
+  html[data-skm-paper=shell] :where(#skm-onboarding [data-next],.earth-music-play[aria-pressed=true]) {
+    background:var(--rubber-pressed) !important;color:white !important;box-shadow:var(--rubber-well) !important;border-color:#686b6c !important;
+  }
+  :where(html:not([data-skm-paper=shell])) :where(.card,.sheet-card,.request-card,.signal-card,.status-card,.record,.auction,.tools>div,.langpick-body,.intro-body,#bar,#edit,.skm-chat,.studio-thread,.skm-chat-message),
+  html[data-skm-paper=shell] :where(.glove-direct-sheet,.nature-window,.nature-picker) {
+    background:linear-gradient(145deg,#efefef,#dedfe0) !important;
+    border-radius:20px !important;border-color:#b7b9bb !important;box-shadow:var(--rubber-sheet) !important;
+  }
+  .skm-chat :where(button:not(.skm-terminal-logo),textarea) {
+    background:var(--rubber-face) !important;box-shadow:var(--rubber-raised) !important;border-radius:12px !important;
+  }
+  :where(button,a,select,input,textarea,summary):focus-visible {outline:2px solid #62676b;outline-offset:3px;}
+  :where(button:disabled) {cursor:default;}
+  #studio {background:radial-gradient(ellipse at 40% 26%,#e8e9e9, #dcddde 68%,#d6d8da) !important;}
+  #studio footer {border-top-color:#8c8e902e !important;}
+  #studio footer [data-open=edit] {min-width:64px;}
+  #studio header #flat,#studio-home,.bm-close,.earth-glove-close {border-radius:50% !important;}
+  #studio #edit .panel-head {background:#e6e7e8 !important;}
+  #studio #gesture-hint {color:#494c4e;}
+  #studio {--picker-size:min(72vw,34dvh,290px);}
+  #catalog #graphic-dial {width:var(--picker-size) !important;}
+  #studio.picking #viewport {bottom:calc(var(--foot) + var(--picker-size) + 8px) !important;}
+  #catalog [data-close] {border-radius:50% !important;}
+  #studio #swatches button {background:var(--sw) !important;}
+  #bodymap-flower .graphic-dial {margin:auto !important;}
+
+  /* On the globe use the same lip and soft edge in a smoked finish. */
+  #skm-earth-preview:not(.feature-open) :where(.earth-language,.earth-account,.earth-city-picker select,.earth-world),
+  #skm-earth-preview.city-focus .earth-feature {
+    background:linear-gradient(145deg,#505153eb,#303134e8 70%,#292a2de8) !important;
+    color:#f5f5f4 !important;border:1px solid #ffffff26 !important;border-radius:15px !important;
+    box-shadow:inset 0 1px 1px #ffffff36,inset 0 -1px 2px #10111399,0 3px 7px #0004 !important;
+  }
+  #skm-earth-preview.city-focus .earth-features {gap:4px !important;}
+  #skm-earth-preview.city-focus .earth-feature {padding-inline:clamp(6px,1.8vw,14px) !important;min-height:44px;}
+  #skm-earth-preview.city-focus .earth-feature-icon {color:#dadbdc;}
+  #skm-earth-preview.city-focus .earth-feature>span:nth-child(2)::before {color:#bebfc1;}
+  #skm-earth-preview .earth-language,#skm-earth-preview .earth-account {border-radius:50% !important;}
+  #skm-earth-preview.feature-open :is(.earth-language,.earth-glove-close) {
+    color:var(--skm-ink) !important;background:var(--rubber-face) !important;box-shadow:var(--rubber-raised) !important;
+  }
+  #skm-earth-preview .earth-music-play {border-radius:999px !important;}
+  html[data-skm-paper=shell] :where(#skm-language-dialog,#skm-onboarding) {color:var(--skm-ink) !important;}
+  @media(max-height:620px) {
+    #skm-earth-preview.city-focus .earth-city-panel {overflow-y:auto;justify-content:safe center;}
+  }
+
+  /* Put the submitted design and the form on separate planes, also on short phones. */
+  html[data-skm-route=booking] main {
+    width:min(100%,460px);min-height:100dvh;justify-content:safe center;
+    gap:14px;padding-inline:clamp(16px,5vw,28px) !important;
+  }
+  html[data-skm-route=booking] #preview {
+    position:relative !important;inset:auto !important;z-index:auto !important;isolation:isolate;
+    width:100% !important;height:clamp(110px,28dvh,245px) !important;flex:none;margin:0 !important;overflow:hidden;
+    border-radius:22px !important;background:#d6d8da !important;
+    border:1px solid #b6b8ba !important;box-shadow:var(--rubber-well) !important;
+  }
+  html[data-skm-route=booking] #preview img {
+    width:100%;height:100%;object-fit:contain;mix-blend-mode:normal !important;filter:none !important;
+  }
+  html[data-skm-route=booking] :is(#booking,#done) {
+    box-sizing:border-box;padding:clamp(18px,4.5vw,28px) !important;margin:0;
+    border-radius:22px !important;background:var(--rubber-face) !important;box-shadow:var(--rubber-sheet) !important;
+    border:1px solid #b6b8baad !important;
+  }
+  html[data-skm-route=booking] :is(#booking,#done)::before {content:none !important;}
+  html[data-skm-route=booking] #fields {min-height:0 !important;max-height:none !important;overflow:visible !important;padding:0 !important;}
+  html[data-skm-route=booking] .booking-progress {text-align:left !important;font:10px ui-monospace,monospace;letter-spacing:.12em;color:#65686b;margin:0 0 16px;}
+  html[data-skm-route=booking] #fields :is(label>span,legend) {color:#292b2d !important;font-weight:550 !important;margin:0 0 9px !important;}
+  html[data-skm-route=booking] .booking-navigation {margin-top:18px;}
+  html[data-skm-route=booking] .booking-navigation button {padding:8px 16px !important;}
+  html[data-skm-route=booking] .booking-language {margin:0 auto !important;color:#4b4f52;min-height:44px;justify-content:center;}
+  @media (max-height:560px) {html[data-skm-route=booking] #preview {height:100px !important;}}
+}

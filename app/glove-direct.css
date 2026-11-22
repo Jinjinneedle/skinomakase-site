@@ -1,0 +1,219 @@
+/* Gloves unfold from a single central logo, matching the original website's colored lines. */
+#skm-earth-preview .earth-drop-panel.glove-direct-grid:not(.earth-booking-panel):not(.earth-music-panel){position:absolute;top:64px;left:0;right:0;bottom:auto;width:100%;max-width:none;height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 64px);max-height:none;margin:0;padding:12px 18px 18px;border:0;border-radius:0;background:transparent;color:#111;box-shadow:none;overflow:hidden;overscroll-behavior:none;touch-action:none}
+#skm-earth-preview .earth-drop-panel.glove-direct-grid:not([hidden]){display:flex;flex-direction:column}
+#skm-earth-preview .glove-direct-grid>header{align-items:center;min-height:44px;margin-bottom:4px;flex:0 0 auto}
+#skm-earth-preview .glove-direct-grid>header h2{font:11px/1.3 'Helvetica Neue',-apple-system,sans-serif;font-weight:400;margin:0;color:#444;letter-spacing:.3px}
+#skm-earth-preview .earth-drop-grid{position:relative;display:block;width:100%;height:0;min-height:0;flex:1 1 0;aspect-ratio:auto;overflow:hidden;padding:0;margin:0;background:none;border:0;isolation:isolate}
+#skm-earth-preview .earth-drop-grid[hidden]{display:none}
+#skm-earth-preview .earth-drop-grid>.glove-network-lines{position:absolute;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+#skm-earth-preview .glove-network-lines line{fill:none;stroke-width:1.05;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:.82}
+#skm-earth-preview .glove-network-lines line[data-owned=true]{filter:blur(.55px);opacity:.24}
+#skm-earth-preview .earth-drop-grid>.earth-drop-pair{position:absolute;z-index:1;display:block;width:calc(44px * var(--glove-scale,1));height:calc(44px * var(--glove-scale,1));min-width:0;min-height:0;aspect-ratio:auto;left:0;top:0;transform:translate(-50%,-50%);margin:0;padding:0;gap:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:#191919;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:none}
+#skm-earth-preview .earth-drop-grid>.earth-drop-pair:active{background:transparent}
+#skm-earth-preview .earth-drop-grid>.earth-drop-pair:active .glove-pair-art{scale:1.12}
+#skm-earth-preview .earth-drop-grid>.earth-drop-pair:focus-visible{outline:1px solid #555;outline-offset:5px;border-radius:50%}
+#skm-earth-preview .glove-pair-art,#skm-earth-preview .earth-drop-grid .glove-pair-art{display:flex;align-items:center;justify-content:center;gap:0;background:none;aspect-ratio:auto;border:0;color:inherit}
+#skm-earth-preview .earth-drop-grid .glove-pair-art{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(calc(var(--glove-scale,1) * 1.12));height:30px;width:39px;transition:filter .45s,opacity .45s,scale .2s;isolation:isolate}
+#skm-earth-preview .earth-drop-grid .glove-pair-art:before{content:'';position:absolute;z-index:-1;inset:-7px -5px;background:radial-gradient(ellipse,#fff 0 36%,#ffffffaa 53%,transparent 73%);pointer-events:none}
+#skm-earth-preview .glove-pair-art svg{width:20px;height:27px;stroke-width:1.3;color:inherit}
+#skm-earth-preview .glove-pair-art svg:first-child{transform:scaleX(-1)}
+#skm-earth-preview .earth-drop-pair small{display:none;position:absolute;left:50%;top:calc(50% + 17px);transform:translateX(-50%);font:8px ui-monospace,monospace;letter-spacing:.7px;color:#5d7386;line-height:1;pointer-events:none;background:none;aspect-ratio:auto}
+#skm-earth-preview .earth-drop-pair .glove-state-dot{display:none}
+#skm-earth-preview .earth-drop-pair:is([data-status=owned],[data-status=sold],[data-status=collected]) .glove-pair-art{opacity:.42;filter:blur(2px)}
+#skm-earth-preview .earth-drop-pair:is([data-status=owned],[data-status=sold],[data-status=collected]):active .glove-pair-art{filter:blur(2px)}
+#skm-earth-preview .earth-drop-pair[data-status=draft] .glove-pair-art{opacity:.66;filter:none}
+#skm-earth-preview .earth-drop-pair[data-status=reserved] .glove-pair-art{opacity:.38;filter:none}
+#skm-earth-preview .earth-drop-pair[data-status=available] .glove-pair-art{opacity:1;color:#111}
+@media(min-width:600px){#skm-earth-preview .earth-drop-panel.glove-direct-grid{padding-left:30px;padding-right:30px}#skm-earth-preview .earth-drop-pair small{top:calc(50% + 22px)}}
+@media(prefers-reduced-motion:reduce){#skm-earth-preview .earth-drop-grid .glove-pair-art{transition:none}}
+
+#skm-earth-preview .glove-direct-sheet{color:#dbe4ed;width:calc(100% - 24px);max-width:420px;max-height:calc(100dvh - 105px);margin:auto;padding:0;border:1px solid #35424f;border-radius:12px;background:#0d1218;overflow:hidden;box-shadow:0 28px 90px #000b}
+#skm-earth-preview .glove-direct-sheet::backdrop{background:#04070b9e;backdrop-filter:blur(5px)}
+#skm-earth-preview .glove-direct-header{display:flex;align-items:center;gap:10px;padding:12px 10px;background:transparent;border-bottom:1px solid #293440}
+#skm-earth-preview .glove-direct-header>div{flex:1;display:flex;flex-direction:column;gap:4px}
+#skm-earth-preview .glove-direct-header strong{font:13px ui-monospace,monospace;letter-spacing:1px}
+#skm-earth-preview .glove-direct-status{font-size:11px;color:#91b9b6}
+#skm-earth-preview .glove-icon-button{display:grid;place-items:center;min-width:44px;height:44px;border:0;background:none;color:inherit;padding:0}
+#skm-earth-preview .glove-icon-button svg{width:18px;height:18px;stroke-width:1.4}
+#skm-earth-preview .glove-preview-mark{display:block;text-align:right;padding:9px 18px 0;color:#718291;font:9px -apple-system,sans-serif}
+#skm-earth-preview .glove-pickup{padding:0 22px 24px;display:flex;align-items:center;flex-direction:column}
+#skm-earth-preview .glove-large-art{height:100px;color:#a2bdd1}
+#skm-earth-preview .glove-large-art svg{width:47px;height:62px;stroke-width:.9}
+#skm-earth-preview .glove-direct-sheet h3{font-size:18px;font-weight:400;margin:2px 0 20px}
+#skm-earth-preview .glove-location-placeholder{width:100%;height:142px;border:1px solid #283644;border-radius:6px;background:radial-gradient(ellipse,#1b2c3a66,transparent),repeating-linear-gradient(0deg,transparent 0 28px,#31435433 29px 30px),repeating-linear-gradient(90deg,transparent 0 38px,#31435433 39px 40px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#8ea8bd;font-size:12px}
+#skm-earth-preview .glove-location-placeholder svg{width:26px;height:26px;stroke-width:1.2}
+#skm-earth-preview .glove-primary{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;min-height:48px;margin-top:16px;background:#a4b9c8;border:0;border-radius:5px;color:#101a23;font-size:13px}
+#skm-earth-preview .glove-primary:disabled{opacity:.32}
+#skm-earth-preview .glove-primary svg{width:16px;height:16px}
+#skm-earth-preview .glove-unavailable{min-height:235px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#7d8fa1}
+#skm-earth-preview .glove-direct-sheet[data-view=chat]{background:#0c0b0d;border-color:#4d2025;color:#f05a60}
+#skm-earth-preview .glove-direct-sheet[data-view=chat] .glove-direct-header{border-color:#402126}
+#skm-earth-preview .glove-direct-sheet[data-view=chat] .glove-direct-status{color:#a98b90}
+#skm-earth-preview .glove-chat-owner{display:flex;align-items:center;gap:9px;padding:10px 20px;color:#b9a3a7;font-size:12px}
+#skm-earth-preview .glove-chat-owner>svg{width:16px;height:16px;stroke-width:1.4}
+#skm-earth-preview .glove-chat-owner small{font-size:9px;margin-left:auto;color:#8d6970}
+#skm-earth-preview .glove-chat-log{height:clamp(170px,40dvh,340px);min-height:0;overflow:auto;overscroll-behavior:contain;padding:16px 20px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+#skm-earth-preview .glove-chat-empty{margin:auto;display:flex;align-items:center;flex-direction:column;color:#775258;font-size:11px;gap:12px}
+#skm-earth-preview .glove-chat-empty .glove-pair-art svg{width:26px;height:36px}
+#skm-earth-preview .glove-chat-message{margin-left:auto;max-width:88%;padding:11px 13px;border:1px solid #55232b;border-radius:10px 10px 2px 10px;background:#241015;color:#f2979b;flex-shrink:0;overflow-wrap:anywhere}
+#skm-earth-preview .glove-chat-message p{margin:0;white-space:pre-wrap;font-size:13px;line-height:1.6}
+#skm-earth-preview .glove-chat-message time{display:block;margin-top:5px;text-align:right;font:8px ui-monospace,monospace;color:#a6606a}
+#skm-earth-preview .glove-chat-compose{display:flex;gap:8px;margin:0;padding:14px;border-top:1px solid #402126}
+#skm-earth-preview .glove-chat-compose textarea{flex:1;min-width:0;min-height:44px;max-height:90px;padding:11px 12px;border:1px solid #4f252c;border-radius:6px;background:#180e12;color:#f4b1b5;resize:none;font:16px -apple-system,sans-serif;outline-color:#c64858}
+#skm-earth-preview .glove-chat-compose button{display:grid;place-items:center;width:44px;min-width:44px;height:44px;padding:0;background:#a42c3e;border:0;border-radius:6px;color:#ffdae0}
+#skm-earth-preview .glove-chat-compose button:disabled{opacity:.28}
+#skm-earth-preview .glove-chat-compose svg{width:18px;height:18px}
+#skm-earth-preview .glove-chat-error{font-size:11px;color:#f5a2aa;margin:0 15px 12px}
+#skm-earth-preview .glove-chat-error:empty{display:none}
+
+@media(prefers-reduced-motion:reduce){#skm-earth-preview .glove-chat-log{scroll-behavior:auto}}
+
+#skm-earth-preview .glove-direct-sheet[data-view=chat][open]{display:flex;flex-direction:column;height:min(610px,calc(100dvh - 105px))}
+#skm-earth-preview .glove-direct-sheet[data-view=chat] .glove-direct-header,#skm-earth-preview .glove-direct-sheet[data-view=chat] .glove-chat-owner,#skm-earth-preview .glove-direct-sheet[data-view=chat] .glove-chat-compose,#skm-earth-preview .glove-direct-sheet[data-view=chat] .glove-preview-mark{flex-shrink:0}
+#skm-earth-preview .glove-direct-sheet[data-view=chat] .glove-chat-log{flex:1;height:auto;min-height:0}
+
+#skm-earth-preview .glove-network-hub{position:absolute;left:50%;top:50%;z-index:2;width:82px;height:40px;transform:translate(-50%,-50%) scale(var(--glove-scale,1));pointer-events:none;isolation:isolate}
+#skm-earth-preview .glove-network-hub:before{content:'';position:absolute;inset:-24px -25px;background:radial-gradient(ellipse,#fff 0 36%,#ffffffdd 52%,transparent 72%);z-index:-1}
+#skm-earth-preview .glove-network-hub img{position:absolute;max-width:none;width:101px;height:101px;left:-9px;top:-32px;filter:none}
+#skm-earth-preview .earth-drop-grid>.earth-drop-pair{animation:glove-radial-spread .7s cubic-bezier(.19,1,.22,1) both;animation-delay:calc(.26s + var(--spread-delay,0ms))}
+#skm-earth-preview .glove-network-lines line{stroke-dasharray:1;stroke-dashoffset:0;animation:glove-spoke-spread .8s cubic-bezier(.19,1,.22,1) .26s both;opacity:.82}
+@keyframes glove-radial-spread{from{transform:translate(calc(-50% + var(--from-x)),calc(-50% + var(--from-y))) scale(.15);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+@keyframes glove-spoke-spread{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){#skm-earth-preview .earth-drop-grid>.earth-drop-pair,#skm-earth-preview .glove-network-lines line{animation:none}}
+
+
+/* A central brand mark is enough on the glove landing; keep the corner controls. */
+#skm-earth-preview:has(.glove-direct-grid:not([hidden]) .glove-network-hub) .earth-header .earth-brand{visibility:hidden;pointer-events:none}
+
+/* The glove landing replaces My Page with one close control in the same corner. */
+#skm-earth-preview .earth-header .earth-glove-close{display:none}
+#skm-earth-preview:has(.glove-direct-grid:not([hidden])) .earth-header .earth-account{display:none}
+#skm-earth-preview:has(.glove-direct-grid:not([hidden])) .earth-header .earth-glove-close{display:flex}
+
+#skm-earth-preview .glove-direct-grid .glove-pending-label{display:inline;margin:0;font:inherit;color:inherit;letter-spacing:inherit}
+#skm-earth-preview .glove-unavailable .glove-large-art{width:70%;height:min(180px,30dvh)}
+
+#skm-earth-preview .glove-detail-photo{display:block;width:100%;height:min(420px,55dvh);object-fit:contain;background:#fff}
+#skm-earth-preview .glove-pickup .glove-detail-photo{height:min(165px,21dvh)}
+#skm-earth-preview .glove-chat-owner .glove-detail-photo{width:44px;height:44px;flex:none}
+#skm-earth-preview .glove-direct-sheet[data-view="pickup"]{overflow-y:auto}
+#skm-earth-preview .glove-unavailable:has(.glove-detail-photo){min-height:0;padding:8px 12px 18px}
+
+#skm-earth-preview .glove-direct-sheet[data-view=unavailable]{overflow-y:auto}
+#skm-earth-preview .glove-direct-sheet:has(.glove-map-section) .glove-direct-header{position:sticky;top:0;z-index:2;background:#fff}
+#skm-earth-preview .glove-direct-sheet:has(.glove-map-section) .glove-detail-photo{height:min(300px,36dvh)}
+#skm-earth-preview .glove-map-section{padding:0 18px 18px;text-align:left;color:#272c2a}
+#skm-earth-preview .glove-map-header{border-top:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;gap:12px}
+#skm-earth-preview .glove-map-header strong{font:500 13px -apple-system,sans-serif}
+#skm-earth-preview .glove-map-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:0;background:none;color:#242a28;text-decoration:underline;text-underline-offset:3px;font:13px -apple-system,sans-serif;cursor:pointer}
+#skm-earth-preview .glove-map-link:disabled{opacity:.55;cursor:default;text-decoration:none}
+#skm-earth-preview .glove-city-map{position:relative;background:#e6ebeb;overflow:hidden;border-radius:4px}
+#skm-earth-preview .glove-city-map svg{display:block;width:100%;height:90px}
+#skm-earth-preview .glove-city-map path{fill:#f4f3ef;stroke:#a3ada9;stroke-width:.7;stroke-linejoin:round}
+#skm-earth-preview .glove-city-map circle{fill:#222;stroke:white;stroke-width:1.5}
+#skm-earth-preview .glove-city-map span{position:absolute;left:calc(50% + 7px);top:50%;transform:translateY(-50%);font:10px ui-monospace,monospace;color:#222;text-shadow:0 0 4px white}
+#skm-earth-preview .glove-pickup-note{margin:9px 0 0;font:12px/1.5 -apple-system,sans-serif;color:#626762;white-space:pre-wrap;overflow-wrap:anywhere}
+#skm-earth-preview .glove-location-photo{width:100%;max-height:180px;object-fit:contain}
+#skm-earth-preview .glove-amount{border-top:1px solid #ddd;margin-top:12px;padding-top:10px}
+#skm-earth-preview .glove-amount label{display:flex;gap:8px;align-items:center;font:13px -apple-system,sans-serif}
+#skm-earth-preview .glove-amount input{margin-left:auto;width:90px;font:16px ui-monospace,monospace;border:1px solid #ccc;border-radius:4px;padding:7px;color:#222;background:#fff}
+
+#skm-earth-preview .glove-auction-entry{margin:0 18px 8px;font-size:11px}
+
+/* A glove opens straight into one compact, pickup-only purchase surface. */
+#skm-earth-preview .glove-direct-sheet:not([data-view=chat]){max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 32px);border-radius:24px;overflow-y:auto;overscroll-behavior:contain}
+#skm-earth-preview .glove-direct-sheet:has(.glove-map-section) .glove-detail-photo{height:clamp(130px,28dvh,240px)}
+#skm-earth-preview .glove-direct-sheet:has(.glove-map-section) .glove-unavailable{min-height:0;padding:2px 18px 10px}
+#skm-earth-preview .glove-direct-sheet .glove-map-section{padding:0 22px 22px}
+#skm-earth-preview .glove-purchase-form{margin:0}
+#skm-earth-preview .glove-price-label{display:block;font:12px/1.5 -apple-system,sans-serif;color:#626262}
+#skm-earth-preview .glove-price-field{display:flex;align-items:baseline;gap:12px;margin-top:5px;padding:10px 16px;border-radius:16px;background:#f2f3f2;box-shadow:inset 0 1px 4px #00000008,0 1px 0 #fff;font-size:13px;color:#444}
+#skm-earth-preview .glove-price-field input{display:block;flex:1;min-width:0;width:100%;padding:0;border:0;outline:0;background:transparent;color:#151515;font:400 30px/1.5 -apple-system,sans-serif;box-shadow:none;border-radius:0;opacity:1;-webkit-text-fill-color:#151515}
+#skm-earth-preview .glove-price-field:focus-within{outline:1px solid #888;outline-offset:2px}
+#skm-earth-preview .glove-price-field:has([aria-invalid=true]){outline:1px solid #b63333}
+#skm-earth-preview .glove-pickup-only{margin:14px 0;font:12px/1.5 -apple-system,sans-serif;color:#333}
+#skm-earth-preview .glove-pickup-address{font:13px/1.5 -apple-system,sans-serif;color:#222;white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0 0}
+#skm-earth-preview .glove-buy-button{display:flex;width:100%;min-height:50px;gap:12px;align-items:center;justify-content:center;padding:12px 18px;margin-top:12px;background:#232523;color:#fff;border:0;border-radius:16px;box-shadow:inset 0 1px 0 #ffffff20,0 3px 10px #0000000b;font:500 15px/1.4 -apple-system,sans-serif;cursor:pointer}
+#skm-earth-preview .glove-buy-button>span:last-child{font-size:20px;font-weight:300}
+#skm-earth-preview .glove-buy-button:disabled{background:#e6e8e6;color:#727572;box-shadow:none;cursor:default}
+#skm-earth-preview .glove-buy-button:disabled>span:last-child{visibility:hidden}
+#skm-earth-preview .glove-buy-button:focus-visible{outline:2px solid #767d76;outline-offset:3px}
+#skm-earth-preview .glove-purchase-status{margin:10px 0 0;font:12px/1.5 -apple-system,sans-serif;color:#9c302e}
+#skm-earth-preview .glove-purchase-status:empty{display:none}
+#skm-earth-preview .glove-confirm-pickup{font-size:11px;margin-top:6px}
+@media(max-height:700px){#skm-earth-preview .glove-direct-sheet:has(.glove-map-section) .glove-detail-photo{height:20dvh}}
+/* Keep the site's material layer from turning the pickup sheet into nested grey boxes. */
+@layer skmMaterial {
+ html[data-skm-paper=shell] #skm-earth-preview .glove-direct-sheet:has(.glove-purchase){background:#fff!important;border:1px solid #e2e4e2!important;border-radius:24px!important;box-shadow:0 10px 30px #00000006!important}
+ html[data-skm-paper=shell] #skm-earth-preview .glove-direct-sheet:has(.glove-purchase) .glove-price-field input{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;color:#151515!important}
+ html[data-skm-paper=shell] #skm-earth-preview .glove-direct-sheet:has(.glove-purchase) :is(.glove-icon-button,.glove-confirm-pickup){background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+ html[data-skm-paper=shell] #skm-earth-preview .glove-direct-sheet .glove-buy-button{background:#232523!important;color:#fff!important;border:0!important;border-radius:16px!important;box-shadow:inset 0 1px 0 #ffffff20,0 3px 10px #0000000b!important}
+ html[data-skm-paper=shell] #skm-earth-preview .glove-direct-sheet .glove-buy-button:disabled{background:#e6e8e6!important;color:#727572!important;box-shadow:none!important}
+}
+.glove-model-dialog{position:fixed;inset:0;width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;border-radius:0;background:#000;color:#fff;overflow:hidden}
+.glove-model-dialog::backdrop{background:#000}
+.glove-model-dialog iframe{display:block;width:100%;height:100%;border:0;background:#000}
+#skm-earth-preview .glove-model-open{position:relative;display:block;width:100%;padding:0;border:0;background:#fff;cursor:pointer}
+#skm-earth-preview .glove-model-badge{position:absolute;right:8px;bottom:8px;color:#333;font:11px -apple-system,sans-serif;letter-spacing:.5px;background:#ffffffd9;padding:6px 8px}
+@layer skmMaterial{html[data-skm-paper=shell] #skm-earth-preview .glove-direct-sheet .glove-model-open{background:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important}}
+
+/* One uninterrupted black product view: location, model, then chosen price. */
+.glove-model-dialog[data-product]{background:#000;color:#ecece8;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;animation:glove-product-in .35s ease both}
+.glove-product-shell{display:flex;flex-direction:column;box-sizing:border-box;width:min(100%,760px);height:100%;margin:auto;padding:max(8px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));overflow:hidden}
+.glove-product-header{flex:none;display:flex;align-items:center;justify-content:space-between;min-height:44px;margin-bottom:8px}
+.glove-product-header strong{font:400 11px/1.4 ui-monospace,monospace;letter-spacing:.12em;color:#aaa}
+.glove-product-close{width:44px;height:44px;margin-right:-12px;border:0;background:none;color:#eee;font:200 29px/1 sans-serif;cursor:pointer}
+.glove-product-location{flex:none;max-height:24dvh;overflow:auto;text-align:center;padding:0 0 8px;scrollbar-width:thin}
+.glove-product-location .glove-pickup-address{font:400 15px/1.4 -apple-system,sans-serif;color:#e8e8e3;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.glove-product-location .glove-pickup-area{font:11px/1.5 -apple-system,sans-serif;margin:3px 0 10px;color:#aaa}
+.glove-model-dialog[data-product] .glove-pickup-note{font:11px/1.5 -apple-system,sans-serif;color:#90918d;margin:5px 0;text-align:center}
+.glove-product-stage{flex:1 1 0;min-height:100px;position:relative;margin:0 -16px;overflow:hidden}
+.glove-model-dialog[data-product] .glove-product-stage iframe{height:100%;width:100%;border:0;display:block;background:#000}
+.glove-product-checkout{flex:0 0 auto;width:100%;max-width:400px;max-height:42dvh;overflow:auto;align-self:center;padding-top:6px;scrollbar-width:thin}
+.glove-model-dialog[data-product] .glove-price-label{display:block;font:11px/1.5 -apple-system,sans-serif;color:#969792;text-align:center}
+.glove-model-dialog[data-product] .glove-price-field{display:flex;align-items:baseline;justify-content:center;gap:12px;margin:5px auto 0;border:0;border-bottom:1px solid #373934;max-width:260px;padding:0 12px 5px;color:#a5a7a0;background:none}
+.glove-model-dialog[data-product] .glove-price-field>span{font-size:12px;letter-spacing:.08em}
+.glove-model-dialog[data-product] .glove-price-field input{appearance:none;width:140px;min-width:0;border:0;background:transparent;color:#eee;-webkit-text-fill-color:#eee;font:300 38px/1.3 -apple-system,sans-serif;padding:0;outline:0;border-radius:0;box-shadow:none;text-align:center}
+.glove-model-dialog[data-product] .glove-price-field:focus-within{border-bottom-color:#ddd}
+.glove-model-dialog[data-product] .glove-price-field:has([aria-invalid=true]){border-bottom-color:#ff6a60}
+.glove-model-dialog[data-product] .glove-buy-button{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:48px;border:1px solid #ccc;border-radius:0;margin:16px 0 0;padding:12px 16px;background:#e3e5df;color:#141512;font:500 13px/1.3 -apple-system,sans-serif;cursor:pointer}
+.glove-model-dialog[data-product] .glove-buy-button:disabled{background:#151614;color:#858780;border-color:#353730;cursor:default}
+.glove-model-dialog[data-product] .glove-buy-button:disabled>span:last-child:not(:only-child){display:none}
+.glove-model-dialog[data-product] .glove-map-link{display:inline-block;font:11px/1.5 -apple-system,sans-serif;color:#d1d5cb;background:none;border:0;text-decoration:underline;padding:7px}
+.glove-model-dialog[data-product] .glove-purchase-status{font:11px/1.5 -apple-system,sans-serif;color:#ff8e83;margin:8px 0 0;text-align:center}
+.glove-model-dialog[data-product] .glove-purchase-status:empty{display:none}
+.glove-model-dialog[data-product] :is(button,input,a):focus-visible{outline:1px solid #ccc;outline-offset:3px}
+@keyframes glove-product-in{from{opacity:0}to{opacity:1}}
+@media(max-height:650px){.glove-product-shell{padding-top:max(4px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom))}.glove-product-header{margin-bottom:0}.glove-product-location .glove-pickup-area{margin-bottom:3px}.glove-model-dialog[data-product] .glove-pickup-note{font-size:10px;margin:3px 0}.glove-model-dialog[data-product] .glove-price-field input{font-size:30px}.glove-model-dialog[data-product] .glove-buy-button{margin-top:8px;min-height:44px}}
+@media(prefers-reduced-motion:reduce){.glove-model-dialog[data-product]{animation:none}}
+
+/* Compact product controls: currency and amount between two 44px targets. */
+.glove-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+.glove-price-value{display:flex;align-items:baseline;justify-content:center;gap:10px;min-width:0;flex:1}
+.glove-price-value>span{font:400 12px/1.3 -apple-system,sans-serif;letter-spacing:.06em}
+.glove-price-step{flex:none;width:44px;min-height:44px;padding:0;background:none;border:0;border-radius:0;color:inherit;font:300 26px/1 sans-serif;cursor:pointer;touch-action:manipulation}
+.glove-price-step:disabled{opacity:.25;cursor:default}
+.glove-model-dialog[data-product] .glove-price-field{align-items:center;gap:8px;max-width:320px;margin:0 auto;border:0;padding:0;background:none;box-shadow:none;border-radius:0}
+.glove-model-dialog[data-product] .glove-price-value input{width:100%;max-width:145px;min-width:65px;font-size:36px;text-align:center}
+.glove-model-dialog[data-product] .glove-price-step{color:#eee}
+.glove-model-dialog[data-product] .glove-product-location{max-height:15dvh;padding-bottom:0}
+.glove-model-dialog[data-product] .glove-pickup-address{font-size:12px;line-height:1.6;color:#b9bab8}
+.glove-model-dialog[data-product] .glove-product-stage{display:flex;align-items:center;justify-content:center}
+.glove-model-dialog[data-product] .glove-product-stage iframe{max-height:58dvh}
+.glove-model-dialog[data-product] .glove-product-checkout{padding-top:4px}
+.glove-model-dialog[data-product] .glove-buy-button{margin-top:16px;font-size:15px;letter-spacing:.02em}
+.glove-model-dialog[data-product] .glove-buy-button:disabled>span:only-child{display:inline;visibility:visible}
+.glove-model-dialog[data-product] .glove-price-field:focus-within{outline:0}
+.glove-model-dialog[data-product] .glove-price-field:has([aria-invalid=true]){outline:1px solid #ff6a60;outline-offset:3px}
+@layer skmMaterial{html[data-skm-paper=shell] #skm-earth-preview .glove-direct-sheet .glove-price-step{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important;font-size:26px!important}}
+
+/* PayPal checkout appearance, using the unmodified official brand assets. */
+.glove-model-dialog[data-product] .glove-paypal-button{height:48px;min-height:48px;background:#ffc439;border:0;border-radius:6px;padding:0 24px;box-shadow:none;transition:background-color .15s ease,opacity .15s ease}
+.glove-model-dialog[data-product] .glove-paypal-button:not(:disabled):hover{background:#f2ba36}
+.glove-model-dialog[data-product] .glove-paypal-button:not(:disabled):active{background:#e8b234}
+.glove-model-dialog[data-product] .glove-paypal-button:disabled{background:#ffc439;border:0;opacity:.65;cursor:default}
+.glove-model-dialog[data-product] .glove-paypal-button>.glove-paypal-brand{display:flex!important;align-items:center;justify-content:center;gap:6px;height:32px;visibility:visible!important}
+.glove-paypal-brand img{display:block;object-fit:contain;max-width:none;filter:none;pointer-events:none}
+.glove-paypal-brand .glove-paypal-mark{width:26px;height:26px}
+.glove-paypal-brand .glove-paypal-wordmark{width:78px;height:28px}
+@media(prefers-reduced-motion:reduce){.glove-model-dialog[data-product] .glove-paypal-button{transition:none}}

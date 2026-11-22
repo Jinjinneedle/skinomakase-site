@@ -18,6 +18,14 @@ const $ = s => document.querySelector(s);
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const TAU = Math.PI * 2;
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* 모바일(좁은 화면 또는 터치): 글자 없는 UI — 도안은 아래에서 올라오는 서랍(세로 스크롤)에서 고르고,
+ * 도구는 아이콘만, 두 손가락으로 크기·회전. 데스크톱 레이아웃은 그대로. */
+const MOBILE = matchMedia('(max-width: 720px)').matches || matchMedia('(pointer: coarse)').matches;
+document.documentElement.classList.toggle('mobile', MOBILE);
+const HANDLE_R = MOBILE ? 24 : 14;                     // 손잡이 히트 반경(화면 px)
+const MPAD = { x: 26, top: 70, bottom: 96 };           // 모바일 카메라 여백: 아래는 액션바 자리
+let camTouched = false;                                // 사용자가 카메라를 움직였는지 (아니면 크기 바뀔 때 다시 맞춤)
+const haptic = k => { try { window.SKMApp && window.SKMApp.haptic(k); } catch (_) {} };
 
 /* ── 상태 ─────────────────────────────── */
 let catalog = [];
@@ -44,7 +52,7 @@ const I18N = window.SKM_I18N;
 let lang = 'ko';
 function detectLang() {
   try {
-    const saved = localStorage.getItem('skm-lang');
+    const saved = window.SKMLanguage.code;
     if (saved && I18N[saved]) return saved;
   } catch (_) {}
   const nav = (navigator.language || 'ko').toLowerCase();
@@ -58,7 +66,7 @@ function t(key, vars) {
 }
 function applyLang(code) {
   lang = I18N[code] ? code : 'en';
-  try { localStorage.setItem('skm-lang', lang); } catch (_) {}
+  window.SKMLanguage.set(lang);
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
@@ -68,6 +76,21 @@ function applyLang(code) {
   $('#globe').title = t('langTitle');
   buildZones(); buildSwatches(); buildLangMenu();
   syncToolHint(); syncUI(); invalidate();
+}
+/* 바디맵에 들어가기 전 언어 선택 — 고르면 인트로가 그 언어로 보인다 */
+const LANG_NAMES = Object.fromEntries(window.SKMLanguage.languages.map(x=>[x.code,x.name]));
+function buildLangPick() {
+  const list = $('#langpick-list'); if (!list) return;
+  list.innerHTML = '';
+  Object.keys(I18N).filter(code => LANG_NAMES[code]).forEach(code => {      // 'langs' 같은 보조 키는 제외
+    const b = document.createElement('button'); b.type = 'button';
+    b.innerHTML = '<span></span><i></i>';
+    b.firstChild.textContent = LANG_NAMES[code] || code.toUpperCase();
+    b.lastChild.textContent = code.toUpperCase();
+    b.classList.toggle('on', code === lang);
+    b.onclick = () => { haptic('selection'); applyLang(code); $('#langpick').hidden = true; introClosedAt = performance.now(); };
+    list.appendChild(b);
+  });
 }
 function buildLangMenu() {
   const m = $('#langmenu'); m.innerHTML = '';
@@ -233,7 +256,8 @@ function buildRender(it) {
 const renderOf = it => (it.dirty || !it._cv ? buildRender(it) : it._cv);
 
 /* ── 원 투명도 ────────────────────────── */
-function ringAlpha() {
+function ringAlpha() { return 0; // Catalog lives in the flower selector.
+
   const wide = boxToCam(SCENE).s, close = boxToCam(bodyBox()).s;
   if (wide >= close) return 1;
   const k = clamp((cam.s - close) / (wide - close), 0, 1);
@@ -242,7 +266,7 @@ function ringAlpha() {
 
 /* ── 그리기 ───────────────────────────── */
 const MONO = '"IBM Plex Mono", ui-monospace, monospace';
-const ROT_ARM = 34;   // 회전 손잡이 팔 길이(화면 px)
+const ROT_ARM = MOBILE ? 46 : 34;   // 회전 손잡이 팔 길이(화면 px)
 const HAIR = 'rgba(18,17,13,.22)';
 const HAIR2 = 'rgba(18,17,13,.10)';
 
@@ -299,7 +323,7 @@ function drawSheet(c, ra) {
 function draw() {
   const c = ctx;
   c.setTransform(canvas._dpr, 0, 0, canvas._dpr, 0, 0);
-  c.fillStyle = '#FFFFFF';
+  c.fillStyle = document.documentElement.hasAttribute('data-skm-paper') ? '#ffffff' : (window.SKMTheme?.dark ? '#09090b' : '#e4e5e7');
   c.fillRect(0, 0, canvas._w, canvas._h);
   c.translate(cam.x, cam.y);
   c.scale(cam.s, cam.s);
@@ -338,7 +362,7 @@ function draw() {
   }
 
   // 몸 — 가는 제도선
-  BODY.draw(c, { fill: '#FFFFFF', stroke: '#12110D', lineWidth: clamp(1.4 * px, .6, 4) });
+  BODY.draw(c, { fill: '#FFFFFF', stroke: '#12110D', lineWidth: clamp((MOBILE ? 2.2 : 1.4) * px, .6, 5) });
 
   for (const it of items) {
     const cv = renderOf(it); if (!cv) continue;
@@ -379,14 +403,14 @@ function draw() {
         c.moveTo(0, -hh); c.lineTo(0, -hh - ROT_ARM * px);
         c.stroke();
         c.fillStyle = '#FF4A38';
-        c.beginPath(); c.arc(0, -hh - ROT_ARM * px, 5.5 * px, 0, TAU); c.fill();
+        c.beginPath(); c.arc(0, -hh - ROT_ARM * px, (MOBILE ? 8.5 : 5.5) * px, 0, TAU); c.fill();
         c.strokeStyle = '#fff'; c.lineWidth = 1.4 * px;
-        c.beginPath(); c.arc(0, -hh - ROT_ARM * px, 5.5 * px, 0, TAU); c.stroke();
+        c.beginPath(); c.arc(0, -hh - ROT_ARM * px, (MOBILE ? 8.5 : 5.5) * px, 0, TAU); c.stroke();
 
         // 모서리 손잡이
         c.strokeStyle = '#FF4A38'; c.lineWidth = 1.2 * px;
         c.fillStyle = '#fff';
-        const r = 5 * px;
+        const r = (MOBILE ? 8 : 5) * px;
         for (const [dx, dy] of [[-1,-1],[1,-1],[1,1],[-1,1]]) {
           c.beginPath(); c.arc(dx * hw, dy * hh, r, 0, TAU); c.fill(); c.stroke();
         }
@@ -452,6 +476,7 @@ function draw() {
 /* ── 프레임 루프 ──────────────────────── */
 let dirty = true, last = 0;
 const invalidate = () => { dirty = true; };
+window.addEventListener('skm-theme',()=>invalidate());
 function spinning() {
   return !REDUCED && ringAlpha() > .06 && !hover && !carry && !tween && $('#sheet').hidden && $('#pv').hidden;
 }
@@ -490,7 +515,16 @@ function toPixel(it, wx, wy) {
   const { lx, ly } = toLocal(it, wx, wy);
   return { px: (lx + it.w / 2) / it.w * it.baseW, py: (ly + it.h / 2) / it.h * it.baseH };
 }
+/* 손가락용 히트: 픽셀이 아니라 도안의 네모 영역 + 여유(화면 18px) — 얇은 선 사이를 눌러도 잡힌다 */
+const inBoxPad = (it, wx, wy, pad) => { const { lx, ly } = toLocal(it, wx, wy); return Math.abs(lx) <= it.w / 2 + pad && Math.abs(ly) <= it.h / 2 + pad; };
 function hitItem(wx, wy) {
+  if (MOBILE) {
+    const pad = 18 / cam.s;
+    const cur = sel.length === 1 ? items.find(i => i.id === sel[0]) : null;
+    if (cur && inBoxPad(cur, wx, wy, pad)) return cur;          // 만지던 도안이 먼저
+    for (let i = items.length - 1; i >= 0; i--) if (inBoxPad(items[i], wx, wy, pad)) return items[i];
+    return null;
+  }
   for (let i = items.length - 1; i >= 0; i--) {
     const it = items[i];
     const { lx, ly } = toLocal(it, wx, wy);
@@ -517,7 +551,7 @@ function hitNode(wx, wy) {
 function hitHandle(wx, wy) {
   if (tool !== 'select' || sel.length !== 1) return null;
   const it = items.find(i => i.id === sel[0]); if (!it) return null;
-  const r = 14 / cam.s;
+  const r = HANDLE_R / cam.s;
   const { lx, ly } = toLocal(it, wx, wy);
   if (Math.hypot(lx, ly + it.h / 2 + ROT_ARM / cam.s) < r) return { it, rot: true };
   for (const [sx, sy] of [[-1,-1],[1,-1],[1,1],[-1,1]]) {
@@ -541,14 +575,17 @@ async function placeNode(g, wx, wy) {
   const first = items.length === 0;
   items.push(it); sel = [it.id];
   syncUI(); invalidate();
-  if (first) flyTo(bodyBox(), 760, { x: 44, top: 78, bottom: 100 });
+  if (first) flyTo(bodyBox(), 760, MOBILE ? MPAD : { x: 44, top: 78, bottom: 100 });
 }
 
 /* ── 포인터 ───────────────────────────── */
 let drag = null;
+let introClosedAt = -1e9;
 const evW = e => toWorld(e.clientX, e.clientY);
 
 canvas.addEventListener('pointerdown', e => {
+  if (pinch) return;                                        // 두 손가락 제스처 중에는 새 포인터 무시
+  if (performance.now() - introClosedAt < 450) return;      // 인트로 닫힌 직후 새는 탭 무시
   canvas.setPointerCapture(e.pointerId);
   const p = evW(e);
 
@@ -612,6 +649,7 @@ function moveBrushRing(x, y) {
 }
 
 canvas.addEventListener('pointermove', e => {
+  if (pinch) return;
   const p = evW(e);
   moveBrushRing(e.clientX, e.clientY);
   if (!drag) {
@@ -644,6 +682,7 @@ canvas.addEventListener('pointermove', e => {
   } else if (drag.mode === 'carry') {
     carry.x = p.x; carry.y = p.y; carry.moved = true; invalidate();
   } else if (drag.mode === 'pan') {
+    camTouched = true;
     cam.x = drag.cx + (e.clientX - drag.sx);
     cam.y = drag.cy + (e.clientY - drag.sy);
     clampCam(); invalidate(); syncUI();
@@ -681,10 +720,28 @@ canvas.addEventListener('wheel', e => {
 }, { passive: false });
 
 let pinch = null;
+const inBox = (it, wx, wy) => { const { lx, ly } = toLocal(it, wx, wy); return Math.abs(lx) <= it.w / 2 && Math.abs(ly) <= it.h / 2; };
+/* 두 손가락: 도안 위에서면 그 도안의 크기·회전·위치, 아니면 카메라 줌 */
 canvas.addEventListener('touchstart', e => {
-  if (e.touches.length === 2) {
-    const [a, b] = e.touches;
-    pinch = { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), s: cam.s };
+  if (e.touches.length !== 2) return;
+  const [a, b] = e.touches;
+  const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+  const ang = Math.atan2(b.clientY - a.clientY, b.clientX - a.clientX);
+  const mx = (a.clientX + b.clientX) / 2, my = (a.clientY + b.clientY) / 2;
+  let it = null;
+  if (tool === 'select') {
+    const pa = toWorld(a.clientX, a.clientY), pb = toWorld(b.clientX, b.clientY);
+    const cur = sel.length === 1 ? items.find(i => i.id === sel[0]) : null;
+    it = (cur && (inBox(cur, pa.x, pa.y) || inBox(cur, pb.x, pb.y))) ? cur : (hitItem(pa.x, pa.y) || hitItem(pb.x, pb.y));
+  }
+  if (it) {
+    if (!(drag && drag.mode === 'move')) pushUndo();        // 한 손가락 이동 중 전환이면 이미 쌓임
+    drag = null; sel = [it.id];
+    pinch = { it, d, ang, mx, my, w: it.w, h: it.h, rot: it.rot, x: it.x, y: it.y };
+    syncUI(); invalidate();
+  } else {
+    drag = null;
+    pinch = { d, s: cam.s };
   }
 }, { passive: true });
 canvas.addEventListener('touchmove', e => {
@@ -693,12 +750,25 @@ canvas.addEventListener('touchmove', e => {
   const [a, b] = e.touches;
   const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
   const mx = (a.clientX + b.clientX) / 2, my = (a.clientY + b.clientY) / 2;
+  if (pinch.it) {
+    const it = pinch.it, k = clamp(d / pinch.d, .05, 8);
+    it.w = pinch.w * k; it.h = pinch.h * k;
+    const ang = Math.atan2(b.clientY - a.clientY, b.clientX - a.clientX);
+    const deg = pinch.rot + (ang - pinch.ang) * 180 / Math.PI;
+    it.rot = ((deg + 180) % 360 + 360) % 360 - 180;
+    const m0 = toWorld(pinch.mx, pinch.my), m1 = toWorld(mx, my);
+    it.x = pinch.x + (m1.x - m0.x); it.y = pinch.y + (m1.y - m0.y);
+    syncSliders(); invalidate();
+    return;
+  }
+  camTouched = true;
   const before = toWorld(mx, my);
   cam.s = clamp(pinch.s * (d / pinch.d), .008, 8);
   cam.x = mx - before.x * cam.s; cam.y = my - before.y * cam.s;
   clampCam(); invalidate(); syncUI();
 }, { passive: false });
-canvas.addEventListener('touchend', () => { pinch = null; }, { passive: true });
+canvas.addEventListener('touchend', e => { if (e.touches.length < 2) pinch = null; }, { passive: true });
+canvas.addEventListener('touchcancel', () => { pinch = null; }, { passive: true });
 
 /* ── 도안 미리보기 ────────────────────── */
 let pvGraphic = null;
@@ -722,7 +792,7 @@ $('#pv').addEventListener('pointerdown', e => {
 $('#pv-add').onclick = () => {
   if (!pvGraphic) return;
   const g = pvGraphic;
-  closePreview();
+  closePreview(); closeTray(); haptic('medium');
   placeNode(g, CX, BH * 0.24);
 };
 
@@ -739,7 +809,7 @@ $('#pv-img').addEventListener('pointerdown', e => {
   const move = ev => {
     if (!started && Math.hypot(ev.clientX - e.clientX, ev.clientY - e.clientY) > 6) {
       started = true;
-      closePreview();
+      closePreview(); closeTray();
     }
     ghost.style.left = (ev.clientX - 60) + 'px';
     ghost.style.top = (ev.clientY - 60) + 'px';
@@ -790,16 +860,46 @@ function buildZones() {
       b.classList.add('on');
       const [x, y, w, h] = z.box, m = i === 0 ? 0 : .16;
       flyTo([x - w * m, y - h * m, w * (1 + m * 2), h * (1 + m * 2)], 660,
-            { x: 44, top: 78, bottom: 100 });
+            MOBILE ? MPAD : { x: 44, top: 78, bottom: 100 });
     };
     box.appendChild(b);
   });
 }
 
+/* ── 모바일 도안 서랍: 링 위의 도안을 위아래로 쭉 스크롤하는 격자로 ── */
+function buildTray() {
+  const grid = $('#tray-grid'); grid.innerHTML = '';
+  nodes.forEach(nd => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'tray-cell';
+    b.style.setProperty('--hue', nd.hue);
+    const im = document.createElement('img'); im.src = nd.g.thumb; im.alt = nd.g.id; im.loading = 'lazy'; im.draggable = false;
+    b.appendChild(im);
+    b.onclick = () => { haptic('light'); openPreview(nd.g); };
+    grid.appendChild(b);
+  });
+  // 액션바 버튼 안에 도안 세 장을 겹쳐 보여 준다 (글자 대신)
+  const st = $('#mb-stack'); st.innerHTML = '';
+  nodes.slice(0, 3).forEach(nd => { const im = document.createElement('img'); im.src = nd.g.thumb; im.alt = ''; st.appendChild(im); });
+}
+function openTray() { haptic('light'); $('#tray').hidden = false; }
+function closeTray() { $('#tray').hidden = true; }
+$('#mb-tray').onclick = openTray;
+$('#tray-close').onclick = closeTray;
+$('#tray').addEventListener('pointerdown', e => { if (e.target === $('#tray')) closeTray(); });
+$('#mb-next').onclick = () => { haptic('medium'); $('#next').click(); };
+
+/* 보내기를 누르는 순간 랜딩 (config.js 의 AFTER_SEND_URL) — 사용자 제스처 안이라 팝업 차단이 없다.
+ * 앱 안에서는 사파리로 열리고, 웹에서는 새 탭. 이메일 전송은 뒤에서 계속된다. */
+function openLanding() {
+  const url = CFG.AFTER_SEND_URL; if (!url) return;
+  try { const w = window.open(url, '_blank'); if (!w && !window.SKMApp) window.top.location.href = url; } catch (_) {}
+}
+
 document.querySelectorAll('.t[data-tool]').forEach(b => {
   b.onclick = () => {
     document.querySelectorAll('.t[data-tool]').forEach(x => x.classList.remove('on'));
-    b.classList.add('on'); tool = b.dataset.tool;
+    b.classList.add('on'); tool = b.dataset.tool; haptic('selection');
     $('#brushwrap').hidden = tool === 'select';
     canvas.className = tool === 'select' ? '' : 'brushing';
     syncToolHint(); moveBrushRing(); invalidate();
@@ -902,12 +1002,14 @@ function syncUI() {
   const placed = items.length > 0, chosen = sel.length > 0;
   $('#lede').hidden = placed;
   $('#titleblock').hidden = placed;
-  $('#zones').hidden = !placed;
+  $('#zones').hidden = MOBILE || !placed;
   $('#next').hidden = !placed;
+  $('#mbar').hidden = !MOBILE;
+  $('#mb-next').hidden = !placed;
   $('#bar').hidden = !chosen;
   $('#p-merge').hidden = sel.length < 2;
   if (typeof syncToolHint === 'function') syncToolHint();
-  $('#back-spread').hidden = !placed || ringAlpha() > .5;
+  $('#back-spread').hidden = MOBILE || !placed || ringAlpha() > .5;
   $('#b-undo').disabled = !undoStack.length;
   $('#b-redo').disabled = !redoStack.length;
   if (chosen) syncSliders();
@@ -980,8 +1082,31 @@ function payload() {
   };
 }
 
+/* 앱: 이름·연락처 없이 — 완성 이미지를 사진첩에 저장하고 Venue Ink 로 간다 (네이티브가 SKMApp.onPhotoSaved → 부모창 → 여기로 알려 줌) */
+let photoTimer = null;
+function photoDone(ok) {
+  if (!photoTimer) return;
+  clearTimeout(photoTimer); photoTimer = null;
+  $('#go-msg').innerHTML = t(ok ? 'go_msg' : 'go_msg_fail');
+  $('#go').hidden = false;
+}
+$('#go-yes').onclick = () => { haptic('medium'); $('#go').hidden = true; openLanding(); };
+$('#go-close').onclick = () => { $('#go').hidden = true; };
+window.addEventListener('message', (e) => { if (e.data && e.data.skm === 'photo') photoDone(!!e.data.ok); });
+
 $('#next').onclick = async () => {
   if (!items.length) return;
+  if ((window.SKMApp && window.SKMApp.savePhoto) || window.parent !== window) {
+    haptic('medium');
+    if (window.__bookingExport) return;
+    window.__bookingExport = true;
+    try {
+      const png = (await exportPNG(2)).toDataURL('image/png');
+      window.parent.postMessage({ skm: 'book', png, graphics: items.map(it => it.gid) }, '*');
+      if (window.SKMApp && window.SKMApp.savePhoto) window.SKMApp.savePhoto(png);
+    } finally { window.__bookingExport = false; }
+    return;
+  }
   const out = await exportPNG(2);
   $('#sheet-preview').src = out.toDataURL('image/png');
   $('#sheet').hidden = false;
@@ -997,6 +1122,7 @@ $('#send').onclick = async () => {
     return toast(t('t_need_name'), true);
   const btn = $('#send');
   btn.disabled = true; btn.textContent = t('sending');
+  openLanding();
   try {
     const out = await exportPNG();
     const data = payload();
@@ -1083,7 +1209,11 @@ $('#send').onclick = async () => {
 let rt = 0;
 addEventListener('resize', () => {
   clearTimeout(rt);
-  rt = setTimeout(() => { resize(); clampCam(); invalidate(); syncUI(); }, 90);
+  rt = setTimeout(() => {
+    resize();
+    if (MOBILE && !camTouched) Object.assign(cam, boxToCam(bodyBox(), MPAD));   // 크기가 늦게 잡혀도 몸이 화면에 맞게
+    clampCam(); invalidate(); syncUI();
+  }, 90);
 });
 
 $('#globe').onclick = e => {
@@ -1113,6 +1243,7 @@ function startBgm() {
 
 $('#intro-start').onclick = () => {
   $('#intro').hidden = true;
+  introClosedAt = performance.now();
   const a = $('#bgm');
   if (a && a.paused) a.play().catch(() => {});   // 클릭 제스처를 재생 허가로 활용
   invalidate();
@@ -1120,13 +1251,16 @@ $('#intro-start').onclick = () => {
 
 (async function init() {
   startBgm();
+  if (MOBILE) { const p = document.querySelector('[data-i18n="in_how"]'); if (p) p.dataset.i18n = 'in_how_m'; }
   applyLang(detectLang());
   catalog = window.SKM_CATALOG || await (await fetch('graphics.json')).json();
   resize();
   await Promise.all(catalog.map(g => loadImage(g.thumb).catch(() => null)));
   layoutNodes();
+  if (MOBILE) { buildTray(); $('#lede').hidden = true; }
+  buildLangPick();
   $('#sheet-n').textContent = String(catalog.length).padStart(2, '0');
-  Object.assign(cam, boxToCam(SCENE));
+  Object.assign(cam, MOBILE ? boxToCam(bodyBox(), MPAD) : boxToCam(SCENE));
   clampCam(); syncUI(); syncToolHint();
   requestAnimationFrame(frame);
 
@@ -1135,7 +1269,7 @@ $('#intro-start').onclick = () => {
     cam.s = target.s * .82;
     cam.x = canvas._w / 2 - (CX) * cam.s;
     cam.y = canvas._h / 2 - (CY) * cam.s;
-    setTimeout(() => flyTo(SCENE, 1000), 40);
+    setTimeout(() => MOBILE ? flyTo(bodyBox(), 1000, MPAD) : flyTo(SCENE, 1000), 40);
   }
   // 큰 이미지는 뒤에서 천천히
   catalog.forEach(g => loadImage(g.src).catch(() => null));
@@ -1150,3 +1284,10 @@ $('#intro-start').onclick = () => {
 })();
 
 })();
+
+// APP: 부모 창(index.html)이 오버레이를 닫을 때 배경음악을 멈추도록 postMessage 수신
+window.addEventListener('message', (e) => {
+  if (!e.data || e.data.skm !== 'bgm') return;
+  const a = document.getElementById('bgm'); if (!a) return;
+  if (e.data.cmd === 'pause') a.pause(); else if (a.getAttribute('src')) a.play().catch(() => {});
+});

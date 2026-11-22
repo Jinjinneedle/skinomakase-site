@@ -1,0 +1,60 @@
+<!doctype html>
+<html data-skm-paper="page" lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Level</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
+<style>
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; }
+  html, body { height:100%; margin:0; background:#fff; color:#111; font-family:"Space Mono", ui-monospace, monospace; overflow:hidden; }
+  .stage { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; }
+  .ring { position:relative; width:min(72vw, 300px); aspect-ratio:1; border-radius:50%; border:1px solid #cfcfcf; transition:border-color .25s, box-shadow .25s; }
+  .ring::before, .ring::after { content:''; position:absolute; background:#e6e6e6; }
+  .ring::before { left:50%; top:8%; bottom:8%; width:1px; }
+  .ring::after { top:50%; left:8%; right:8%; height:1px; }
+  .ring .target { position:absolute; left:50%; top:50%; width:44px; height:44px; margin:-22px 0 0 -22px; border-radius:50%; border:1px solid #cfcfcf; }
+  .bubble { position:absolute; left:50%; top:50%; width:36px; height:36px; margin:-18px 0 0 -18px; border-radius:50%; background:#111; will-change:transform; }
+  .ring.ok { border-color:#1f9d55; box-shadow:0 0 0 6px rgba(31,157,85,.12); }
+  .ring.ok .bubble { background:#1f9d55; }
+  .deg { font-size:44px; letter-spacing:.02em; font-variant-numeric:tabular-nums; }
+  .deg small { font-size:14px; color:#8a8a8a; margin-left:4px; }
+  .xy { font-size:11px; letter-spacing:.14em; color:#8a8a8a; font-variant-numeric:tabular-nums; }
+</style>
+<link rel="stylesheet" href="subtle-depth.css">
+<link rel="stylesheet" href="session-theme.css?v=1"><link rel="stylesheet" href="feature-paper.css?v=1"><link rel="stylesheet" href="studio-tone.css?v=11da9c45cf3f"><link rel="stylesheet" href="web-mobile.css?v=20261122"></head>
+<body>
+<div class="stage">
+  <div class="ring" id="ring"><div class="target"></div><div class="bubble" id="bubble"></div></div>
+  <div class="deg" id="deg">—</div>
+  <div class="xy" id="xy"></div>
+</div>
+<script>
+(function () {
+  const ring = document.getElementById('ring'), bubble = document.getElementById('bubble'), deg = document.getElementById('deg'), xy = document.getElementById('xy');
+  const haptic = k => { try { window.SKMApp && SKMApp.haptic(k); } catch (e) {} };
+  let gx = 0, gy = 0, gz = -1, sx = 0, sy = 0, ok = false, got = false;
+  // 평평하게 놓았을 때 중력 = (0,0,-1). x·y 성분이 곧 기울기.
+  window.addEventListener('message', e => { const d = e.data; if (!d || d.skm !== 'tilt') return; gx = d.x; gy = d.y; gz = d.z; got = true; });
+  function frame() {
+    if (got) {
+      sx += (gx - sx) * .18; sy += (gy - sy) * .18;
+      const R = ring.clientWidth / 2 - 18;
+      const k = Math.min(1, Math.hypot(sx, sy) / 0.5);            // 30° 쯤이면 가장자리
+      const a = Math.atan2(sy, sx), r = k * R;
+      bubble.style.transform = `translate(${(Math.cos(a) * r).toFixed(1)}px, ${(-Math.sin(a) * r).toFixed(1)}px)`;
+      const tilt = Math.atan2(Math.hypot(sx, sy), Math.abs(gz)) * 180 / Math.PI;
+      const rx = Math.asin(Math.max(-1, Math.min(1, sx))) * 180 / Math.PI, ry = Math.asin(Math.max(-1, Math.min(1, sy))) * 180 / Math.PI;
+      deg.innerHTML = tilt.toFixed(1) + '<small>°</small>';
+      xy.textContent = 'X ' + (rx >= 0 ? '+' : '') + rx.toFixed(1) + '°   Y ' + (ry >= 0 ? '+' : '') + ry.toFixed(1) + '°';
+      const now = tilt < 0.6;
+      if (now !== ok) { ok = now; ring.classList.toggle('ok', ok); haptic(ok ? 'success' : 'light'); }
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+<script src="session-theme-state.js?v=1"></script><script src="session-theme.js?v=1"></script><script src="screen-insets.js"></script></body>
+</html>

@@ -1,0 +1,59 @@
+/* The rim and moulded index stay still. Only the eight impressions move. */
+@layer skmMaterial {
+  .petal-dial {
+    position: relative; isolation: isolate; margin: auto; aspect-ratio: 1;
+    width: min(88vw, 410px, 55svh); touch-action: none; user-select: none;
+    -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+    border-radius: 50%;
+    background:
+      radial-gradient(ellipse at 43% 40%, transparent 49%, #85888b24 66%, #ffffff59 82%),
+      linear-gradient(143deg, #f2f2f1 0%, #dcddde 39%, #c2c4c6 86%, #d3d5d6);
+    box-shadow: inset 1px 1.5px 2px #ffffffed, inset -1px -2px 3px #777b8061,
+      0 3px 0 #a8aaad, 0 6px 9px -4px #54575b6b, 0 15px 24px -11px #55575b6b;
+  }
+  .petal-dial::before {
+    content: ''; position: absolute; inset: 2.6%; pointer-events: none; border-radius: 50%;
+    background: repeating-conic-gradient(from -.42deg, #54575948 0deg .8deg, transparent .8deg 4.5deg);
+    -webkit-mask: radial-gradient(closest-side, transparent 95%, black 96% 98%, transparent 99%);
+    mask: radial-gradient(closest-side, transparent 95%, black 96% 98%, transparent 99%);
+  }
+  .petal-dial::after {
+    content: ''; position: absolute; left: 48%; top: 3%; width: 4%; height: 1%;
+    border-radius: 8px; background: #777a7c; box-shadow: 0 1px 1px #fff; pointer-events: none;
+  }
+  .petal-rotor { position: absolute; inset: 0; transform: rotate(var(--turn, 0deg));
+    transition: transform 180ms cubic-bezier(.19,.82,.22,1.12); }
+  .petal-dial .petal-choice {
+    box-sizing: border-box; position: absolute; width: 19%; height: 19%; min-width: 0; min-height: 0;
+    margin: 0; padding: 0; border: 0 !important; border-radius: 50% !important; outline-offset: 1px;
+    background: transparent !important; box-shadow: none !important; cursor: grab;
+    transform: translate(-50%,-50%) rotate(calc(0deg - var(--turn, 0deg)));
+    transition: transform 180ms cubic-bezier(.19,.82,.22,1.12); touch-action: none;
+  }
+  .petal-dial .petal-choice img { position: absolute; inset: 15%; width: 70%; height: 70%;
+    object-fit: contain; pointer-events: none; mix-blend-mode: multiply;
+    filter: grayscale(1) blur(clamp(1.7px,.65vw,3px)) !important; opacity: .38; }
+  .petal-dial .petal-choice[aria-pressed=true]::before {
+    content: ''; position: absolute; inset: 13% -8%; border-radius: 999px;
+    background: linear-gradient(155deg,#f3f3f29c,#c5c7c966 85%);
+    box-shadow: inset 0 1px 2px #fff, inset 0 -1px 2px #888b8e55, 0 2px 4px #686b6e25;
+  }
+  .petal-dial .petal-choice[aria-pressed=true] img {opacity:.65; filter:grayscale(1) blur(1px) !important;}
+  .petal-dial .petal-hub {
+    position: absolute; box-sizing: border-box; inset: 26% !important; width: 48% !important; height: 48%;
+    margin: 0; min-width: 0 !important; min-height: 0; padding: 0 !important;
+    border: 0 !important; border-radius: 50% !important; transform: none;
+    background: radial-gradient(ellipse at 57% 74%,#fcfcfb 1%,#e3e4e4 63%,#b9bcbe 96%) !important;
+    box-shadow: inset 1px 3px 6px #55595c38, inset 0 -2px 3px #ffffffb3, 0 1px 2px #fff !important;
+    cursor: pointer; touch-action: none;
+  }
+  .petal-hub img { position:absolute; inset:15%; width:70%; height:70%; object-fit:contain;
+    mix-blend-mode:multiply; filter:none !important; opacity:1; pointer-events:none; }
+  .petal-dial button:focus-visible {outline:2px solid #45494b !important;outline-offset:2px;}
+  .petal-dial.is-turning :is(.petal-rotor,.petal-choice) {transition:none;}
+  @media (prefers-reduced-motion:reduce) {.petal-dial :is(.petal-rotor,.petal-choice){transition:none;}}
+}
+@layer skmMaterial {
+  #studio :is(#studio-home,#flat),#bodymap-flower .graphic-dismiss {background:transparent!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+  #studio #swatches button {border-radius:2px!important}
+}

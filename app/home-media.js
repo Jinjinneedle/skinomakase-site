@@ -1,0 +1,1 @@
+window.SKM_HOME_VIDEOS = ["app/backgrounds/clip-01.mp4", "app/backgrounds/clip-02.mp4", "app/backgrounds/clip-03.mp4", "app/backgrounds/clip-04.mp4", "app/backgrounds/clip-05.mp4", "app/backgrounds/clip-06.mp4", "app/backgrounds/clip-07.mp4", "app/backgrounds/clip-08.mp4", "app/backgrounds/clip-09.mp4"];

@@ -1,0 +1,6 @@
+Deep Star Maps 2020, galactic coordinates, 4k. Visualization by Ernie Wright.
+NASA/Goddard Space Flight Center Scientific Visualization Studio. Gaia DR2: ESA/Gaia/DPAC.
+https://svs.gsfc.nasa.gov/4851/
+Converted from the public EXR to a tone-mapped JPEG for mobile display.
+8k galactic tiles from the same NASA/Goddard SVS Deep Star Maps 2020 dataset.
+Moon: NASA/Goddard Space Flight Center Scientific Visualization Studio; LROC, Arizona State University. CGI Moon Kit: https://svs.gsfc.nasa.gov/4720/

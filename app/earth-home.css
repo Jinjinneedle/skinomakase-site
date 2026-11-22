@@ -1,0 +1,393 @@
+@import url("earth-live.css?v=fb82039e196e");
+
+#skm-earth-preview{background:transparent;color:#dce8f5;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;font-size:12px;line-height:1.45}
+#skm-earth-preview *{box-sizing:border-box}
+#skm-earth-preview button,#skm-earth-preview select{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+#skm-earth-preview .earth-app{position:relative;isolation:isolate;max-width:736px;margin:auto;overflow:hidden;background:#020509;border:1px solid #172431;border-radius:4px}
+#skm-earth-preview .earth-header{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#030609;position:relative;z-index:30;border-bottom:1px solid #1b2c3b}
+#skm-earth-preview .earth-header button{display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:0;padding:0;min-width:44px;min-height:44px}
+#skm-earth-preview .earth-header svg{width:20px;height:20px;stroke-width:1.35}
+#skm-earth-preview .earth-header .earth-brand{width:92px;height:45px}
+#skm-earth-preview .earth-logo{display:block;position:relative;width:82px;height:40px;overflow:hidden;opacity:.8}
+#skm-earth-preview .earth-logo img{position:absolute;max-width:none;width:101px;height:101px;left:-9px;top:-32px;filter:invert(1)}
+#skm-earth-preview .earth-stage{position:relative;height:490px;overflow:hidden;touch-action:none;background:#000}
+#skm-earth-preview canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+#skm-earth-preview canvas:active{cursor:grabbing}
+#skm-earth-preview .earth-caption{position:absolute;top:23px;left:25px;display:flex;flex-direction:column;gap:7px;pointer-events:none;color:#9aacbd}
+#skm-earth-preview .earth-caption span{font:9px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1.3px}
+#skm-earth-preview .earth-caption strong{font-size:17px;font-weight:400;letter-spacing:-.5px;color:#e3edf6}
+#skm-earth-preview .earth-markers{position:absolute;inset:0;pointer-events:none}
+#skm-earth-preview .earth-pin{position:absolute;display:grid;place-items:center;width:44px;height:44px;transform:translate(-50%,-50%);border:0;background:transparent;pointer-events:auto;touch-action:none;padding:0;color:#1777c5}
+#skm-earth-preview .earth-pin:before{content:"";width:7px;height:7px;background:#218de0;border:1px solid #effaff;border-radius:50%;box-shadow:0 0 3px 3px #51b9ff2b,0 0 15px #2a9df66b}
+#skm-earth-preview .earth-pin[aria-pressed="true"]:before{width:10px;height:10px;box-shadow:0 0 0 6px #238ee71c,0 0 16px #208ce688}
+#skm-earth-preview .earth-pin .earth-cluster-count{position:absolute;top:1px;right:2px;min-width:15px;height:15px;background:#0e2030;color:#bddbfa;font:9px ui-monospace,monospace;border:1px solid #31526d;border-radius:8px;display:grid;place-items:center}
+#skm-earth-preview .earth-focus-label{position:absolute;z-index:9;pointer-events:none;display:flex;flex-direction:column;gap:2px;white-space:nowrap;text-shadow:0 1px 5px #000,0 0 9px #000}
+#skm-earth-preview .earth-focus-label strong{font:11px ui-monospace,monospace;letter-spacing:1.4px;font-weight:500;color:#deefff}
+#skm-earth-preview .earth-focus-label span{font-size:10px;color:#abcce9}
+#skm-earth-preview .earth-zoom{position:absolute;bottom:18px;right:18px;z-index:15;display:flex;align-items:center;background:#07111ef2;border:1px solid #22384b;border-radius:25px;overflow:hidden;box-shadow:0 3px 14px #345b7010}
+#skm-earth-preview .earth-zoom button{min-width:44px;height:44px;display:grid;place-items:center;border:0;background:transparent;padding:0}
+#skm-earth-preview .earth-zoom [data-view="reset"]{min-width:47px;font:11px ui-monospace,monospace;font-variant-numeric:tabular-nums}
+#skm-earth-preview .earth-zoom button:hover,#skm-earth-preview .earth-tilt:hover{background:#14263a}
+#skm-earth-preview .earth-zoom svg{width:16px;height:16px;stroke-width:1.5}
+#skm-earth-preview .earth-tilt{position:absolute;bottom:18px;left:18px;z-index:15;min-height:44px;border:1px solid #22384b;border-radius:25px;padding:0 12px;background:#07111ef2;display:flex;align-items:center;gap:6px;font-size:11px}
+#skm-earth-preview .earth-tilt svg{width:17px;height:17px;stroke-width:1.3}
+#skm-earth-preview .earth-map-note{position:absolute;right:22px;top:24px;color:#93a9bd;font-size:10px;letter-spacing:.3px}
+#skm-earth-preview .earth-message:empty{display:none}
+#skm-earth-preview .earth-message{position:absolute;bottom:75px;left:20px;right:20px;padding:10px 14px;background:#0a1725;border:1px solid #294158;border-radius:5px;font-size:12px;z-index:20}
+#skm-earth-preview .earth-city-panel{background:#070c12;padding:19px 24px 12px;border-top:1px solid #1d2d3e;position:relative;z-index:20}
+#skm-earth-preview .earth-city-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+#skm-earth-preview .earth-country{font-size:11px;color:#93a8bd}
+#skm-earth-preview h2{margin:2px 0 0;font:500 23px ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.3;letter-spacing:.5px;color:#edf4fc}
+#skm-earth-preview h2 span{font:12px -apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:0;margin-left:8px;color:#93a8bd}
+#skm-earth-preview .earth-city-picker{display:flex;flex-direction:column;gap:3px;min-width:118px}
+#skm-earth-preview .earth-city-picker>span{font-size:10px;color:#a3b6ca}
+#skm-earth-preview select{width:100%;border:1px solid #253e55;border-radius:5px;background:#0b1825;padding:8px;min-height:38px;font-size:13px}
+#skm-earth-preview .earth-feature{display:flex;gap:13px;align-items:center;width:100%;padding:13px 14px;border:1px solid #20374b;border-radius:9px;background:#0b1520;text-align:left}
+#skm-earth-preview .earth-feature-icon{width:35px;height:35px;display:grid;place-items:center;border:1px solid #29465e;border-radius:50%;color:#a5cef3;background:#10283d}
+#skm-earth-preview .earth-feature-icon svg{width:22px;height:22px;stroke-width:1.3}
+#skm-earth-preview .earth-feature>span:nth-child(2){display:flex;flex-direction:column;gap:3px;flex:1}
+#skm-earth-preview .earth-feature strong{font-size:14px;font-weight:500}
+#skm-earth-preview .earth-feature small{font-size:11px;color:#9eb3c7}
+#skm-earth-preview .earth-feature>svg{width:18px;height:18px;stroke-width:1.4}
+#skm-earth-preview .earth-private-note{margin:10px 0 0;font-size:10px;color:#94a9bb;display:flex;align-items:center;gap:5px}
+#skm-earth-preview .earth-private-note svg{width:12px;height:12px;flex-shrink:0}
+#skm-earth-preview .earth-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 24px;background:#070c12;font:8px ui-monospace,monospace;letter-spacing:.8px;color:#8aa0b4}
+#skm-earth-preview .earth-footer details{font:10px -apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:0}
+#skm-earth-preview .earth-footer details[open]{max-width:170px}
+#skm-earth-preview .earth-footer a{color:#93c5ef}
+#skm-earth-preview .earth-language-menu{position:absolute;z-index:50;top:60px;left:15px;background:#0b1520;border:1px solid #29445a;padding:7px;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 6px 25px #35587120;border-radius:8px}
+#skm-earth-preview .earth-language-menu button{min-height:44px;background:transparent;border:0;padding:8px 14px;text-align:left}
+#skm-earth-preview .earth-language-menu[hidden],#skm-earth-preview .earth-drop-panel[hidden]{display:none}
+#skm-earth-preview .earth-drop-panel{position:absolute;z-index:40;top:92px;left:20px;right:20px;max-width:460px;margin:0 auto;background:#0a121c;border:1px solid #2b465f;border-radius:17px;box-shadow:0 14px 50px #24466835;padding:20px}
+#skm-earth-preview .earth-drop-panel header{display:flex;justify-content:space-between;align-items:center;gap:10px}
+#skm-earth-preview .earth-drop-panel header span{font:10px ui-monospace,monospace;letter-spacing:1px;color:#a4b9cc}
+#skm-earth-preview .earth-drop-panel header button{border:0;background:transparent;min-width:44px;min-height:44px;display:grid;place-items:center}
+#skm-earth-preview .earth-drop-panel header svg{width:19px;height:19px}
+#skm-earth-preview .earth-drop-art{padding:15px 0 20px;display:flex;flex-direction:column;align-items:center;gap:8px;color:#9fc7ea;font-size:11px}
+#skm-earth-preview .earth-drop-art svg{width:64px;height:64px;stroke-width:.8}
+#skm-earth-preview .earth-drop-count{display:flex;justify-content:space-between;font:10px ui-monospace,monospace;letter-spacing:.6px;color:#a9bfd4;margin-bottom:13px}
+#skm-earth-preview .earth-drop-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:7px}
+#skm-earth-preview .earth-drop-grid span{display:grid;place-items:center;aspect-ratio:1;background:#132638;border-radius:4px}
+#skm-earth-preview .earth-drop-grid svg{width:15px;height:15px;stroke-width:1.2;color:#aacce6}
+#skm-earth-preview .earth-drop-panel p{font-size:11px;color:#9fb5c8;margin:17px 0 0;text-align:center}
+@media(max-width:480px){#skm-earth-preview .earth-header{padding:0 15px}#skm-earth-preview .earth-stage{height:455px}#skm-earth-preview .earth-caption{top:20px;left:18px}#skm-earth-preview .earth-caption strong{font-size:15px}#skm-earth-preview .earth-map-note{top:82px;left:18px;right:auto;font-size:9px}#skm-earth-preview .earth-city-panel{padding:16px 16px 10px}#skm-earth-preview .earth-footer{padding:8px 16px}#skm-earth-preview h2{font-size:21px}#skm-earth-preview h2 span{display:block;margin:3px 0 0;font-size:11px}#skm-earth-preview .earth-city-picker{max-width:128px}#skm-earth-preview .earth-private-note{font-size:10px}#skm-earth-preview .earth-drop-panel{top:86px;left:12px;right:12px;padding:16px}#skm-earth-preview .earth-drop-grid{gap:5px}#skm-earth-preview select{font-size:16px}}
+@media(prefers-reduced-motion:reduce){#skm-earth-preview *{scroll-behavior:auto;transition:none!important}}
+
+#skm-earth-preview .earth-features{display:grid;gap:9px}
+#skm-earth-preview .earth-feature:hover{background:#102337;border-color:#3a6385}
+#skm-earth-preview .earth-booking-content{padding:24px 0;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+#skm-earth-preview .earth-booking-content>svg{width:45px;height:45px;color:#87baf1;stroke-width:1.2}
+#skm-earth-preview .earth-booking-content strong{font-size:20px;font-weight:400}
+#skm-earth-preview .earth-booking-content p{margin:0;font-size:13px;line-height:1.7}
+#skm-earth-preview .earth-booking-content>span{font-size:11px;color:#8ba3b9}
+#skm-earth-preview .earth-caption span,#skm-earth-preview .earth-map-note,#skm-earth-preview .earth-private-note,#skm-earth-preview .earth-footer,#skm-earth-preview .earth-city-picker>span{font-size:11px}
+/* A single vertical world with an unboxed game menu. */
+#skm-earth-preview{color:#e2e6eb}
+#skm-earth-preview .earth-app{border:1px solid #24262a;border-radius:20px;background:#08090b;box-shadow:0 14px 50px #0002}
+#skm-earth-preview .earth-header{position:absolute;inset:0 0 auto;height:76px;padding:0 26px;background:transparent;border:0}
+#skm-earth-preview .earth-header .earth-brand{width:103px}
+#skm-earth-preview .earth-logo{opacity:.95}
+#skm-earth-preview .earth-header button{color:#a8b1bc}
+#skm-earth-preview .earth-stage{height:830px;background:radial-gradient(ellipse at 50% 24%,#202e40 0,#111a25 55%,#0c121b 100%)}
+#skm-earth-preview .earth-caption{top:90px;left:27px;gap:5px;opacity:.65}
+#skm-earth-preview .earth-caption span{font-size:9px;letter-spacing:2px}
+#skm-earth-preview .earth-caption span:last-child{display:none}
+#skm-earth-preview .earth-map-note,#skm-earth-preview .earth-focus-label{display:none!important}
+#skm-earth-preview .earth-pin{color:#d1e1ef}
+#skm-earth-preview .earth-pin:before{width:5px;height:5px;box-shadow:0 0 12px #81baff70}
+#skm-earth-preview .earth-pin[aria-pressed="true"]:before{width:8px;height:8px;box-shadow:0 0 0 6px #9dcfff14,0 0 12px #9acaff99}
+#skm-earth-preview .earth-pin .earth-cluster-count{background:#101922;border-color:#34404e;color:#acbdcc}
+#skm-earth-preview .earth-zoom{top:47%;bottom:auto;right:24px;border:0;background:#0b0d11bb;box-shadow:none;transform:scale(.9);transform-origin:right center}
+#skm-earth-preview .earth-tilt{top:47%;bottom:auto;left:24px;border:0;background:transparent;color:#8492a1;padding:0 4px}
+#skm-earth-preview .earth-tilt span{display:none}
+#skm-earth-preview .earth-message{top:40%;bottom:auto;background:#111720;border:1px solid #303a47}
+#skm-earth-preview .earth-city-panel{position:absolute;z-index:20;bottom:45px;left:28px;right:28px;max-width:540px;margin:auto;padding:0;background:transparent;border:0}
+#skm-earth-preview .earth-city-title{margin-bottom:20px;align-items:center;gap:16px}
+#skm-earth-preview .earth-country{font-size:11px;color:#8e9da9;letter-spacing:1.4px}
+#skm-earth-preview h2{font:500 32px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1px;color:#eceff2}
+#skm-earth-preview h2 span{display:none}
+#skm-earth-preview .earth-city-picker{min-width:96px;max-width:140px}
+#skm-earth-preview .earth-city-picker>span{font-size:10px;letter-spacing:.5px;color:#7c8a96}
+#skm-earth-preview select{background:transparent;border:0;border-bottom:1px solid #3b4651;border-radius:0;padding:7px 0;min-height:36px;font-size:13px;color:#c9d3dd}
+#skm-earth-preview select option,#skm-earth-preview select optgroup{background:#11151b;color:#dce5ef}
+#skm-earth-preview .earth-features{gap:0}
+#skm-earth-preview .earth-feature{min-height:65px;padding:13px 3px;gap:18px;border:0;border-top:1px solid #363c454f;border-radius:0;background:transparent;transition:background .18s ease,color .18s ease}
+#skm-earth-preview .earth-feature:last-child{border-bottom:1px solid #363c454f}
+#skm-earth-preview .earth-feature:hover,#skm-earth-preview .earth-feature:focus-visible{background:linear-gradient(90deg,#a4c9ed18,transparent);border-color:#363c454f;color:#fff}
+#skm-earth-preview .earth-feature-icon{border:0;border-radius:0;background:transparent;color:#8d9caa;width:30px;height:30px;flex-shrink:0}
+#skm-earth-preview .earth-feature-icon svg{width:24px;height:24px;stroke-width:1.1}
+#skm-earth-preview .earth-feature>span:nth-child(2){gap:3px}
+#skm-earth-preview .earth-feature strong{font:500 16px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.4px}
+#skm-earth-preview .earth-feature small{font-size:11px;color:#7e8c99;letter-spacing:.2px}
+#skm-earth-preview .earth-feature>svg{width:15px;height:15px;color:#798795}
+#skm-earth-preview .earth-private-note{font-size:10px;color:#75828f;margin-top:15px;line-height:1.6}
+#skm-earth-preview .earth-footer{position:absolute;bottom:13px;left:28px;right:28px;padding:0;background:transparent;z-index:25;color:#4f5c69;font:8px ui-monospace,monospace;letter-spacing:1px}
+#skm-earth-preview .earth-footer>span{font-size:8px}
+#skm-earth-preview .earth-footer details{font-size:9px;color:#6b7987}
+#skm-earth-preview .earth-footer details[open]{background:#10161f;padding:10px;border-radius:6px}
+#skm-earth-preview .earth-drop-panel{top:130px;background:#10141b;border:1px solid #3a424e;border-radius:18px;box-shadow:0 20px 70px #000c;padding:24px}
+#skm-earth-preview .earth-drop-panel h2{font-size:25px}
+#skm-earth-preview .earth-music-panel{max-width:400px}
+#skm-earth-preview .earth-record{height:125px;display:grid;place-items:center;margin:10px 0 20px;background:radial-gradient(ellipse,#29394b50,transparent 65%)}
+#skm-earth-preview .earth-record svg{width:62px;height:62px;stroke-width:.8;color:#adc6de}
+#skm-earth-preview .earth-track-info{text-align:center;margin-bottom:25px}
+#skm-earth-preview .earth-track-info>span{font:9px ui-monospace,monospace;color:#7e91a5;letter-spacing:1.6px}
+#skm-earth-preview .earth-track-info h3{font-size:24px;font-weight:400;letter-spacing:-.5px;margin:12px 0 5px;color:#e7eff6;overflow-wrap:anywhere}
+#skm-earth-preview .earth-track-info p{font-size:11px;color:#8293a5;margin:0}
+#skm-earth-preview .earth-music-seek{display:block;width:100%;height:24px;margin:0;accent-color:#adc8e0;cursor:ew-resize}
+#skm-earth-preview .earth-music-time{display:flex;justify-content:space-between;font:11px ui-monospace,monospace;font-variant-numeric:tabular-nums;color:#91a1b2}
+#skm-earth-preview .earth-music-play{display:flex;gap:12px;align-items:center;justify-content:center;min-width:130px;min-height:48px;margin:24px auto 2px;border:1px solid #526275;border-radius:26px;background:#a4bfd810;color:#dfeaf5;font:11px ui-monospace,monospace;letter-spacing:2px}
+#skm-earth-preview .earth-music-play svg{width:16px;height:16px;stroke-width:1.5}
+#skm-earth-preview .earth-music-error:empty{display:none}
+#skm-earth-preview .earth-music-error{font-size:11px;color:#c0a98a;margin:15px 0 0}
+@media(max-width:480px){
+#skm-earth-preview .earth-app{border-radius:15px}
+#skm-earth-preview .earth-stage{height:790px}
+#skm-earth-preview .earth-header{padding:0 18px;height:70px}
+#skm-earth-preview .earth-caption{top:83px;left:22px}
+#skm-earth-preview .earth-city-panel{left:22px;right:22px;bottom:42px}
+#skm-earth-preview .earth-city-title{margin-bottom:16px}
+#skm-earth-preview h2{font-size:27px;letter-spacing:0}
+#skm-earth-preview .earth-city-picker{min-width:91px;max-width:116px}
+#skm-earth-preview select{font-size:16px}
+#skm-earth-preview .earth-feature{min-height:61px;gap:13px}
+#skm-earth-preview .earth-feature strong{font-size:15px}
+#skm-earth-preview .earth-footer{left:22px;right:22px;bottom:12px}
+#skm-earth-preview .earth-zoom{top:47%;right:18px}
+#skm-earth-preview .earth-tilt{top:47%;left:18px}
+#skm-earth-preview .earth-drop-panel{top:115px;left:12px;right:12px;padding:20px}
+}
+
+@media(max-width:340px){#skm-earth-preview h2{font-size:22px}#skm-earth-preview .earth-city-title{gap:12px}#skm-earth-preview .earth-city-picker{min-width:110px;max-width:110px}}
+
+/* iPhone shell: the original booking, account and chat overlays stay above this home. */
+body:has(#skm-earth-preview){background:#08090b!important;touch-action:pan-y!important}
+body:has(#skm-earth-preview)>.viewport,body:has(#skm-earth-preview)>#skm-account-link,body:has(#skm-earth-preview)>#skm-language-button,body:has(#skm-earth-preview)>#revolver-clock{display:none!important}
+#skm-earth-preview{position:fixed;inset:0;z-index:80;overflow-x:hidden;overflow-y:auto;background:#08090b;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+body.bm-open #skm-earth-preview{visibility:hidden}
+#skm-earth-preview .earth-app{max-width:736px;border:0;border-radius:0;box-shadow:none;min-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+#skm-earth-preview .earth-stage{height:max(710px,calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)));min-height:710px}
+#skm-earth-preview .earth-header{height:64px}
+#skm-earth-preview .earth-caption{top:75px}
+#skm-earth-preview .earth-city-panel{bottom:35px}
+#skm-earth-preview .earth-drop-panel{position:absolute;max-height:none}
+#skm-earth-preview .earth-language img{width:24px;height:24px;object-fit:contain;filter:invert(1);mix-blend-mode:screen}
+html.skm-session #skm-earth-preview .earth-stage{background:radial-gradient(ellipse at 50% 24%,#39242c,#1b151b 55%)}
+html.skm-session #skm-earth-preview .earth-feature{background:transparent!important}
+#skm-earth-preview .earth-footer>button{background:transparent;border:0;color:#8d9baa;font:11px -apple-system,sans-serif;min-height:32px;padding:0 5px}
+#skm-earth-preview .earth-extra-menu{position:absolute;z-index:35;left:22px;right:22px;bottom:50px;padding:12px;background:#121922;border:1px solid #34414f;border-radius:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#skm-earth-preview .earth-extra-menu[hidden]{display:none}
+#skm-earth-preview .earth-extra-menu button{min-height:48px;background:#192330;color:#d7e3ee;border:0;border-radius:6px}
+
+/* City detail: four quiet menu rows at left, a continuous Earth at right. */
+#skm-earth-preview .earth-world{position:absolute;z-index:31;top:77px;left:24px;display:flex;align-items:center;gap:9px;min-height:44px;padding:0;background:transparent;border:0;color:#b6c2ce;font:11px ui-monospace,monospace;letter-spacing:2px}
+#skm-earth-preview .earth-world svg{width:16px;height:16px;stroke-width:1.2}
+#skm-earth-preview .earth-world[hidden]{display:none}
+#skm-earth-preview .earth-feature[data-feature="more"]{display:none}
+#skm-earth-preview .earth-stage::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#101823 0%,#101823e8 39%,#10182300 68%);opacity:0;transition:opacity .5s ease}
+#skm-earth-preview .earth-markers{z-index:3}
+#skm-earth-preview.city-focus .earth-stage::after{opacity:1}
+#skm-earth-preview.city-focus .earth-caption{display:none}
+#skm-earth-preview.city-focus .earth-city-panel{top:19%;bottom:12%;left:28px;right:auto;width:calc(47% - 28px);max-width:none;margin:0;padding:0;display:flex;flex-direction:column;justify-content:center;z-index:20}
+#skm-earth-preview.city-focus .earth-city-title{display:block;margin-bottom:24px}
+#skm-earth-preview.city-focus .earth-city-title h2{font-size:30px;line-height:1.15;overflow-wrap:normal;margin-top:7px}
+#skm-earth-preview.city-focus .earth-city-picker{margin-top:16px;min-width:0;width:100%;max-width:150px}
+#skm-earth-preview.city-focus .earth-city-picker>span{display:none}
+#skm-earth-preview.city-focus .earth-city-picker select{border-color:#45505c70;color:#a0afbc;font-size:14px;min-height:40px}
+#skm-earth-preview.city-focus .earth-features{display:flex;flex-direction:column;counter-reset:city-menu}
+#skm-earth-preview.city-focus .earth-feature{display:grid;grid-template-columns:25px minmax(0,1fr);column-gap:13px;min-height:80px;padding:18px 0;border-top:1px solid #78889c26;position:relative}
+#skm-earth-preview.city-focus .earth-feature[data-feature="more"]{display:grid}
+#skm-earth-preview.city-focus .earth-feature>svg{display:none}
+#skm-earth-preview.city-focus .earth-feature-icon{width:22px;height:25px;align-self:center;color:#8697a8}
+#skm-earth-preview.city-focus .earth-feature-icon svg{width:22px;height:22px}
+#skm-earth-preview.city-focus .earth-feature>span:nth-child(2){min-width:0;gap:6px}
+#skm-earth-preview.city-focus .earth-feature>span:nth-child(2)::before{counter-increment:city-menu;content:"0" counter(city-menu);font:9px ui-monospace,monospace;letter-spacing:1px;color:#7b8b9b}
+#skm-earth-preview.city-focus .earth-feature strong{font-size:14px;line-height:1.4;letter-spacing:.3px;white-space:normal}
+#skm-earth-preview.city-focus .earth-feature small{display:none}
+#skm-earth-preview.city-focus .earth-private-note{font-size:10px;line-height:1.5;align-items:flex-start;max-width:160px;margin-top:17px;opacity:.8}
+#skm-earth-preview.city-focus .earth-private-note svg{margin-top:1px}
+#skm-earth-preview.city-focus .earth-zoom{top:auto;bottom:55px;right:20px;background:#080d1590;transform:scale(.92)}
+#skm-earth-preview.city-focus .earth-tilt{top:auto;bottom:58px;left:24px}
+#skm-earth-preview.city-focus .earth-footer>.earth-more{visibility:hidden}
+#skm-earth-preview.city-focus .earth-pin[aria-pressed="true"]::after{content:attr(data-city-name);position:absolute;left:30px;top:33px;max-width:94px;white-space:normal;color:#cbdcea;font:10px ui-monospace,monospace;letter-spacing:.6px;text-shadow:0 1px 8px #000}
+#skm-earth-preview.city-focus .earth-extra-menu{left:24px;right:24px;bottom:95px;box-shadow:0 15px 40px #0008}
+@media(max-width:480px){
+#skm-earth-preview.city-focus .earth-city-panel{top:18%;bottom:12%;left:22px;width:calc(48% - 22px)}
+#skm-earth-preview.city-focus .earth-city-title{margin-bottom:18px}
+#skm-earth-preview.city-focus .earth-city-title h2{font-size:25px;line-height:1.2}
+#skm-earth-preview.city-focus .earth-city-picker{margin-top:13px;max-width:125px}
+#skm-earth-preview.city-focus .earth-city-picker select{font-size:16px}
+#skm-earth-preview.city-focus .earth-feature{min-height:77px;grid-template-columns:20px minmax(0,1fr);column-gap:10px;padding:15px 0}
+#skm-earth-preview.city-focus .earth-feature-icon,#skm-earth-preview.city-focus .earth-feature-icon svg{width:19px;height:21px}
+#skm-earth-preview.city-focus .earth-feature strong{font-size:12px;letter-spacing:0;line-height:1.45}
+#skm-earth-preview.city-focus .earth-pin[aria-pressed="true"]::after{left:-20px;top:41px;min-width:85px;text-align:center}
+}
+@media(max-width:350px){
+#skm-earth-preview.city-focus .earth-city-panel{left:16px;width:calc(48% - 16px)}
+#skm-earth-preview.city-focus .earth-city-title h2{font-size:21px}
+#skm-earth-preview.city-focus .earth-feature{column-gap:8px}
+#skm-earth-preview.city-focus .earth-feature strong{font-size:11px}
+#skm-earth-preview.city-focus .earth-world{left:16px}
+}
+@media(prefers-reduced-motion:reduce){#skm-earth-preview .earth-stage::after{transition:none}}
+
+#skm-earth-preview .earth-extra-heading{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding-left:8px;color:#a3b4c4;font:11px ui-monospace,monospace;letter-spacing:2px}
+#skm-earth-preview .earth-extra-heading .earth-extra-close{width:44px;min-height:44px;background:transparent;font:26px -apple-system,sans-serif;line-height:1}
+
+/* Keep the opening screen quiet; city actions appear only after selecting a point. */
+#skm-earth-preview:not(.city-focus) .earth-city-panel{display:none}
+#skm-earth-preview .earth-caption,#skm-earth-preview .earth-footer>.earth-more{display:none}
+#skm-earth-preview:not(.city-focus) .earth-zoom{top:auto;bottom:55px;right:20px;background:#080d1590;transform:scale(.92)}
+#skm-earth-preview:not(.city-focus) .earth-tilt{top:auto;bottom:58px;left:24px}
+
+/* Uncluttered globe: gestures remain available without corner controls. */
+#skm-earth-preview .earth-zoom,#skm-earth-preview .earth-tilt{display:none!important}
+#skm-earth-preview .earth-logo{transform:scale(.75);transform-origin:center}
+
+/* Edition numbers describe a collection; pair slots remain a production preview. */
+#skm-earth-preview .earth-drop-panel:not(.earth-booking-panel):not(.earth-music-panel){max-height:calc(100% - 140px);overflow-y:auto;overscroll-behavior:contain}
+#skm-earth-preview .earth-drop-collection{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+#skm-earth-preview .earth-drop-code{font:22px ui-monospace,monospace;letter-spacing:2px;color:#dce8f5}
+#skm-earth-preview .earth-drop-window{font-size:11px;color:#9faebd}
+#skm-earth-preview .earth-drop-art{padding:13px 0}
+#skm-earth-preview .earth-drop-art>svg{width:44px;height:44px}
+#skm-earth-preview .earth-drop-count{gap:10px;font-size:9px;line-height:1.5}
+#skm-earth-preview .earth-drop-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+#skm-earth-preview .earth-drop-grid[hidden]{display:none}
+#skm-earth-preview .earth-drop-grid>.earth-drop-pair{display:flex;flex-direction:column;gap:3px;justify-content:center;aspect-ratio:1.3;padding:5px 2px}
+#skm-earth-preview .earth-drop-grid .earth-drop-pair-art{display:flex;justify-content:center;gap:1px;background:transparent;aspect-ratio:auto}
+#skm-earth-preview .earth-drop-pair-art svg:first-child{transform:scaleX(-1)}
+#skm-earth-preview .earth-drop-pair small{font:8px ui-monospace,monospace;color:#91a8be}
+
+#skm-earth-preview .earth-stg-community{display:block;width:100%;min-height:44px;margin:0 0 16px;padding:11px 12px;border:1px solid #657180;border-radius:4px;background:transparent;color:#d2c1a8;font-size:12px;letter-spacing:.5px}
+#skm-earth-preview .earth-stg-community[hidden]{display:none}
+
+/* Five city entries; keep source documentation outside the customer menu. */
+#skm-earth-preview .earth-footer details{display:none}
+#skm-earth-preview.city-focus .earth-feature{min-height:64px;padding:12px 0}
+@media(max-height:700px){#skm-earth-preview.city-focus .earth-feature{min-height:54px;padding:8px 0}#skm-earth-preview.city-focus .earth-city-title{margin-bottom:10px}}
+
+#skm-earth-preview .earth-camera-pin{position:absolute;pointer-events:auto;touch-action:manipulation;transform:translate(-50%,-50%);width:44px;height:44px;border:0;background:transparent;color:#ffdab3;font:600 18px/1 system-ui;text-shadow:0 1px 3px #16100c;padding:0}
+#skm-earth-preview .earth-camera-pin[hidden]{display:none}
+.nature-window{width:min(420px,94vw);border:0;border-radius:10px;padding:12px;background:#fff;color:#181818}
+.nature-window header{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px}
+.nature-window iframe{width:100%;height:clamp(200px,54vw,260px);border:0;background:#101010}
+.nature-window button,.nature-window a{display:inline-flex;align-items:center;min-height:44px;background:none;border:0;color:inherit}
+.nature-window::backdrop{background:#15100d55}
+
+#skm-earth-preview [data-extra=library]:disabled{opacity:.55;cursor:default}
+#skm-earth-preview [data-extra=library] svg{width:12px;height:12px;vertical-align:baseline}
+#skm-earth-preview .earth-camera-pin{font:600 12px/1 ui-monospace,monospace;text-shadow:0 0 4px #030509,0 0 7px #030509}
+#skm-earth-preview .earth-camera-pin::before{content:'';position:absolute;left:50%;top:50%;width:var(--leader,0);height:1px;transform-origin:left;transform:rotate(var(--direction,0rad));background:#ffd19b77;pointer-events:none}
+.nature-picker{max-height:min(64dvh,480px);overflow-y:auto;overscroll-behavior:contain}
+.nature-picker header{position:sticky;top:0;background:white;z-index:1}
+.nature-picker>button{display:block;width:100%;padding:10px 0;text-align:left;border-bottom:1px solid #ddd}
+/* Full-bleed canvas. Only interactive chrome sits inside the physical safe area. */
+#skm-earth-preview{padding:0;overflow:hidden}
+#skm-earth-preview .earth-app,#skm-earth-preview .earth-stage{width:100%;max-width:none;height:100dvh;min-height:0}
+#skm-earth-preview .earth-header{top:env(safe-area-inset-top);padding-inline:max(18px,env(safe-area-inset-left)) max(18px,env(safe-area-inset-right))}
+#skm-earth-preview .earth-world{top:calc(66px + env(safe-area-inset-top))}
+#skm-earth-preview .earth-footer{bottom:calc(12px + env(safe-area-inset-bottom))}
+#skm-earth-preview .earth-extra-menu{bottom:calc(50px + env(safe-area-inset-bottom))}
+@media(max-height:530px){#skm-earth-preview.city-focus .earth-city-panel{top:calc(62px + env(safe-area-inset-top));bottom:max(5px,env(safe-area-inset-bottom));overflow:auto;justify-content:flex-start}#skm-earth-preview.city-focus .earth-feature{flex-shrink:0;min-height:42px}}
+
+#skm-earth-preview .sky-finder{position:absolute;z-index:24;right:max(16px,env(safe-area-inset-right));bottom:calc(16px + env(safe-area-inset-bottom));display:flex;gap:2px;padding:0 3px;border:1px solid #c8d4de55;border-radius:24px;background:#0d1623b8}
+#skm-earth-preview .sky-finder button{width:44px;height:44px;border:0;background:none;color:#edf0ec;font:22px system-ui;cursor:pointer}
+#skm-earth-preview .sky-finder button[aria-pressed=true]{color:#ffda9b}
+#skm-earth-preview .sky-target-name{position:absolute;z-index:4;pointer-events:none;transform:translateX(-50%);font:11px ui-monospace,monospace;color:#f7e7c9;text-shadow:0 1px 4px #000}
+#skm-earth-preview.city-focus .sky-finder,#skm-earth-preview.feature-open .sky-finder,#skm-earth-preview.feature-open .sky-target-name{display:none}
+
+/* Small, on-demand neighbourhood view; native dialog keeps gestures inside the map. */
+.skm-district{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#e7e9e5;color:#222b29;overflow:hidden;font-family:Arial,sans-serif;overscroll-behavior:none;}
+.skm-district::backdrop{background:#e7e9e5}.skm-district[open]{animation:district-enter .38s ease both}.skm-district.leaving{animation:district-leave .18s ease both}.district-open{overflow:hidden!important}
+.district-shell{height:100%;height:100dvh;position:relative;background:radial-gradient(ellipse at 50% 35%,#f0f1ed 0%,#e6e9e3 72%)}
+.district-header{position:absolute;z-index:2;top:0;left:0;right:0;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 22px) 22px 10px;pointer-events:none}
+.district-header>div{text-align:center}.district-header span{font:9px/1.5 monospace;letter-spacing:.17em;color:#6d7770}.district-header h1{font:500 clamp(24px,4vw,34px)/1.2 Arial,sans-serif;letter-spacing:-.06em;margin:4px 0}
+.district-header button{border:0;background:none;color:inherit;font:11px Arial,sans-serif;padding:10px 0;text-align:left;min-height:44px;pointer-events:auto;cursor:pointer}.district-header [data-menu]{text-align:right}
+.district-canvas{position:absolute;inset:0 0 120px;min-height:200px}.district-canvas canvas{display:block;width:100%;height:100%;outline:none}.district-status{position:absolute;z-index:3;top:45%;width:100%;text-align:center;color:#6b756e;font:12px monospace}.district-status[hidden]{display:none}.district-status button{margin:12px;padding:10px 18px;border:0;border-radius:12px;background:#fff;color:#222}
+.district-pin{position:absolute;z-index:1;transform:translate(-50%,-100%);border:1px solid #fff8;background:#f5f6f1ec;color:#283a30;box-shadow:0 8px 25px #243a3833,inset 0 1px 0 #fff;backdrop-filter:blur(10px);border-radius:9px;padding:9px 15px;cursor:pointer;min-width:66px;min-height:44px}.district-pin span{display:block;font:8px/1.6 monospace;letter-spacing:.1em}.district-pin strong{font:500 17px/1.2 Arial,sans-serif}.district-pin i{position:absolute;left:50%;bottom:-18px;height:18px;border-left:1px solid #da543e}.district-pin[hidden]{display:none}
+.district-bottom{position:absolute;z-index:2;bottom:0;left:50%;width:min(520px,100%);transform:translateX(-50%);padding:0 22px calc(env(safe-area-inset-bottom,0px) + 14px);box-sizing:border-box;pointer-events:none}.district-hint{text-align:center;color:#6e796e;font:10px/1.4 Arial,sans-serif;margin:0 0 16px}
+.district-collection{width:100%;border:1px solid #ffffffe0;border-radius:22px;display:flex;align-items:center;gap:15px;text-align:left;background:#e9ece5d9;box-shadow:inset 0 1px 2px white,0 12px 40px #3b4e3c12;backdrop-filter:blur(18px);color:#27332e;padding:15px 18px;cursor:pointer;pointer-events:auto}.district-collection img{width:47px;height:66px;object-fit:cover;mix-blend-mode:multiply;border-radius:4px}.district-collection>span{flex:1;min-width:0}.district-coming{display:block;font:9px/1.4 monospace;letter-spacing:.07em;color:#667464}.district-collection strong{display:block;font:500 clamp(15px,3.8vw,19px)/1.4 Arial,sans-serif;letter-spacing:-.04em;margin:3px 0}.district-see{display:block;font:10px/1.5 Arial,sans-serif;color:#5d6b62}.district-collection b{font:24px Arial;font-weight:normal}
+.district-bottom footer{display:flex;justify-content:space-between;gap:8px;font:8px/1.4 Arial,sans-serif;color:#828b80;margin-top:12px}.district-bottom a{color:inherit;white-space:nowrap;pointer-events:auto}.district-note{max-width:70%}@keyframes district-enter{from{opacity:0}to{opacity:1}}@keyframes district-leave{to{opacity:0}}
+@media(max-height:550px){.district-canvas{bottom:70px}.district-header{padding-top:10px}.district-bottom{left:auto;right:12px;transform:none;width:300px;padding-bottom:8px}.district-hint,.district-note{display:none}.district-collection{padding:8px 12px}.district-collection img{height:40px;width:30px}}
+@media(prefers-reduced-motion:reduce){.skm-district[open],.skm-district.leaving{animation:none}}
+
+/* Survey world / atmospheric city: a single map, two distances. */
+#skm-earth-preview.survey-home,#skm-earth-preview.survey-home .earth-app,#skm-earth-preview.survey-home .earth-stage{background:#000!important;color:#d9e2db}
+#skm-earth-preview.survey-home .earth-app{border:0;border-radius:0}
+#skm-earth-preview.survey-home .earth-header{position:absolute;inset:0;pointer-events:none;background:transparent!important;border:0;height:100%;padding:0}
+#skm-earth-preview.survey-home .earth-header button{pointer-events:auto;border-radius:0!important;background:none!important;box-shadow:none!important;color:#dae4da;font:11px/1.3 Arial,sans-serif;min-height:44px;min-width:44px}
+#skm-earth-preview.survey-home .earth-brand{position:absolute;top:calc(env(safe-area-inset-top) + 48px);left:34px;width:auto;height:30px;min-height:30px;text-align:left;justify-content:flex-start;font-size:12px;letter-spacing:.02em}
+#skm-earth-preview.survey-home .earth-language{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 27px);left:30px}.survey-home .earth-language img{display:none!important}
+#skm-earth-preview.survey-home .earth-account{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 27px);right:32px}
+#skm-earth-preview.survey-home #skm-tour-launch{display:none}
+#skm-earth-preview.survey-home .sky-finder,#skm-earth-preview.survey-home .sky-target-name,#skm-earth-preview.survey-home .earth-footer,#skm-earth-preview.survey-home .earth-map-note{display:none!important}
+#skm-earth-preview.survey-home .earth-stage::after{background:linear-gradient(90deg,#061113a6,transparent 80%);opacity:0}
+#skm-earth-preview.survey-home.city-focus .earth-stage::after{opacity:1}
+.survey-frame{position:absolute;z-index:25;inset:calc(env(safe-area-inset-top) + 29px) 22px calc(env(safe-area-inset-bottom) + 23px);border-block:1px solid #4760658c;border-inline:1px dotted #792f24;pointer-events:none}
+.survey-frame::before,.survey-frame::after{content:'';position:absolute;left:14px;right:14px;height:4px;background:repeating-linear-gradient(90deg,#8f9c9666 0 1px,transparent 1px 22px)}.survey-frame::before{top:-12px}.survey-frame::after{bottom:-12px}
+.survey-frame i{position:absolute;width:6px;height:6px;border:1px solid #7a8885;background:#000}.survey-frame i:nth-child(1){top:-4px;left:-4px}.survey-frame i:nth-child(2){top:-4px;right:-4px}.survey-frame i:nth-child(3){bottom:-4px;left:-4px}.survey-frame i:nth-child(4){bottom:-4px;right:-4px}
+.survey-meta{position:absolute;z-index:25;top:calc(env(safe-area-inset-top) + 81px);left:34px;right:34px;display:flex;justify-content:space-between;font:10px/1.55 Arial,sans-serif;color:#a8b6ac;pointer-events:none}.survey-date{font-size:10px;letter-spacing:.07em}.survey-meta span{font-size:9px}
+.survey-dock{position:absolute;z-index:31;bottom:calc(env(safe-area-inset-bottom) + 27px);left:50%;transform:translateX(-50%);display:flex;gap:17px}
+#skm-earth-preview.survey-home .survey-dock button{font:10px/1.3 Arial,sans-serif;color:#d0dbd3;min-height:44px;border:0;background:none;cursor:pointer;padding:0 6px;letter-spacing:.04em}.survey-dock button[aria-pressed=true],.survey-dock button[aria-expanded=true]{color:#8bba6c!important}
+.survey-cities{position:absolute;z-index:33;bottom:calc(env(safe-area-inset-bottom) + 83px);left:34px;right:34px;max-height:60%;overflow:auto;display:grid;grid-template-columns:1fr 1fr;background:#020809ef;border:1px solid #495e56;backdrop-filter:blur(12px);padding:10px 16px;gap:0 16px}
+.survey-cities[hidden]{display:none}#skm-earth-preview.survey-home .survey-cities button{border:0;border-bottom:1px solid #273a31;background:none;font:11px/1.4 Arial,sans-serif;color:#cedbcf;text-align:left;min-height:44px;padding:8px 0;border-radius:0}.survey-cities button:hover{color:#9aba72!important}
+#skm-earth-preview.survey-home .earth-pin::before{width:4px;height:4px;border:1px solid #cadb9c;background:#819a5f;border-radius:0;box-shadow:none}
+#skm-earth-preview.survey-home .earth-pin[aria-pressed=true]::before{width:5px;height:5px;box-shadow:0 0 8px #adc87944}
+#skm-earth-preview.survey-home .earth-pin .earth-cluster-count{display:none!important}.survey-pin-label{position:absolute;left:28px;top:14px;white-space:nowrap;font:8px/1.3 Arial,sans-serif;color:#b9c8ba;text-shadow:0 1px 5px #000}
+#skm-earth-preview.survey-home .earth-focus-label{display:none!important}
+#skm-earth-preview.survey-home.city-focus .earth-brand,#skm-earth-preview.survey-home.city-focus .survey-meta{opacity:0;pointer-events:none}
+#skm-earth-preview.survey-home.city-focus .earth-world{left:34px;top:calc(env(safe-area-inset-top) + 44px);font:11px Arial;letter-spacing:.02em;color:#bfd8da;z-index:31}
+#skm-earth-preview.survey-home.city-focus .earth-city-panel{top:calc(env(safe-area-inset-top) + 117px);bottom:auto;left:34px;width:42%;max-width:260px;background:transparent!important;border:0!important;justify-content:flex-start;padding:0;box-shadow:none}
+#skm-earth-preview.survey-home.city-focus .earth-city-title{margin:0 0 22px}#skm-earth-preview.survey-home.city-focus .earth-city-title h2{font:300 clamp(23px,4vw,37px)/1.05 Arial,sans-serif;letter-spacing:-.045em;color:#90d4d8;overflow-wrap:break-word;margin:8px 0}
+#skm-earth-preview.survey-home.city-focus .earth-city-title h2 span,#skm-earth-preview.survey-home .earth-country,#skm-earth-preview.survey-home .earth-city-picker{display:none}
+.survey-coordinates{font:8px/1.5 Arial,sans-serif;color:#8fbdc1;white-space:nowrap;margin:0}
+#skm-earth-preview.survey-home.city-focus .earth-features{background:#0b212580;border-top:1px solid #7db6be;border-bottom:1px solid #3e6b72;padding:3px 10px}
+#skm-earth-preview.survey-home.city-focus .earth-feature{display:block;border:0;border-bottom:1px solid #51747c38;border-radius:0;background:transparent!important;min-height:46px;padding:12px 0;margin:0;box-shadow:none}
+#skm-earth-preview.survey-home.city-focus .earth-feature:last-child{border:0}#skm-earth-preview.survey-home.city-focus .earth-feature:hover{color:#a7eef1;background:#70adb02c!important}
+#skm-earth-preview.survey-home.city-focus .earth-feature-icon,#skm-earth-preview.survey-home.city-focus .earth-feature>span:nth-child(2)::before{display:none}
+#skm-earth-preview.survey-home.city-focus .earth-feature strong{font:400 12px/1.45 Arial,sans-serif;color:#b6d0d1;letter-spacing:0}
+#skm-earth-preview.survey-home.city-focus .earth-private-note{display:none}
+#skm-earth-preview.survey-home.city-focus .earth-pin::before{width:6px;height:6px;border-color:#9eeaf0;background:#5a939b;box-shadow:0 0 10px #8ec9db66}
+#skm-earth-preview.survey-home.city-focus .earth-pin[aria-pressed=true]::after{display:none}
+#skm-earth-preview.survey-home .earth-extra-menu{border-radius:0;background:#0d1e22e8;border:1px solid #395b61;color:#c4dbdd}.survey-home .earth-extra-menu button{border-radius:0!important;background:none!important}
+#skm-earth-preview.survey-home.feature-open .survey-frame,#skm-earth-preview.survey-home.feature-open .survey-meta,#skm-earth-preview.survey-home.feature-open .survey-dock,#skm-earth-preview.survey-home.feature-open .survey-cities{display:none}
+#skm-earth-preview.survey-home.feature-open .earth-header{height:64px;position:absolute;inset:env(safe-area-inset-top) 0 auto}
+#skm-earth-preview.survey-home.feature-open .earth-language{left:20px;bottom:0;color:#111}
+#skm-earth-preview.survey-home.feature-open .earth-account{right:20px;bottom:0;color:#111}
+#skm-earth-preview.survey-home.feature-open .earth-glove-close{position:absolute;right:20px;top:0;color:#111}
+#skm-earth-preview.survey-home.feature-open .earth-brand{display:none}
+@media(min-width:800px){.survey-frame{inset:36px}.survey-meta{left:54px;right:54px;top:90px}#skm-earth-preview.survey-home .earth-brand{left:54px;top:55px}#skm-earth-preview.survey-home.city-focus .earth-city-panel{left:60px;top:150px;width:260px}.survey-cities{left:50%;right:auto;width:380px;transform:translateX(-50%)}}
+@media(max-height:600px){#skm-earth-preview.survey-home.city-focus .earth-city-panel{top:90px;bottom:80px;overflow:auto;width:32%}#skm-earth-preview.survey-home.city-focus .earth-city-title{margin-bottom:10px}#skm-earth-preview.survey-home.city-focus .earth-feature{min-height:40px;padding:8px 0}}
+@layer skmMaterial {
+ #skm-earth-preview.survey-home:not(.feature-open) .earth-header button,#skm-earth-preview.survey-home .earth-world,#skm-earth-preview.survey-home .survey-dock button,#skm-earth-preview.survey-home .survey-cities button{background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;color:#d5ddd8!important}
+ #skm-earth-preview.survey-home.city-focus .earth-feature{background:none!important;border:0!important;border-bottom:1px solid #51747c38!important;border-radius:0!important;box-shadow:none!important;color:#b6d0d1!important;padding-inline:0!important}
+}
+#skm-earth-preview.survey-home:not(.feature-open) .earth-brand,.survey-meta>span{display:none!important}.survey-meta{justify-content:flex-end}
+#skm-earth-preview.survey-home .earth-camera-pin{opacity:.7;transform:translate(-50%,-50%) scale(.82)}
+.drop-proximity{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 12px;margin:0 0 12px;font:11px/1.4 Arial,sans-serif;pointer-events:auto;color:#59665f}
+.drop-proximity button{font:11px/1.4 Arial,sans-serif;color:#3f5149;border:1px solid #b4c0b6;background:#edf0e8;border-radius:12px;padding:10px 14px;min-height:44px;cursor:pointer}.drop-proximity button[hidden]{display:none}.drop-proximity button:disabled{opacity:.7;cursor:default}
+
+/* Red city beacons pulse gently without blinking the labels or hit targets. */
+#skm-earth-preview.survey-home .earth-pin::before,
+#skm-earth-preview.survey-home.city-focus .earth-pin::before{border-color:#ff5b52;background:#f32924;box-shadow:0 0 9px #ff352d80;animation:skm-city-beacon 1.8s ease-in-out infinite}
+#skm-earth-preview.survey-home .earth-pin[aria-pressed=true]::before{border-color:#ff9d91;box-shadow:0 0 12px #ff352db0}
+@keyframes skm-city-beacon{0%,100%{opacity:1}50%{opacity:.55}}
+@media(prefers-reduced-motion:reduce){#skm-earth-preview.survey-home .earth-pin::before{animation:none}}
+
+/* The original brand artwork, white on the black world view. */
+#skm-earth-preview.survey-home:not(.feature-open) .earth-header .earth-brand{display:flex!important;opacity:1;pointer-events:auto;left:30px;top:calc(env(safe-area-inset-top) + 43px);width:88px;height:44px}
+#skm-earth-preview.survey-home .earth-brand .earth-logo{width:82px;height:40px;transform:scale(.85);opacity:1}
+#skm-earth-preview.survey-home .earth-brand .earth-logo img{filter:brightness(0) invert(1)}
+#skm-earth-preview.survey-home.city-focus .earth-world{top:calc(env(safe-area-inset-top) + 90px)}
+#skm-earth-preview.survey-home.city-focus .earth-city-panel{top:calc(env(safe-area-inset-top) + 142px)}
+@media(min-width:800px){#skm-earth-preview.survey-home:not(.feature-open) .earth-header .earth-brand{left:50px;top:45px}#skm-earth-preview.survey-home.city-focus .earth-city-panel{top:162px}}
+
+/* Give each city a visible beacon and its own 44px touch target. */
+#skm-earth-preview.survey-home .earth-pin::before{width:6px;height:6px}
+#skm-earth-preview.survey-home .earth-pin[aria-pressed=true]::before{width:7px;height:7px}
+#skm-earth-preview .earth-pin-leaders{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;stroke:#ee5a50;stroke-width:.7;opacity:.45}
+#skm-earth-preview .earth-pin[data-label-side="left"] .survey-pin-label{left:auto;right:28px;text-align:right}
+
+#skm-earth-preview.survey-home .survey-meta{top:calc(env(safe-area-inset-top) + 59px)}
+@media(min-width:800px){#skm-earth-preview.survey-home .survey-meta{top:61px}}

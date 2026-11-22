@@ -1,0 +1,4 @@
+Instrument samples: tonejs-instruments, Nicholaus P. Brosowsky and the original authors listed in sample-source-info.txt.
+Source: https://github.com/nbrosowsky/tonejs-instruments
+License: Creative Commons Attribution 3.0 https://creativecommons.org/licenses/by/3.0/
+Original MP3 files, unmodified; selected subset.

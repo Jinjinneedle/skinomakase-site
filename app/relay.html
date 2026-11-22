@@ -1,0 +1,225 @@
+<!doctype html>
+<html data-skm-paper="page" lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Relay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
+<style>
+  :root { --ink:#f0f0f0; --mute:#7c7c7c; --pill:#171717; --line:#333; --live:#57d98a; --warn:#ff5c4d; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  html, body { height:100%; margin:0; background:#000; color:var(--ink); font-family:"Space Mono", ui-monospace, monospace; font-size:12px; overflow:hidden; }
+  [hidden] { display:none !important; }
+  .langpick { position:fixed; inset:0; z-index:20; background:#000; display:grid; place-items:center; padding:28px; }
+  .langpick-list { width:min(100%, 22rem); display:flex; flex-direction:column; gap:9px; }
+  .langpick-list button { min-height:50px; border-radius:999px; padding:0 22px; font:inherit; font-size:14px; background:var(--pill); color:var(--ink); border:0; display:flex; align-items:center; justify-content:space-between; gap:12px; touch-action:manipulation; }
+  .langpick-list button i { font-style:normal; font-size:9.5px; letter-spacing:.14em; opacity:.5; }
+  .langpick-list button.on { background:#fff; color:#000; }
+
+  .app { position:absolute; inset:0; display:flex; flex-direction:column; gap:14px; padding:68px 20px calc(20px + env(safe-area-inset-bottom)); max-width:480px; margin:0 auto; }
+  .cap { font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--mute); }
+  .head { display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+  .me { font-size:15px; letter-spacing:.14em; }
+
+  /* 두 갈래: 근처(오프라인) · 네트워크(서버) */
+  .lanes { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .lane { background:var(--pill); border-radius:18px; padding:14px; display:flex; flex-direction:column; gap:7px; min-height:92px; }
+  .lane .n { font-size:26px; font-weight:700; line-height:1; }
+  .lane .s { font-size:10px; letter-spacing:.1em; color:var(--mute); text-transform:uppercase; }
+  .dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:#444; margin-right:6px; vertical-align:middle; }
+  .dot.on { background:var(--live); box-shadow:0 0 0 3px rgba(87,217,138,.18); }
+
+  .power { width:100%; min-height:62px; border-radius:999px; border:1px solid var(--line); background:transparent; color:var(--ink); font:inherit; font-size:12px; letter-spacing:.24em; text-transform:uppercase; touch-action:manipulation; transition:transform .25s cubic-bezier(.34,1.56,.64,1); }
+  .power:active { transform:scale(.97); }
+  .power.on { background:var(--warn); border-color:var(--warn); color:#fff; }
+
+  .peers { display:flex; flex-wrap:wrap; gap:6px; min-height:26px; }
+  .peer { padding:5px 11px; border-radius:999px; background:var(--pill); font-size:10.5px; letter-spacing:.1em; }
+  .peer b { font-weight:400; color:var(--live); }
+
+  .sends { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .sends button { min-height:46px; border-radius:14px; border:1px solid var(--line); background:transparent; color:var(--ink); font:inherit; font-size:11.5px; letter-spacing:.06em; touch-action:manipulation; }
+  .sends button:active { background:var(--pill); }
+  .sends button.sos { grid-column:1 / -1; border-color:var(--warn); color:var(--warn); letter-spacing:.3em; }
+  .field { display:flex; align-items:center; gap:8px; background:var(--pill); border-radius:999px; padding:0 8px 0 16px; min-height:46px; }
+  .field input { flex:1; min-width:0; border:0; background:transparent; font:inherit; font-size:13px; color:var(--ink); outline:none; -webkit-user-select:text; user-select:text; }
+  .field input::placeholder { color:var(--mute); }
+  .field button { width:34px; height:34px; border-radius:50%; border:0; background:#fff; color:#000; font:inherit; font-size:14px; flex:none; }
+
+  .log { flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; display:flex; flex-direction:column; gap:8px; padding-bottom:6px; }
+  .row { display:flex; gap:10px; align-items:baseline; font-size:12px; line-height:1.45; }
+  .row .w { color:var(--mute); font-size:10px; letter-spacing:.08em; flex:none; }
+  .row .m { flex:1; word-break:break-word; }
+  .row.sos .m { color:var(--warn); }
+  .row.sys .m { color:var(--mute); font-size:10.5px; letter-spacing:.06em; }
+  .note { font-size:10px; letter-spacing:.06em; color:var(--mute); line-height:1.6; }
+</style>
+<link rel="stylesheet" href="subtle-depth.css">
+<link rel="stylesheet" href="session-theme.css?v=1"><link rel="stylesheet" href="feature-paper.css?v=1"><link rel="stylesheet" href="studio-tone.css?v=11da9c45cf3f"><link rel="stylesheet" href="web-mobile.css?v=20261122"></head>
+<body>
+<div class="langpick" id="langpick"><div class="langpick-list" id="langpick-list"></div></div>
+<div class="app">
+  <div class="head"><span class="cap" data-i18n="title">Emergency relay</span><span class="me" id="me">—</span></div>
+  <div class="lanes">
+    <div class="lane">
+      <span class="s"><span class="dot" id="nearDot"></span><span data-i18n="near">Nearby</span></span>
+      <span class="n" id="nearN">0</span>
+      <span class="s" id="nearS" data-i18n="offline_ok">works offline</span>
+    </div>
+    <div class="lane">
+      <span class="s"><span class="dot" id="netDot"></span><span data-i18n="net">Network</span></span>
+      <span class="n" id="netN">—</span>
+      <span class="s" id="netS" data-i18n="net_off">not connected</span>
+    </div>
+  </div>
+  <button class="power" id="power" type="button" data-i18n="turn_on">Turn on</button>
+  <div class="peers" id="peers"></div>
+  <div class="sends" id="sends" hidden>
+    <button class="sos" data-kind="sos" data-i18n="sos">SOS</button>
+    <button data-kind="safe" data-i18n="safe">I'm safe</button>
+    <button data-kind="need" data-i18n="need">Need help</button>
+    <button data-kind="moving" data-i18n="moving">Moving</button>
+    <button data-kind="here" data-i18n="stay">Staying here</button>
+  </div>
+  <div class="field" id="fieldBox" hidden><input id="msg" type="text" maxlength="120" data-i18n-ph="type" placeholder="message"><button id="send" type="button">↑</button></div>
+  <div class="log" id="log"></div>
+  <div class="note" id="note" data-i18n="privacy">Anonymous. Location is rounded to ~100 m and only shared while this is on.</div>
+</div>
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+  const haptic = k => { try { window.SKMApp && SKMApp.haptic(k); } catch (e) {} };
+  const inApp = !!window.SKMApp;
+  const pad2 = n => String(n).padStart(2, '0');
+  const L = {
+    ko: { title:'긴급 연대', near:'근처', net:'네트워크', offline_ok:'인터넷 없이 동작', net_off:'연결 안 됨', turn_on:'켜기', turn_off:'끄기',
+          sos:'SOS', safe:'나는 안전해요', need:'도움이 필요해요', moving:'이동 중', stay:'여기 머무름', type:'메시지',
+          privacy:'익명입니다. 위치는 약 100 m 로 뭉개고, 켜 둔 동안에만 공유돼요.', on:'연대 켜짐 — 근처를 찾는 중', off:'꺼짐', join:'{w} 연결됨', leave:'{w} 끊김', none:'아직 아무도 없어요', me:'나' },
+    en: { title:'Emergency relay', near:'Nearby', net:'Network', offline_ok:'works offline', net_off:'not connected', turn_on:'Turn on', turn_off:'Turn off',
+          sos:'SOS', safe:"I'm safe", need:'Need help', moving:'Moving', stay:'Staying here', type:'message',
+          privacy:'Anonymous. Location is rounded to ~100 m and only shared while this is on.', on:'Relay on — looking for others', off:'Off', join:'{w} joined', leave:'{w} left', none:'No one yet', me:'me' },
+    ja: { title:'緊急リレー', near:'近く', net:'ネット', offline_ok:'オフラインでも動作', net_off:'未接続', turn_on:'オン', turn_off:'オフ',
+          sos:'SOS', safe:'無事です', need:'助けが必要', moving:'移動中', stay:'ここにいます', type:'メッセージ',
+          privacy:'匿名です。位置は約100mに丸め、オンの間だけ共有します。', on:'リレー オン — 探索中', off:'オフ', join:'{w} 参加', leave:'{w} 離脱', none:'まだ誰もいません', me:'自分' },
+    zh: { title:'紧急联络', near:'附近', net:'网络', offline_ok:'离线可用', net_off:'未连接', turn_on:'开启', turn_off:'关闭',
+          sos:'SOS', safe:'我安全', need:'需要帮助', moving:'移动中', stay:'留在原地', type:'消息',
+          privacy:'匿名。位置精度约100米，仅在开启时共享。', on:'已开启 — 正在寻找', off:'已关闭', join:'{w} 加入', leave:'{w} 离开', none:'暂时没有人', me:'我' },
+    es: { title:'Enlace de emergencia', near:'Cerca', net:'Red', offline_ok:'funciona sin internet', net_off:'sin conexión', turn_on:'Activar', turn_off:'Desactivar',
+          sos:'SOS', safe:'Estoy bien', need:'Necesito ayuda', moving:'En movimiento', stay:'Me quedo aquí', type:'mensaje',
+          privacy:'Anónimo. La ubicación se redondea a ~100 m y solo se comparte mientras está activo.', on:'Activo — buscando', off:'Apagado', join:'{w} se unió', leave:'{w} salió', none:'Nadie aún', me:'yo' },
+    fr: { title:'Relais d’urgence', near:'À proximité', net:'Réseau', offline_ok:'fonctionne hors ligne', net_off:'non connecté', turn_on:'Activer', turn_off:'Désactiver',
+          sos:'SOS', safe:'Je vais bien', need:'Besoin d’aide', moving:'En route', stay:'Je reste ici', type:'message',
+          privacy:'Anonyme. Position arrondie à ~100 m, partagée seulement quand c’est activé.', on:'Activé — recherche', off:'Désactivé', join:'{w} rejoint', leave:'{w} parti', none:'Personne pour l’instant', me:'moi' },
+    de: { title:'Notfall-Relais', near:'In der Nähe', net:'Netz', offline_ok:'funktioniert offline', net_off:'nicht verbunden', turn_on:'Einschalten', turn_off:'Ausschalten',
+          sos:'SOS', safe:'Mir geht es gut', need:'Brauche Hilfe', moving:'Unterwegs', stay:'Bleibe hier', type:'Nachricht',
+          privacy:'Anonym. Standort auf ~100 m gerundet, nur geteilt solange aktiv.', on:'Aktiv — suche', off:'Aus', join:'{w} dabei', leave:'{w} weg', none:'Noch niemand', me:'ich' },
+  };
+  const NAMES = { ko:'한국어', en:'English', ja:'日本語', zh:'中文', es:'Español', fr:'Français', de:'Deutsch' };
+  let lang = (() => { try { const v = localStorage.getItem('skm-lang'); return L[v] ? v : 'en'; } catch (e) { return 'en'; } })();
+  const t = (k, v) => { let s = (L[lang] && L[lang][k]) || L.en[k] || k; if (v) for (const n in v) s = s.replace('{' + n + '}', v[n]); return s; };
+  function applyLang(code) {
+    lang = L[code] ? code : 'en'; try { localStorage.setItem('skm-lang', lang); } catch (e) {}
+    document.querySelectorAll('[data-i18n]').forEach(e => { e.textContent = t(e.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-ph]').forEach(e => { e.placeholder = t(e.dataset.i18nPh); });
+    $('#power').textContent = on ? t('turn_off') : t('turn_on');
+  }
+  (function () {
+    const list = $('#langpick-list');
+    Object.keys(NAMES).forEach(code => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.innerHTML = '<span></span><i></i>'; b.firstChild.textContent = NAMES[code]; b.lastChild.textContent = code.toUpperCase();
+      b.classList.toggle('on', code === lang);
+      b.onclick = () => { haptic('selection'); applyLang(code); $('#langpick').hidden = true; };
+      list.appendChild(b);
+    });
+  })();
+
+  // 익명 핸들: 기기에 한 번만 만들고 재사용 (이름·계정 없음)
+  const handle = (() => {
+    let h = ''; try { h = localStorage.getItem('skm-relay-handle') || ''; } catch (e) {}
+    if (!/^SKM-[0-9A-F]{4}$/.test(h)) {
+      const b = (window.crypto && crypto.getRandomValues) ? crypto.getRandomValues(new Uint8Array(2)) : [Math.random() * 256 | 0, Math.random() * 256 | 0];
+      h = 'SKM-' + Array.from(b, x => x.toString(16).padStart(2, '0')).join('').toUpperCase();
+      try { localStorage.setItem('skm-relay-handle', h); } catch (e) {}
+    }
+    return h;
+  })();
+  $('#me').textContent = handle;
+
+  let on = false, peers = [], myPos = null;
+  function line(text, cls, who) {
+    const d = document.createElement('div'); d.className = 'row ' + (cls || '');
+    const now = new Date();
+    d.innerHTML = '<span class="w"></span><span class="m"></span>';
+    d.firstChild.textContent = pad2(now.getHours()) + ':' + pad2(now.getMinutes()) + (who ? ' ' + who : '');
+    d.lastChild.textContent = text;
+    $('#log').prepend(d);
+    while ($('#log').children.length > 60) $('#log').lastChild.remove();
+  }
+  function renderPeers() {
+    const box = $('#peers'); box.innerHTML = '';
+    $('#nearN').textContent = peers.length;
+    $('#nearDot').classList.toggle('on', on && peers.length > 0);
+    if (!on) return;
+    if (!peers.length) { const s = document.createElement('span'); s.className = 'peer'; s.textContent = t('none'); box.appendChild(s); return; }
+    peers.forEach(p => { const s = document.createElement('span'); s.className = 'peer'; s.innerHTML = '<b>●</b> '; s.append(p); box.appendChild(s); });
+  }
+  function setOn(v) {
+    on = v;
+    $('#power').textContent = on ? t('turn_off') : t('turn_on');
+    $('#power').classList.toggle('on', on);
+    $('#sends').hidden = !on; $('#fieldBox').hidden = !on;
+    if (!on) { peers = []; }
+    renderPeers();
+    line(on ? t('on') : t('off'), 'sys');
+  }
+  function send(kind, text) {
+    if (!on) return;
+    haptic(kind === 'sos' ? 'error' : 'light');
+    const payload = { k: kind, x: text || '', t: Date.now() };
+    if (myPos) { payload.la = Math.round(myPos.lat * 1000) / 1000; payload.lo = Math.round(myPos.lon * 1000) / 1000; }   // ~100 m 격자
+    if (inApp && window.SKMApp.mesh) SKMApp.mesh({ cmd: 'send', payload });
+    line((text || t(kind === 'sos' ? 'sos' : kind === 'safe' ? 'safe' : kind === 'need' ? 'need' : kind === 'moving' ? 'moving' : 'stay')), kind === 'sos' ? 'sos' : '', t('me'));
+  }
+  $('#power').addEventListener('click', () => {
+    haptic('medium');
+    if (!inApp || !window.SKMApp.mesh) { line('Relay needs the app', 'sys'); return; }
+    if (on) { SKMApp.mesh({ cmd: 'stop' }); setOn(false); }
+    else { SKMApp.mesh({ cmd: 'start', handle }); setOn(true); if (window.SKMApp.location) SKMApp.location('start'); }
+  });
+  document.querySelectorAll('#sends button').forEach(b => b.addEventListener('click', () => send(b.dataset.kind)));
+  $('#send').addEventListener('click', () => { const v = $('#msg').value.trim(); if (!v) return; $('#msg').value = ''; send('msg', v); });
+  $('#msg').addEventListener('keydown', e => { if (e.key === 'Enter') $('#send').click(); });
+
+  // 네이티브 → 메인 프레임 → 여기 (iframe 이라 부모가 전달해 준다)
+  function onMesh(json) {
+    let d; try { d = JSON.parse(json); } catch (e) { return; }
+    if (d.peers) peers = d.peers;
+    if (d.type === 'state') { if (!d.on && on) setOn(false); else renderPeers(); return; }
+    if (d.type === 'peers') { renderPeers(); if (d.event === 'join') { haptic('success'); line(t('join', { w: d.who }), 'sys'); } else if (d.event === 'leave') line(t('leave', { w: d.who }), 'sys'); return; }
+    if (d.type === 'error') { line(d.message, 'sys'); return; }
+    if (d.type === 'msg' && d.msg) {
+      const m = d.msg, kind = m.k || 'msg';
+      let text = m.x || t(kind === 'sos' ? 'sos' : kind === 'safe' ? 'safe' : kind === 'need' ? 'need' : kind === 'moving' ? 'moving' : 'stay');
+      if (m.la != null && myPos) {
+        const R = 6371, rad = x => x * Math.PI / 180;
+        const dLat = rad(m.la - myPos.lat), dLon = rad(m.lo - myPos.lon);
+        const a = Math.sin(dLat / 2) ** 2 + Math.cos(rad(myPos.lat)) * Math.cos(rad(m.la)) * Math.sin(dLon / 2) ** 2;
+        const km = 2 * R * Math.asin(Math.sqrt(a));
+        text += '  ·  ' + (km < 1 ? Math.round(km * 1000) + ' m' : km.toFixed(1) + ' km');
+      }
+      haptic(kind === 'sos' ? 'error' : 'light');
+      line(text, kind === 'sos' ? 'sos' : '', m.from || '?');
+    }
+  }
+  // 부모(메인 페이지)가 넘겨주는 내 위치 — 공유는 켜져 있을 때만
+  window.addEventListener('message', e => {
+    const d = e.data; if (!d) return;
+    if (d.skm === 'mesh') onMesh(d.json);
+    if (d.skm === 'loc') myPos = { lat: d.lat, lon: d.lon };
+    if (d.skm === 'stop' && on) { if (inApp && window.SKMApp.mesh) SKMApp.mesh({ cmd: 'stop' }); setOn(false); }
+  });
+  applyLang(lang); renderPeers();
+})();
+</script><script src="session-theme-state.js?v=1"></script><script src="session-theme.js?v=1"></script><script src="screen-insets.js"></script></body></html>

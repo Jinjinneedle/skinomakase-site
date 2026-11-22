@@ -1,0 +1,64 @@
+/* Menu-only finish. The world, photos and feature pages retain their own palette. */
+@layer skmMenu, skmMaterial;
+@layer skmMenu {
+ #skm-earth-preview.survey-home.city-focus .earth-city-panel{width:min(47%,220px)!important;max-width:260px;background:transparent!important;padding:0!important;border:0!important;box-shadow:none!important}
+ #skm-earth-preview.survey-home.city-focus .survey-coordinates{display:none}
+ #skm-earth-preview.survey-home.city-focus .earth-city-title{margin:0 0 26px!important}
+ #skm-earth-preview.survey-home.city-focus .earth-city-title h2{color:#f2f1ed!important;font:400 clamp(22px,5.8vw,34px)/1.08 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif!important;letter-spacing:-.045em!important;margin:0!important;text-shadow:0 2px 18px #0008}
+ #skm-earth-preview.survey-home.city-focus .earth-features{display:flex!important;flex-direction:column;gap:0!important;background:none!important;border:0!important;padding:0!important;box-shadow:none!important}
+ #skm-earth-preview.survey-home.city-focus .earth-feature{position:relative;display:flex!important;align-items:center;justify-content:space-between;gap:12px;min-height:52px!important;padding:12px 2px!important;border:0!important;border-bottom:1px solid #ffffff18!important;background:transparent!important;box-shadow:none!important;border-radius:0!important;text-align:left;color:#dedfdf!important;cursor:pointer;transition:color .18s ease,opacity .18s ease}
+ #skm-earth-preview.survey-home.city-focus .earth-feature:last-child{border-bottom:0!important}
+ #skm-earth-preview.survey-home.city-focus .earth-feature strong{font:400 14px/1.3 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif!important;color:inherit!important;letter-spacing:-.012em!important;text-shadow:0 1px 8px #0008}
+ #skm-earth-preview.survey-home.city-focus .earth-feature>span:nth-child(2){min-width:0;flex:1}
+ #skm-earth-preview.survey-home.city-focus .earth-feature>svg{display:block!important;width:13px!important;height:13px!important;opacity:.4;flex:none;transition:transform .2s ease,opacity .2s ease}
+ #skm-earth-preview.survey-home.city-focus .earth-feature:is(:hover,:focus-visible){color:#fff!important;background:none!important}
+ #skm-earth-preview.survey-home.city-focus .earth-feature:is(:hover,:focus-visible)>svg{opacity:1;transform:translateX(3px)}
+ #skm-earth-preview.survey-home.city-focus .earth-feature:active{opacity:.6}
+ #skm-earth-preview.survey-home.city-focus .earth-stage::after{background:linear-gradient(90deg,#000b,transparent 78%)!important}
+ #skm-earth-preview.survey-home:not(.feature-open) :is(.survey-dock button,.earth-account,.earth-language){font:400 10px/1.3 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif!important;letter-spacing:.075em!important;color:#c5c7c8!important;background:none!important;border:0!important;box-shadow:none!important}
+ #skm-earth-preview.survey-home .survey-dock{gap:15px}
+ #skm-earth-preview.survey-home .survey-dock button{position:relative;min-width:44px!important;min-height:44px!important;padding:0 5px!important}
+ #skm-earth-preview.survey-home .survey-dock button[aria-expanded=true]{color:#fff!important}
+ #skm-earth-preview.survey-home .survey-dock button[aria-expanded=true]::after{content:'';position:absolute;width:3px;height:3px;border-radius:50%;background:#ed6a5d;left:calc(50% - 1.5px);bottom:4px}
+ #skm-earth-preview.survey-home :is(.survey-cities,.earth-live-panel,.earth-orbit-detail,.earth-radio-mini){background:linear-gradient(145deg,#1a1b1ed9,#0d0e11f5)!important;border:1px solid #ffffff16!important;border-radius:12px!important;box-shadow:0 18px 50px #0005!important;backdrop-filter:blur(24px) saturate(.65);-webkit-backdrop-filter:blur(24px) saturate(.65);color:#ececeb!important}
+ #skm-earth-preview.survey-home .survey-cities{padding:10px 18px!important;gap:0 22px!important}
+ #skm-earth-preview.survey-home .survey-cities button{min-height:48px!important;font:400 11px/1.3 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif!important;letter-spacing:.035em;color:#d0d1d2!important;border:0!important;border-bottom:1px solid #ffffff0c!important;background:none!important}
+ #skm-earth-preview.survey-home .survey-cities button:is(:hover,:focus-visible){color:#fff!important}
+ #skm-earth-preview.survey-home :is(.earth-live-panel,.earth-orbit-detail){padding:12px 18px 14px!important}
+ #skm-earth-preview.survey-home :is(.earth-live-panel,.earth-orbit-detail) header strong{font:500 11px/1.4 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif!important;letter-spacing:.08em!important;color:#dcdddd!important}
+ #skm-earth-preview.survey-home .earth-live-panel nav{gap:16px!important;border-color:#ffffff16!important}
+ #skm-earth-preview.survey-home .earth-live-panel nav button{font:400 10px/1.3 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif!important;letter-spacing:.025em!important;color:#999b9f!important;background:none!important}
+ #skm-earth-preview.survey-home .earth-live-panel nav button[aria-pressed=true]{color:#f2f2f1!important;border-bottom:1px solid #e2e0da!important}
+ #skm-earth-preview.survey-home .earth-live-row{font:400 12px/1.4 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif!important;min-height:48px!important;padding:12px 0!important;border-color:#ffffff0d!important;color:#d9dada!important}
+ #skm-earth-preview.survey-home .earth-live-row[aria-pressed=true]{color:#fff!important}
+ #skm-earth-preview.survey-home .earth-live-row small{font:400 9px/1.3 -apple-system,BlinkMacSystemFont,sans-serif!important;color:#969a9e!important}
+ #skm-earth-preview.survey-home .earth-live-body input{font:400 16px/1.4 -apple-system,BlinkMacSystemFont,sans-serif!important;background:#ffffff06!important;border-color:#ffffff20!important;border-radius:6px!important;color:#f3f3f1!important}
+ #skm-earth-preview.survey-home .earth-live-body input::placeholder{color:#9c9d9f}
+ #skm-earth-preview.survey-home .earth-live-note{color:#a4a6a9!important;font-size:10px;line-height:1.6}
+ #skm-earth-preview.survey-home .earth-live-source{color:#a4a6a9!important}
+ #skm-earth-preview.survey-home .earth-radio-mini{border-radius:9px!important}
+ #skm-earth-preview.survey-home .earth-orbit-metrics strong{font:300 21px/1.15 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif!important;letter-spacing:-.035em;color:#f0f0ee!important}
+ #skm-earth-preview.survey-home .earth-orbit-actions button{color:#dedfdf!important;font-family:-apple-system,BlinkMacSystemFont,sans-serif!important}
+ #skm-earth-preview.survey-home :is(.survey-dock,.survey-cities,.earth-features,.earth-live-panel,.earth-orbit-detail) button:focus-visible{outline:1px solid #f1eee5!important;outline-offset:3px}
+ #skm-earth-preview.survey-home.feature-open .earth-extra-menu{display:flex!important;flex-direction:column;justify-content:center;gap:0!important;padding:24px 32px!important;background:var(--feature-paper,#dbdcde)!important;border:0!important;box-shadow:none!important;border-radius:0!important}
+ #skm-earth-preview.survey-home .earth-extra-menu[hidden]{display:none!important}
+ #skm-earth-preview.survey-home.feature-open .earth-extra-menu [data-extra]{display:flex;align-items:center;justify-content:space-between;flex:none;width:100%;min-height:58px!important;padding:14px 0!important;font:400 16px/1.4 -apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif!important;letter-spacing:-.02em!important;color:#26292c!important;background:none!important;box-shadow:none!important;border:0!important;border-bottom:1px solid #00000015!important;border-radius:0!important;text-align:left}
+ #skm-earth-preview.survey-home.feature-open .earth-extra-menu [data-extra]:last-child{border-bottom:0!important}
+ #skm-earth-preview.survey-home.feature-open .earth-extra-menu [data-extra]:not(:disabled)::after{content:'→';font-size:14px;color:#73777b;margin-left:auto;padding-left:14px}
+ #skm-earth-preview.survey-home.feature-open .earth-extra-menu [data-extra]:disabled{opacity:.35!important}
+ #skm-earth-preview.survey-home.feature-open .earth-header button{background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important}
+ #skm-earth-preview.survey-home.feature-open .earth-extra-menu [data-extra]:focus-visible{outline:1px solid #444;outline-offset:3px}
+ @media(prefers-reduced-motion:no-preference){
+  #skm-earth-preview.survey-home .earth-city-panel:not([hidden]) .earth-city-title{animation:skm-menu-title .36s ease both}
+  #skm-earth-preview.survey-home :is(.earth-city-panel:not([hidden]) .earth-feature,.earth-extra-menu:not([hidden]) [data-extra]){animation:skm-menu-row .36s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--menu-order,0)*40ms + 50ms)}
+  #skm-earth-preview.survey-home :is(.earth-feature,[data-extra]):nth-child(2){--menu-order:1}#skm-earth-preview.survey-home :is(.earth-feature,[data-extra]):nth-child(3){--menu-order:2}#skm-earth-preview.survey-home :is(.earth-feature,[data-extra]):nth-child(4){--menu-order:3}#skm-earth-preview.survey-home :is(.earth-feature,[data-extra]):nth-child(5){--menu-order:4}#skm-earth-preview.survey-home :is(.earth-feature,[data-extra]):nth-child(6){--menu-order:5}
+  #skm-earth-preview.survey-home :is(.survey-cities,.earth-live-panel,.earth-orbit-detail):not([hidden]){animation:skm-menu-sheet .24s ease both!important}
+  @keyframes skm-menu-title{from{opacity:0;translate:0 6px}to{opacity:1;translate:0 0}}
+  @keyframes skm-menu-row{from{opacity:0;translate:0 8px;filter:blur(2px)}to{opacity:1;translate:0 0;filter:blur(0)}}
+  @keyframes skm-menu-sheet{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+ }
+ @media(prefers-reduced-motion:reduce){#skm-earth-preview.survey-home :is(.survey-cities,.earth-live-panel,.earth-orbit-detail,.earth-city-title,.earth-feature,.earth-extra-menu [data-extra]){animation:none!important;transition:none!important}}
+ @media(max-width:360px){#skm-earth-preview.survey-home.city-focus .earth-feature strong{font-size:13px!important}}
+ @media(min-width:800px){#skm-earth-preview.survey-home.city-focus .earth-feature{min-height:60px!important}#skm-earth-preview.survey-home.city-focus .earth-feature strong{font-size:16px!important}}
+ @media(max-height:600px){#skm-earth-preview.survey-home.city-focus .earth-feature{min-height:44px!important;padding-block:8px!important}#skm-earth-preview.survey-home.city-focus .earth-city-title{margin-bottom:14px!important}}
+}

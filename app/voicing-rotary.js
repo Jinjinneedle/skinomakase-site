@@ -1,0 +1,14 @@
+(() => {
+const flower=document.querySelector('.flower');if(!flower)return;const rotor=document.createElement('div');rotor.className='flower-rotor';const buttons=[...flower.querySelectorAll('.flower-petal')];rotor.append(flower.querySelector('.flower-shape'),...buttons);flower.prepend(rotor);
+let angle=0,step=0,down=false,dragged=false,pointer=null,lastAngle=0,x=0,y=0,origin=null,held=null,lastHaptic=0,fade;
+function hold(b){if(held===b)return;held?.classList.remove('touch-clear');held=b;held?.classList.add('touch-clear');}
+function point(e){const r=flower.getBoundingClientRect();return Math.atan2(e.clientY-r.top-r.height/2,e.clientX-r.left-r.width/2)*180/Math.PI;}
+function nearest(e){const a=(point(e)+90-angle)/45;return buttons[((Math.round(a)%8)+8)%8];}
+function pulse(){const now=performance.now();if(now-lastHaptic<45)return;lastHaptic=now;try{if(window.SKMApp?.haptic)window.SKMApp.haptic('light');else navigator.vibrate?.(8);}catch{}flower.classList.remove('rotary-click');void flower.offsetWidth;flower.classList.add('rotary-click');}
+function render(snap){const detent=Math.round(angle/45);rotor.style.setProperty('--rotary-angle',(snap?detent*45:detent*45+(angle-detent*45)*.3)+'deg');if(step!==detent){step=detent;pulse();}flower.dataset.position=String(((detent%8)+8)%8);}
+rotor.addEventListener('pointerdown',e=>{if(e.button!==0||down)return;down=true;dragged=false;pointer=e.pointerId;origin=e.target.closest('.flower-petal');x=e.clientX;y=e.clientY;lastAngle=point(e);clearTimeout(fade);rotor.setPointerCapture(pointer);flower.classList.add('rotary-held');hold(origin||nearest(e));});
+rotor.addEventListener('pointermove',e=>{if(!down||e.pointerId!==pointer)return;if(Math.hypot(e.clientX-x,e.clientY-y)>9)dragged=true;if(!dragged)return;const a=point(e);let delta=a-lastAngle;if(delta>180)delta-=360;if(delta< -180)delta+=360;angle+=delta;lastAngle=a;render(false);hold(nearest(e));});
+function finish(e,cancel){if(!down||e.pointerId!==pointer)return;down=false;pointer=null;flower.classList.remove('rotary-held');if(rotor.hasPointerCapture(e.pointerId))rotor.releasePointerCapture(e.pointerId);angle=Math.round(angle/45)*45;render(true);if(!cancel){if(!dragged&&origin){pulse();origin.click();}else if(dragged&&held&&![4,7].includes(buttons.indexOf(held)))held.click();}fade=setTimeout(()=>hold(null),260);}
+rotor.addEventListener('pointerup',e=>finish(e,false));rotor.addEventListener('pointercancel',e=>finish(e,true));rotor.addEventListener('click',e=>{if(e.isTrusted&&e.detail>0){e.preventDefault();e.stopImmediatePropagation();}},true);
+buttons.forEach(b=>{b.addEventListener('focus',()=>hold(b));b.addEventListener('blur',()=>{if(!down)hold(null);});});window.addEventListener('blur',()=>{down=false;pointer=null;hold(null);flower.classList.remove('rotary-held');});render(true);
+})();

@@ -8,6 +8,8 @@ window.SKM_CONFIG = {
   WEBHOOK_HEADERS: {},
   WEBHOOK_MODE: "json",     // "json" | "formdata"
   EXPORT_SCALE: 2,
+  NO_DOWNLOAD: true,        // APP: 전송 뒤 이미지 다운로드 없음
+  AFTER_SEND_URL: "",      // 문의를 보낸 뒤 랜딩할 주소 (예: Venue Ink 사이트). 비우면 그대로 머무름
   // 이미지 호스팅 (선택) — 채우면 배치 이미지가 이메일 본문에 바로 보입니다.
   // cloudinary.com 무료 계정 → Cloud name + Unsigned upload preset
   CLOUDINARY: {

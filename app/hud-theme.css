@@ -1,0 +1,84 @@
+/* First layer wins important declarations over the previous material finish.
+   This is a visual layer only: hit areas, hidden states, artwork and data stay intact. */
+@layer skmHUD, skmMaterial;
+@layer skmHUD {
+ html[data-skm-hud]{color-scheme:dark!important;--hud-bg:#030a08;--hud-panel:#07140f;--hud-ink:#c8ebd5;--hud-green:#58e9a3;--hud-muted:#83a794;--hud-line:#285b44;--hud-amber:#f5b76b;--skm-ash:var(--hud-bg)!important;--skm-surface:var(--hud-bg)!important;--skm-ink:var(--hud-ink)!important;--skm-line:var(--hud-line)!important;--paper:var(--hud-bg)!important;--bg:var(--hud-bg)!important;--ink:var(--hud-ink)!important;--line:var(--hud-line)!important;--muted:var(--hud-muted)!important;--mute:var(--hud-muted)!important;--dim:var(--hud-muted)!important;--pill:var(--hud-panel)!important;--case:var(--hud-panel)!important;--signal:var(--hud-green)!important;--feature-paper:var(--hud-bg)!important;--dialog-paper:var(--hud-bg)!important;background:var(--hud-bg)!important}
+ html[data-skm-hud] body{background:var(--hud-bg)!important;color:var(--hud-ink)!important;font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace!important;--paper:var(--hud-bg)!important;--ink:var(--hud-ink)!important;--line:var(--hud-line)!important;--mute:var(--hud-muted)!important}
+ html[data-skm-hud] :is(button,input,textarea,select,summary,h1,h2,h3,h4,label,small){font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace!important}
+ html[data-skm-hud] :is(main,.wrap,.app,.desk,.stage,.intro,.intro-body,.langpick,.langpick-body,.sheet-card,.request-card,#shelter-setup,#bodymap-flower,#flower-booking-overlay,#preview,.graphic-screen,#canvas,#studio,.morse-deck,.signal-card,fieldset,.section,.card,.bubble,.record,.auction,.status-card){background-color:var(--hud-bg)!important;color:var(--hud-ink)!important;border-color:var(--hud-line)!important;box-shadow:none!important}
+ html[data-skm-hud] :is(.panel,.panel-head,.tools>div,.langmenu,#skm-language-dialog,#skm-onboarding,.nature-window,.nature-picker header,.safety-dialog,dialog){background:var(--hud-panel)!important;color:var(--hud-ink)!important;border-color:var(--hud-line)!important;border-radius:2px!important;box-shadow:0 12px 50px #0009!important}
+ html[data-skm-hud] :is(button:not(.sw,.swatch,[data-hex],.petal-choice,.petal-hub,.earth-pin,.earth-camera-pin,.earth-satellite-pin,.earth-drop-pair,.glove-direct-slot,.slot,.cell,.skm-terminal-logo,.map-compass),input:not([type=range],[type=color]),textarea,select,summary){background-color:var(--hud-panel)!important;background-image:none!important;color:var(--hud-ink)!important;border-color:var(--hud-line)!important;border-radius:2px!important;box-shadow:none!important;text-shadow:none!important}
+ html[data-skm-hud] :is(input,textarea,select){font-size:16px!important;accent-color:var(--hud-green)!important;caret-color:var(--hud-green)!important}
+ html[data-skm-hud] :is(input,textarea)::placeholder{color:var(--hud-muted)!important;opacity:1}
+ html[data-skm-hud] :is(a,label,h1,h2,h3,h4,legend){color:var(--hud-ink)!important}
+ html[data-skm-hud] :is(.help,.when,.serial,.quiet,.desk-empty,#status,#message,#gesture,#format,.earth-live-note,.earth-live-source,.earth-music-time,.earth-music-error,.glove-direct-status,.glove-product-help,.skm-chat-status,.skm-chat-empty,.skm-chat time,.studio-thread time){color:var(--hud-muted)!important}
+ html[data-skm-hud] :is(button.primary,button.on,button[aria-pressed=true],button[aria-selected=true],#next,#mb-next,.go.on):not(.earth-pin,.earth-drop-pair,.sw,.swatch,[data-hex]){background:#123423!important;color:var(--hud-green)!important;border-color:var(--hud-green)!important}
+ html[data-skm-hud] :is(#delete-confirm,.cancel-request,.safety-action){color:#ff9385!important;border-color:#98453d!important}
+ html[data-skm-hud] :is(button,a,input,textarea,select,summary):focus-visible{outline:2px solid var(--hud-amber)!important;outline-offset:3px!important}
+ html[data-skm-hud] :is(.desk-wordmark img,.studio-mark img,.earth-logo img,.glove-network-center img){filter:brightness(0) invert(1)!important}
+ html[data-skm-hud] :is(.bm-overlay,.app-overlay,.app-overlay.light,.vc-overlay,.video-player-overlay,.video-player,.modal-overlay.active,.modal-overlay.active .modal-content,.earth-white-wash){background:var(--hud-bg)!important}
+ html[data-skm-hud] dialog::backdrop{background:#010805e8!important;backdrop-filter:blur(5px)!important}
+ html[data-skm-hud] :is(#studio,.morse-deck,.desk){background-image:linear-gradient(#57d49408 1px,transparent 1px),linear-gradient(90deg,#57d49408 1px,transparent 1px)!important;background-size:32px 32px!important}
+ html[data-skm-hud] :is(.brand,.desk nav,.record,.row,footer,#studio footer,.panel-head){border-color:var(--hud-line)!important}
+ html[data-skm-hud] #studio :is(#region,#focus-tools,#left>small,#right>small,#status,header){color:var(--hud-ink)!important}
+ html[data-skm-hud] .petal-dial{background:radial-gradient(circle,#0b2119 0 47%,#164633 48%,#0a2018 49% 67%,#226147 68%,#071710 69%)!important;box-shadow:inset 0 0 0 1px #57dd9966,0 0 35px #20a86f12!important}
+ html[data-skm-hud] .petal-dial::before{background:repeating-conic-gradient(#65e7a5 0deg .8deg,transparent .8deg 4.5deg)!important;opacity:.45}
+ html[data-skm-hud] .petal-dial::after{background:var(--hud-amber)!important;box-shadow:none!important}
+ html[data-skm-hud] .petal-choice{background:#bfd4c5!important;border-color:#4e9c75!important;box-shadow:none!important}
+ html[data-skm-hud] .petal-hub{background:#d6e6da!important;border-color:#4e9c75!important;box-shadow:0 0 0 1px #4e9c75!important}
+ html[data-skm-hud] .skm-chat{--signal:var(--hud-green)!important;--muted:var(--hud-muted)!important;color:var(--hud-ink)!important;background:var(--hud-bg)!important;border:1px solid var(--hud-line)!important}
+ html[data-skm-hud] .skm-chat :is(header,form,.skm-chat-message,.skm-chat-message.mine,textarea,button){background:var(--hud-panel)!important;border-color:var(--hud-line)!important;color:var(--hud-ink)!important}
+ html[data-skm-hud] .skm-chat :is(p,strong,a){color:var(--hud-ink)!important}
+ html[data-skm-hud] .skm-chat-message.mine{border-right:2px solid var(--hud-amber)!important}
+ html[data-skm-hud] .skm-chat .skm-terminal-logo{background:transparent!important;box-shadow:none!important}
+ html[data-skm-hud] .skm-chat .skm-terminal-logo img{filter:brightness(0) invert(1)!important}
+ html[data-skm-hud] .studio-thread :is(.bubble,.mine){background:var(--hud-panel)!important;border-color:var(--hud-line)!important}
+ html[data-skm-hud] .signal-card{border:1px solid var(--hud-line)!important;border-radius:3px!important}
+ html[data-skm-hud] .signal-card :is(strong,#signal-code){color:var(--hud-green)!important}
+ html[data-skm-hud] .morse-deck .lit{background:var(--hud-green)!important;color:#031008!important}
+ html[data-skm-hud] :is(.map-controls button,#map-status,.leaflet-control-attribution){background:#07140fee!important;color:var(--hud-ink)!important}
+ html[data-skm-hud] .leaflet-tile-pane{filter:grayscale(1) invert(.92) hue-rotate(150deg)!important}
+ html[data-skm-hud] #skm-earth-preview{--feature-paper:var(--hud-bg)!important}
+ html[data-skm-hud] #skm-earth-preview.feature-open :is(.earth-app,.earth-header,.earth-drop-panel,.earth-extra-menu,.earth-booking-panel,.earth-music-panel,.glove-direct-sheet){background:var(--hud-bg)!important;color:var(--hud-ink)!important}
+ html[data-skm-hud] #skm-earth-preview :is(.feature-heading,.earth-track-info h3,.earth-record svg,.earth-music-play,.glove-edition-label,.glove-pickup,.glove-direct-grid,.earth-extra-menu,.earth-header button){color:var(--hud-ink)!important}
+ html[data-skm-hud] #skm-earth-preview .glove-pair-art:before{background:none!important}
+ html[data-skm-hud] #skm-earth-preview .glove-pair-art{color:var(--hud-green)!important}
+ html[data-skm-hud] #skm-earth-preview .glove-network-lines line{stroke:#5db88c!important;opacity:.5}
+ html[data-skm-hud] #skm-earth-preview :is(.earth-live-panel,.earth-orbit-detail,.earth-radio-mini,.survey-cities,.earth-extra-menu,.glove-direct-sheet){background:#06120ef5!important;color:var(--hud-ink)!important;border:1px solid var(--hud-line)!important;border-radius:2px!important;box-shadow:0 12px 50px #0008!important}
+ html[data-skm-hud] #skm-earth-preview :is(.earth-live-panel header,.earth-orbit-detail header){border-bottom:1px solid var(--hud-line)!important}
+ html[data-skm-hud] #skm-earth-preview :is(.earth-live-panel header strong,.earth-orbit-detail header strong,.earth-orbit-metrics strong){color:var(--hud-green)!important;letter-spacing:.04em}
+ html[data-skm-hud] #skm-earth-preview :is(.earth-live-row,.earth-live-panel nav button,.earth-radio-mini button,.earth-orbit-detail button){font-family:ui-monospace,Menlo,monospace!important}
+ html[data-skm-hud] #skm-earth-preview :is(.earth-live-row[aria-pressed=true],.earth-live-panel nav button[aria-pressed=true],.earth-orbit-actions button[aria-pressed=true]){color:var(--hud-amber)!important;background:#38261544!important;border-color:#9b6e39!important}
+ html[data-skm-hud] #skm-earth-preview :is(.earth-live-row small,.earth-orbit-metrics small,.earth-radio-info small){color:var(--hud-muted)!important}
+ html[data-skm-hud] #skm-earth-preview .earth-radio-mini[data-status=playing] small{color:var(--hud-green)!important}
+ html[data-skm-hud] #skm-earth-preview .earth-radio-mini[data-status=error] small{color:#ff9385!important}
+ html[data-skm-hud] #skm-earth-preview .earth-satellite-pin{color:var(--hud-green)!important}
+ html[data-skm-hud] #skm-earth-preview .earth-orbit-trail path{stroke:var(--hud-green)!important}
+ html[data-skm-hud] #skm-earth-preview .survey-frame{border:1px solid #39826288!important;background-image:linear-gradient(#3ff3a908 1px,transparent 1px),linear-gradient(90deg,#3ff3a908 1px,transparent 1px);background-size:32px 32px}
+ html[data-skm-hud] #skm-earth-preview .survey-frame i{border-color:#67dca0!important;background:#06150e!important}
+ html[data-skm-hud] #skm-earth-preview :is(.survey-meta,.survey-date,.survey-pin-label){color:#98cbb0!important;font-family:ui-monospace,Menlo,monospace!important}
+ html[data-skm-hud] #skm-earth-preview .earth-city-title h2{color:var(--hud-green)!important;letter-spacing:-.025em!important}
+ html[data-skm-hud] #skm-earth-preview .earth-features{background:#06150ed9!important;border-color:var(--hud-line)!important}
+ html[data-skm-hud] #skm-earth-preview .earth-feature strong{color:var(--hud-ink)!important;font-family:ui-monospace,Menlo,monospace!important}
+ html[data-skm-hud] #skm-earth-preview .earth-feature:hover strong{color:var(--hud-amber)!important}
+ html[data-skm-hud] #skm-earth-preview :is(.earth-pin,.earth-camera-pin,.earth-satellite-pin,.earth-drop-pair,.earth-brand,.earth-language,.earth-account,.earth-glove-close){background:transparent!important;box-shadow:none!important}
+ html[data-skm-hud] #skm-earth-preview .earth-live-row{font-size:12px!important}
+ html[data-skm-hud] #skm-earth-preview .earth-hud-reticle{position:absolute;z-index:24;inset:calc(50% - 11px) auto auto calc(50% - 11px);width:22px;height:22px;opacity:.35;pointer-events:none;background:linear-gradient(#6de5a8,#6de5a8) center/1px 22px no-repeat,linear-gradient(#6de5a8,#6de5a8) center/22px 1px no-repeat}
+ html[data-skm-hud] #skm-earth-preview:is(.feature-open,.city-focus) .earth-hud-reticle{display:none}
+ html[data-skm-hud] #login{background:transparent!important;border:0!important}
+ html[data-skm-hud] #login img{filter:brightness(0) invert(1)!important}
+ html[data-skm-hud] #gesture-hint{color:var(--hud-muted)!important}
+ html[data-skm-hud] #swatches button{background:var(--sw)!important;border:1px solid #659879!important}
+ html[data-skm-hud] .graphic-strip>button{background:#a2b9aa!important;border:1px solid #3e7053!important}
+ html[data-skm-hud] :is(#studio #graphic-dial,#bodymap-flower .graphic-dial).graphic-strip>button[aria-pressed=true]{background:#d6e6da!important;border-color:var(--hud-amber)!important}
+ html[data-skm-hud] #skm-earth-preview .glove-network-hub:before{background:radial-gradient(ellipse,#030a08 0 38%,#030a08dd 54%,transparent 73%)!important}
+ html[data-skm-hud] #skm-earth-preview .glove-network-hub img{filter:brightness(0) invert(1)!important}
+ @media(prefers-reduced-motion:no-preference){
+  html[data-skm-hud] :is(.earth-live-panel:not([hidden]),.earth-orbit-detail:not([hidden]),.survey-cities:not([hidden]),.earth-extra-menu:not([hidden]),dialog[open],.tools[open]>div){animation:hud-frame-in .32s cubic-bezier(.2,.7,.3,1) both!important}
+  html[data-skm-hud] :is(.earth-live-panel:not([hidden]),.survey-cities:not([hidden]),.earth-extra-menu:not([hidden]),.earth-city-panel:not([hidden]),.tools[open]>div) :is(.earth-live-row,.earth-feature,[data-extra],a,.survey-cities button){animation:hud-row-in .24s ease both!important;animation-delay:calc(min(var(--hud-order,0),6)*35ms)!important}
+  html[data-skm-hud] :is(.earth-live-row,.earth-feature,[data-extra],.survey-cities button):nth-child(2){--hud-order:1}html[data-skm-hud] :is(.earth-live-row,.earth-feature,[data-extra],.survey-cities button):nth-child(3){--hud-order:2}html[data-skm-hud] :is(.earth-live-row,.earth-feature,[data-extra],.survey-cities button):nth-child(4){--hud-order:3}html[data-skm-hud] :is(.earth-live-row,.earth-feature,[data-extra],.survey-cities button):nth-child(n+5){--hud-order:4}
+  @keyframes hud-frame-in{from{opacity:0;clip-path:inset(0 0 85% 0);transform:translateY(5px)}70%{opacity:1;clip-path:inset(0)}to{opacity:1;clip-path:inset(0);transform:none}}
+  @keyframes hud-row-in{from{opacity:0;transform:translateX(-7px)}to{opacity:1;transform:none}}
+ }
+ @media(prefers-reduced-motion:reduce){html[data-skm-hud] :is(.earth-live-panel,.earth-orbit-detail,.survey-cities,.earth-extra-menu,.earth-live-row,.earth-feature,dialog){animation:none!important;transition:none!important}}
+}

@@ -1,0 +1,332 @@
+[
+  {
+    "id": "piano",
+    "notes": [
+      {
+        "midi": 48,
+        "file": "piano/C3.mp3",
+        "bytes": 262326,
+        "sha256": "277149247cbd666ce256689369e5f501bafdb68d027d866178b7944820f8ebc6"
+      },
+      {
+        "midi": 60,
+        "file": "piano/C4.mp3",
+        "bytes": 239164,
+        "sha256": "a265c8cfd4140cf27b55054b4953b6c691fce3523530ca8ae0faed5e4cd39063"
+      },
+      {
+        "midi": 72,
+        "file": "piano/C5.mp3",
+        "bytes": 177190,
+        "sha256": "54a9304d2c609328580c0e06a394670559fe5f594f643d5d12c6dae158051b4a"
+      },
+      {
+        "midi": 84,
+        "file": "piano/C6.mp3",
+        "bytes": 100192,
+        "sha256": "c3c9ee316e7b98a07d89be2340c2382aa689826b50db9080dab7f6e23ebc3d7c"
+      }
+    ]
+  },
+  {
+    "id": "guitar-acoustic",
+    "notes": [
+      {
+        "midi": 48,
+        "file": "guitar-acoustic/C3.mp3",
+        "bytes": 331812,
+        "sha256": "b9533ea5477879ddb9e1742c29f9084488ef70beee50a6fb44429d5b9a994e99"
+      },
+      {
+        "midi": 60,
+        "file": "guitar-acoustic/C4.mp3",
+        "bytes": 83916,
+        "sha256": "594c98aa8f9d1a426078e91899525f143e0bc82218b7b2c3f4cea2c54c181925"
+      },
+      {
+        "midi": 72,
+        "file": "guitar-acoustic/C5.mp3",
+        "bytes": 82664,
+        "sha256": "bed99fde143232c3a33847b82cf3e07c5d5e47b56d584d3d829d01deb9defbab"
+      },
+      {
+        "midi": 74,
+        "file": "guitar-acoustic/D5.mp3",
+        "bytes": 78282,
+        "sha256": "c9d74d19e672780b7b6e9eb4468b31b5fee6642f20df724198b232f7c78af4f1"
+      }
+    ]
+  },
+  {
+    "id": "guitar-electric",
+    "notes": [
+      {
+        "midi": 48,
+        "file": "guitar-electric/C3.mp3",
+        "bytes": 102696,
+        "sha256": "4859bcaf12f9bf953bdcdbfbbbac18c86516b3f0566b8ea0a2b195ba7beb09a9"
+      },
+      {
+        "midi": 60,
+        "file": "guitar-electric/C4.mp3",
+        "bytes": 102696,
+        "sha256": "b2252b95bbea34faba9d7800c1ab1c819d548d18d0cbada7882395fdc34e2617"
+      },
+      {
+        "midi": 72,
+        "file": "guitar-electric/C5.mp3",
+        "bytes": 102696,
+        "sha256": "6b0671195f6d82b2fdf8afab8d1883554d2c0fb7d99cc935adc609c2816397f3"
+      },
+      {
+        "midi": 84,
+        "file": "guitar-electric/C6.mp3",
+        "bytes": 102696,
+        "sha256": "0d170c00a32045de1a7e71ea6c14cfb78cb16cebe7706066b0cf5c4f45797415"
+      }
+    ]
+  },
+  {
+    "id": "bass-electric",
+    "notes": [
+      {
+        "midi": 37,
+        "file": "bass-electric/Cs2.mp3",
+        "bytes": 361234,
+        "sha256": "7558885c23cf0a313c9651b7b2e11fd297902bb063db6b003748156ca9c07e9f"
+      },
+      {
+        "midi": 49,
+        "file": "bass-electric/Cs3.mp3",
+        "bytes": 316162,
+        "sha256": "5bd48a1633be2aae2d1032e7c304afa98568d947dc0bc0efa630bc2569a4dc7d"
+      },
+      {
+        "midi": 61,
+        "file": "bass-electric/Cs4.mp3",
+        "bytes": 248554,
+        "sha256": "2d72028b1af2ed42783f9cb905c5f5ec8b211032350c1c27c771bd4beaf04d16"
+      },
+      {
+        "midi": 70,
+        "file": "bass-electric/As4.mp3",
+        "bytes": 181572,
+        "sha256": "b9dac9a326747e0a7be7659aed435c3de2f23d62b15d3e80bb58193126482105"
+      }
+    ]
+  },
+  {
+    "id": "flute",
+    "notes": [
+      {
+        "midi": 60,
+        "file": "flute/C4.mp3",
+        "bytes": 190962,
+        "sha256": "d6837b9e7c524e7b733a11530d930316d85a91cd80dbba38a497047624bb63e3"
+      },
+      {
+        "midi": 72,
+        "file": "flute/C5.mp3",
+        "bytes": 183450,
+        "sha256": "1b6ec4d5bf2caeca80da4c53f6d9f09eb3a49e8de04588965c55ca8f00ff296d"
+      },
+      {
+        "midi": 84,
+        "file": "flute/C6.mp3",
+        "bytes": 176564,
+        "sha256": "535d1fbfaddbdb7f91c415708470f0860669c08733823212e81e98909afc9a64"
+      }
+    ]
+  },
+  {
+    "id": "harp",
+    "notes": [
+      {
+        "midi": 48,
+        "file": "harp/C3.mp3",
+        "bytes": 216628,
+        "sha256": "11d3a10ba191106b7c82e70d3929fe805b2c3dbfb5de909b05583828c40481c9"
+      },
+      {
+        "midi": 59,
+        "file": "harp/B3.mp3",
+        "bytes": 270464,
+        "sha256": "461bc54638be6b620a069a3141d1029efa068ccf288e44776a5fd727ce1316a3"
+      },
+      {
+        "midi": 72,
+        "file": "harp/C5.mp3",
+        "bytes": 169678,
+        "sha256": "d585ef5b9571dc16a6d28735e6166c010d663ab6c2f6f43b8d926ccb0a1cbf73"
+      },
+      {
+        "midi": 83,
+        "file": "harp/B5.mp3",
+        "bytes": 107704,
+        "sha256": "aa36e1ac8e99dc5b1c1c0b50712aa81f6531aec9d01290962ea81f415ec9d767"
+      }
+    ]
+  },
+  {
+    "id": "organ",
+    "notes": [
+      {
+        "midi": 48,
+        "file": "organ/C3.mp3",
+        "bytes": 298008,
+        "sha256": "bf4744079c5537f4351f2f970d74267da0b80efb4e3dd7c1f78e6b6e79b8efb1"
+      },
+      {
+        "midi": 60,
+        "file": "organ/C4.mp3",
+        "bytes": 298634,
+        "sha256": "6526889efa8f0656b088596c9aced36a6da51536ff2c9d509535d00ae62a0955"
+      },
+      {
+        "midi": 72,
+        "file": "organ/C5.mp3",
+        "bytes": 291748,
+        "sha256": "5fad02fe126e13bd31636d1dd62a5fb1a4dcfeb14a094833b0040727cb7ba8c6"
+      },
+      {
+        "midi": 84,
+        "file": "organ/C6.mp3",
+        "bytes": 286740,
+        "sha256": "b1379532340a1c15da9a1b628e60494a94b6189bf14a89e6d17140005574fe13"
+      }
+    ]
+  },
+  {
+    "id": "violin",
+    "notes": [
+      {
+        "midi": 57,
+        "file": "violin/A3.mp3",
+        "bytes": 390656,
+        "sha256": "22573e45ae1dd09043c4456ccb9835a067fee8222e7170b5d3d4c564562b98b1"
+      },
+      {
+        "midi": 60,
+        "file": "violin/C4.mp3",
+        "bytes": 318666,
+        "sha256": "47a86f01f5a9f978e3328d72ecc3d12ad72cc18852676f655090e68c34b87d8c"
+      },
+      {
+        "midi": 72,
+        "file": "violin/C5.mp3",
+        "bytes": 341202,
+        "sha256": "51315c5bce2c5186d0ac5bd69b72d632bc6188c9401a19212998fcd11ba2934a"
+      },
+      {
+        "midi": 84,
+        "file": "violin/C6.mp3",
+        "bytes": 295504,
+        "sha256": "85c103492bd20f3bcf8eab6fd3de5f41853c98259b7d92a6a2ca169861d21f7c"
+      }
+    ]
+  },
+  {
+    "id": "trumpet",
+    "notes": [
+      {
+        "midi": 53,
+        "file": "trumpet/F3.mp3",
+        "bytes": 104574,
+        "sha256": "2068cc05c490441bf922c7d7786c4a3035d78ea1e3a9091c31410a2eed3399ca"
+      },
+      {
+        "midi": 60,
+        "file": "trumpet/C4.mp3",
+        "bytes": 112086,
+        "sha256": "9273c36ea31cf1d35e92da54b1c7515ccfb9a54a0f9057756ea5be2524fec9f9"
+      },
+      {
+        "midi": 74,
+        "file": "trumpet/D5.mp3",
+        "bytes": 136500,
+        "sha256": "1298bf78bb8613d9fcc6b87f414e28fb311689ab784267381f7af39f30ecb387"
+      },
+      {
+        "midi": 84,
+        "file": "trumpet/C6.mp3",
+        "bytes": 150272,
+        "sha256": "f9508020cc26fcd443508dd5fa5eaa209328cfbd7653e8ddddb8aeadefa48bc9"
+      }
+    ]
+  },
+  {
+    "id": "xylophone",
+    "notes": [
+      {
+        "midi": 67,
+        "file": "xylophone/G4.mp3",
+        "bytes": 88298,
+        "sha256": "a5a0122e3111e4ac803d529d11bcff7f0655a76946ad3892af9f57a42310a799"
+      },
+      {
+        "midi": 72,
+        "file": "xylophone/C5.mp3",
+        "bytes": 82664,
+        "sha256": "84e3a114c88d5735e6d0fc26dc141283947c5b2cc791ac36c33782d747e37a0a"
+      },
+      {
+        "midi": 84,
+        "file": "xylophone/C6.mp3",
+        "bytes": 46982,
+        "sha256": "8a4e5edc7e0ba9087ef8d67d9f5e2e513a4c8350cd0939e06b0e0d5eea9c6adb"
+      }
+    ]
+  },
+  {
+    "id": "saxophone",
+    "notes": [
+      {
+        "midi": 49,
+        "file": "saxophone/Cs3.mp3",
+        "bytes": 150272,
+        "sha256": "95f33777b647e8438ccea298c3fb4bf7dfdee43766a9db21475bd68c06fdd8ff"
+      },
+      {
+        "midi": 60,
+        "file": "saxophone/C4.mp3",
+        "bytes": 150272,
+        "sha256": "151eb3f3142d10bdc188561870679b018fe6afddb157808bf5ccf75a5154d16a"
+      },
+      {
+        "midi": 72,
+        "file": "saxophone/C5.mp3",
+        "bytes": 144638,
+        "sha256": "4ac9089d8a86c4f9e85f1cfc63376f846d60cd5c9d69e714277057ba2307f38c"
+      },
+      {
+        "midi": 81,
+        "file": "saxophone/A5.mp3",
+        "bytes": 146516,
+        "sha256": "95f6b32b092dffe53bf28380ec4168f4ec066db596017f55d5b4ccee71735c4e"
+      }
+    ]
+  },
+  {
+    "id": "contrabass",
+    "notes": [
+      {
+        "midi": 36,
+        "file": "contrabass/C2.mp3",
+        "bytes": 251058,
+        "sha256": "29909070468832bd40184a3add476c73df42412e03b5e31d33828f7a2ab40fd4"
+      },
+      {
+        "midi": 49,
+        "file": "contrabass/Cs3.mp3",
+        "bytes": 184702,
+        "sha256": "09977ba5b668236a2d5817ae5d5ee9d824a15d8c67b8c6bbbc8a637c5ad39993"
+      },
+      {
+        "midi": 59,
+        "file": "contrabass/B3.mp3",
+        "bytes": 170930,
+        "sha256": "7487224e1df0d5bc136b47e3316ba03252bae78fa7d4514554386d06e075139c"
+      }
+    ]
+  }
+]

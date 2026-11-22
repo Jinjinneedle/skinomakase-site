@@ -1,0 +1,39 @@
+/* Booking-session palette. Original photos, video, maps and tattoo ink retain their colours. */
+html.skm-session{--paper:#09090b;--bg:#09090b;--ink:#ff555e;--dim:#dd7077;--mute:#dd7077;--muted:#dd7077;--line:#723037;--pill:#1b1013;--live:#ff555e;--warn:#ff767d;color-scheme:dark;background:#09090b!important}
+html.skm-session body,html.skm-session body:has(#home-revolver),html.skm-session .viewport,html.skm-session main,html.skm-session .wrap,html.skm-session .stage,html.skm-session .app{background:#09090b!important;color:#ff555e!important}
+html.skm-session :is(p,h1,h2,h3,label,legend,small,figcaption,a,time,.cap,.mi,.vb,.vs,.clock-city,#clock-rate,#clock-rate small,.revolver-status,#home-entry-status){color:#ff626a!important}
+html.skm-session :is(button,input,textarea,select,.request-card,.chips button,.langpick,.langpick-body,.intro,.intro-body,.intro-start,.langmenu,#bar,#zones,.graphic-screen,#bodymap-flower,#flower-booking-overlay,.petal-hub,.petal-choice,.app-overlay.light,#skm-language-dialog){background-color:#130c0f!important;border-color:#723037!important;color:#ff626a!important;box-shadow:none!important}
+html.skm-session input::placeholder,html.skm-session textarea::placeholder{color:#dc7b82!important;opacity:1}
+html.skm-session :is(input,select,textarea){caret-color:#ff626a;accent-color:#ff454d}
+html.skm-session :is(button[aria-pressed=true],button.on,.primary,.chips button[aria-pressed=true]){background-color:#4c151d!important;color:#ff9298!important;border-color:#ff454d!important}
+html.skm-session #home-revolver.static-menu .revolver-center,html.skm-session #skm-language-button{background:#09090b!important}
+html.skm-session #home-revolver .revolver-logo-crop img,html.skm-session #login .mark img{filter:invert(25%) sepia(96%) saturate(2435%) hue-rotate(332deg) brightness(114%) contrast(100%)}
+html.skm-session #home-revolver .landing-connections line{stroke:#ff343f!important;opacity:.85}
+html.skm-session #skm-account-link svg{stroke:#ff626a}
+html.skm-session #skm-language-button img{filter:invert(1);mix-blend-mode:screen}
+html.skm-session #home-revolver .revolver-icon .revolver-art{filter:invert(25%) sepia(96%) saturate(2435%) hue-rotate(332deg) brightness(114%) contrast(100%)!important}
+html.skm-session #home-revolver .revolver-icon.locked .revolver-art{opacity:.4!important}
+html.skm-session :is(.graphic-screen,.request-card) img{filter:none!important}
+html.skm-session :is(.ln,.lt,.tape line,.trk rect){stroke:#b04049!important}
+html.skm-session svg text{fill:#ff626a!important}
+html.skm-session #bar .t,html.skm-session #next,html.skm-session #mb-next,html.skm-session #flower-add{background:#130c0f!important;color:#ff626a!important;border-color:#723037!important}
+html.skm-session #bar .t.on{background:#4c151d!important}
+html.skm-session #mb-next::before{background:#ff626a!important}
+html.skm-session :focus-visible{outline-color:#ff626a!important}
+.skm-chat .skm-terminal-logo{padding:0!important;border:0!important;min-height:0!important;background:transparent!important;flex-shrink:0;cursor:pointer}
+.skm-thread-picker{height:auto;max-height:calc(100dvh - 160px);min-height:180px}
+.skm-thread-picker .skm-chat-list button{min-height:48px;padding:12px;text-align:left}
+body:has(#skm-language-dialog[open]){touch-action:pan-y}
+
+html.skm-session .petal-choice img{background:#e4e5e7;border-radius:4px}
+html.skm-session .graphic-screen img{background:#e4e5e7}
+
+body:has(.skm-chat[open]){touch-action:pan-y!important}
+html.skm-session body:has(#home-revolver) > .viewport{background:#09090b!important}
+html.skm-session #home-revolver .revolver-logo-crop img{filter:invert(25%) sepia(96%) saturate(2435%) hue-rotate(332deg) brightness(114%) contrast(100%)!important}
+html.skm-session #skm-music-sheet,html.skm-session #skm-player{background:#130c0f!important;color:#ff626a!important;border-color:#723037!important}
+html.skm-session #skm-player :is(span,div,button,#skm-track,#skm-now-playing){color:#ff626a!important}
+/* Alpha-mask the existing SKM artwork for a precise signal red. */
+html.skm-session #home-revolver .revolver-logo-crop img{visibility:hidden}
+html.skm-session #home-revolver .revolver-logo-crop::after,.skm-chat .skm-terminal-logo::after{content:'';position:absolute;inset:0;background:#ff262d;-webkit-mask:url('logo-transparent.png') 54.2735% 52.877% / 122.941176% auto no-repeat;mask:url('logo-transparent.png') 54.2735% 52.877% / 122.941176% auto no-repeat;pointer-events:none}
+.skm-chat .skm-terminal-logo img{visibility:hidden}

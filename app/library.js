@@ -1,0 +1,30 @@
+(async()=>{'use strict';
+ const $=id=>document.getElementById(id),api=window.SKMLanguage,core=window.SKMLibraryCore,key='skm-library-bookmarks-v1';
+ let docs=[],copy={},saved=new Set(),shown=[],active=null,tab='all',generation=0,searching=false,translationBusy=false,nativeInfo={};
+ const bridge=window.webkit?.messageHandlers?.skmLibrary;
+ const native=body=>bridge.postMessage(body);
+ const t=k=>(copy[api.code]||copy.en||{})[k]||k;
+ function paint(){for(const id of ['prompt','search','all','saved','sample','archive','back','device','translate','download','machine'])$(id).textContent=t(id);$('language').value=api.code;$('mode').textContent=t(nativeInfo.semantic?'native':'web');if(active)paintBookmark();$('translate').disabled=translationBusy;$('download').hidden=!nativeInfo.translation;}
+ function paragraphs(element,text){element.replaceChildren();for(const line of text.split(/\n\n/)){const p=document.createElement('p');p.textContent=line;element.append(p);}}
+ function paintBookmark(){$('bookmark').textContent=t(saved.has(active.id)?'remove':'save');$('bookmark').setAttribute('aria-pressed',String(saved.has(active.id)));}
+ function results(){const list=tab==='saved'?shown.filter(d=>saved.has(d.id)):shown;$('results').replaceChildren();$('all').setAttribute('aria-pressed',String(tab==='all'));$('saved').setAttribute('aria-pressed',String(tab==='saved'));if(!list.length){$('status').textContent=t(tab==='saved'?'noSaved':'empty');return;}
+  for(const doc of list){const b=document.createElement('button');b.type='button';b.className='note';b.dataset.id=doc.id;const meta=document.createElement('small'),title=document.createElement('strong'),desc=document.createElement('p');meta.textContent=`${doc.source} / ${String(doc.page).padStart(3,'0')}`;title.textContent=doc.title;desc.textContent=doc.description;b.append(meta,title,desc);b.onclick=()=>open(doc);$('results').append(b);}
+ }
+ function open(doc){generation++;active=doc;$('browse').hidden=true;$('reader').hidden=false;$('source').textContent=`${doc.source} / ${String(doc.page).padStart(3,'0')}`;$('reader-title').textContent=doc.title;paragraphs($('original'),doc.body);$('translation').hidden=true;$('translation-status').textContent='';paintBookmark();window.scrollTo(0,0);$('reader-title').focus({preventScroll:true});}
+ async function search(event){event?.preventDefault();if(searching)return;const query=$('query').value.trim(),token=++generation;searching=true;$('search').disabled=true;$('status').textContent=t('working');let fallback=false;
+  try{if(!query){shown=docs;}else{let lexical=core.rank(docs,query);let semantic=[];if(nativeInfo.semantic){try{let english=query;if(api.code!=='en'||/[^\x00-\x7f]/.test(query)){if(!nativeInfo.translation)throw Error('translation unavailable');const r=await native({action:'translate',source:'auto',target:'en',text:query});if(!r.ok)throw Error('translation unavailable');english=r.text;lexical=core.merge(lexical,core.rank(docs,english));}const r=await native({action:'search',query:english,documents:docs.map(d=>({id:d.id,text:d.title+'. '+d.description}))});if(r.ok)semantic=r.results;else fallback=true;}catch{fallback=true;}}else fallback=true;
+   if(token!==generation)return;const ranked=core.merge(lexical,core.related(semantic,lexical));shown=ranked.map(r=>docs.find(d=>d.id===r.id)).filter(Boolean);}
+   if(token!==generation)return;$('status').textContent=fallback?t('fallback'):'';results();
+  }finally{searching=false;$('search').disabled=false;}
+ }
+ $('back').onclick=()=>{generation++;if(bridge)native({action:'cancel'}).catch(()=>{});active=null;$('reader').hidden=true;$('browse').hidden=false;window.scrollTo(0,0);$('query').focus({preventScroll:true});};
+ $('bookmark').onclick=()=>{if(!active)return;const next=new Set(saved);if(next.has(active.id))next.delete(active.id);else next.add(active.id);try{localStorage.setItem(key,JSON.stringify([...next]));saved=next;paintBookmark();$('translation-status').textContent='';results();}catch{$('translation-status').textContent=t('storage');}};
+ $('translate').onclick=async()=>{if(!active||translationBusy)return;const doc=active,token=generation,lang=api.code;if(lang==='en'){paragraphs($('translated'),doc.body);$('translation').hidden=false;return;}if(!nativeInfo.translation){$('translation-status').textContent=t('unavailable');return;}translationBusy=true;paint();$('translation-status').textContent=t('translating');
+  try{const r=await native({action:'translate',source:'en',target:lang,text:doc.body});if(token!==generation||doc!==active||lang!==api.code)return;if(!r.ok)throw Error('unavailable');paragraphs($('translated'),r.text);$('translation').hidden=false;$('translation-status').textContent='';}catch{if(token===generation)$('translation-status').textContent=t('unavailable');}finally{translationBusy=false;paint();}
+ };
+ for(const item of api.languages){const option=document.createElement('option');option.value=item.code;option.textContent=item.name;$('language').append(option);}
+ $('language').onchange=()=>api.set($('language').value);window.addEventListener('skm-language',()=>{generation++;paint();$('translation').hidden=true;$('translation-status').textContent='';$('status').textContent='';results();});
+ $('all').onclick=()=>{tab='all';$('status').textContent='';results();};$('saved').onclick=()=>{tab='saved';$('status').textContent='';results();};$('search-form').onsubmit=search;
+ window.addEventListener('message',e=>{if(e.source===parent&&e.data?.skm==='stop'){generation++;if(bridge)native({action:'cancel'}).catch(()=>{});}});
+ try{[docs,copy]=await Promise.all(['library-data.json','library-copy.json'].map(async file=>{const r=await fetch(file);if(!r.ok)throw Error('load');return r.json();}));if(bridge)try{nativeInfo=await native({action:'capabilities'});}catch{};try{saved=core.bookmarks(localStorage.getItem(key),docs);}catch{}shown=docs;paint();results();}catch{$('status').textContent=api.code==='ko'?'불러오지 못했어요. 다시 열어주세요.':'Could not load. Please reopen.';}
+})();

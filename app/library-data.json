@@ -1,0 +1,68 @@
+[
+  {
+    "id": "repair",
+    "title": "Repair before replacing",
+    "description": "Clothing repair, mending and caring for tools",
+    "body": "A small tear can become a reason to learn about how a garment was made. Look at the fabric, the direction of the weave and the strain around the damaged area.\n\nKeep a record of repairs: the material used, who helped and whether the repair held up over time. A community repair table can bring together people who have different skills.\n\nStart with an object you can safely practice on. Electrical equipment and protective equipment need suitable professional guidance.",
+    "keywords": "repair mend clothing clothes sewing tools fix 수선 바느질 옷 도구 고치 直す 修理 縫 衣 修补 维修 缝 衣服 ремонт одежд шить réparer couture vêtement reparar ropa coser reparieren nähen kleidung consertar costura roupa riparare cucire vestiti",
+    "page": 1,
+    "source": "SKM FIELD NOTES",
+    "language": "en",
+    "sample": true
+  },
+  {
+    "id": "energy",
+    "title": "Living with less electricity",
+    "description": "Off-grid living, energy budgets and daily routines",
+    "body": "Begin an energy notebook by listing the things you use each day. Record the purpose of each device, how long you use it and whether daylight or a simpler tool could serve the same purpose.\n\nCompare needs before comparing equipment. Keeping food cool, reading after dark and charging a phone are different problems. A shared plan makes those differences visible.\n\nThis is a reading prompt for understanding energy needs, not instructions for wiring, generators or electrical installation.",
+    "keywords": "electric electricity power energy off grid solar battery 전기 전력 태양광 배터리 에너지 電気 電力 太陽 電力 电 电池 太阳 энерги электр солнеч énergie électricité solaire electricidad energía solar strom energie solar eletricidade energia solar elettricità energia solare",
+    "page": 2,
+    "source": "SKM FIELD NOTES",
+    "language": "en",
+    "sample": true
+  },
+  {
+    "id": "water",
+    "title": "A water plan for your community",
+    "description": "Water access, storage records and reliable information",
+    "body": "Map the sources of drinking water that your community normally uses. Write down who publishes local water quality notices and where official emergency updates can be found.\n\nFor stored supplies, keep a clear record of the source, storage date and container instructions. Agree on who checks the supplies and how information reaches everyone.\n\nAppearance alone cannot establish whether water is safe to drink. Follow current guidance from the relevant local water and health authorities.",
+    "keywords": "water drinking storage clean 물 식수 저장 정수 水 飲料 储水 净水 вода пить хран eau potable agua potable wasser trinken água potável acqua potabile",
+    "page": 3,
+    "source": "SKM FIELD NOTES",
+    "language": "en",
+    "sample": true
+  },
+  {
+    "id": "garden",
+    "title": "Growing in a small space",
+    "description": "Balcony gardens, plants and observation",
+    "body": "A growing space can begin with observation. Note how light moves across a balcony or window during the day, and record how much space and attention you can offer.\n\nChoose plants suited to those conditions with help from a reliable local growing guide. A simple notebook can track planting dates, watering and changes in growth.\n\nNeighbours can exchange observations, spare containers and seeds where local rules allow. Learning together is part of the harvest.",
+    "keywords": "garden grow plants food balcony seeds soil 농사 식물 재배 텃밭 씨앗 베란다 園芸 栽培 植物 种植 园艺 阳台 сад растени семен jardin plante semence jardín planta semilla garten pflanzen saat jardim planta semente giardino piante semi",
+    "page": 4,
+    "source": "SKM FIELD NOTES",
+    "language": "en",
+    "sample": true
+  },
+  {
+    "id": "community",
+    "title": "Sharing a tool library",
+    "description": "Community, lending and independent organisation",
+    "body": "A tool library begins with an agreement about care. List the tools available, the people responsible for them and the conditions under which each tool can be borrowed.\n\nMake the borrowing record easy to understand. Agree on return dates, maintenance and what to do when something is damaged. Do not publish private contact details in an open list.\n\nKeep a copy of the agreement accessible to the group. Review it together as the community changes.",
+    "keywords": "community share sharing tools collective lending library independent 커뮤니티 공동체 공유 자립 도서관 빌리 共同 コミュニティ 貸 図書 共享 社区 独立 社群 сообществ общ обмен outil communauté partage comunidad compartir herramientas gemeinschaft teilen werkzeug comunidade compartilhar ferramenta comunità condividere strumenti",
+    "page": 5,
+    "source": "SKM FIELD NOTES",
+    "language": "en",
+    "sample": true
+  },
+  {
+    "id": "maps",
+    "title": "Reading a place before travelling",
+    "description": "Maps, navigation and planning routes",
+    "body": "Read a map before choosing a route. Check its date, legend, scale and the source of its information. A line on a map does not always describe present-day access.\n\nCompare the map with current local information about transport, weather and closures. Save the information you need before leaving reliable connectivity.\n\nA shared route plan can include meeting points and a way to communicate changes. Keep sensitive location details within the intended group.",
+    "keywords": "map maps route navigation travel offline 지도 길찾기 여행 오프라인 地図 経路 旅行 地图 路线 离线 карт маршрут путешеств carte itinéraire voyage mapa ruta viaje karte route reisen mapa rota viagem mappa percorso viaggio",
+    "page": 6,
+    "source": "SKM FIELD NOTES",
+    "language": "en",
+    "sample": true
+  }
+]

@@ -1,0 +1,25 @@
+/* Browser viewport, keyboard and touch adaptation; the native app is unchanged. */
+:root{color-scheme:light;--skm-web-height:100dvh}
+html{min-height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-height:100dvh}button,a,input,select,textarea{touch-action:manipulation}
+input,select,textarea{font-size:16px!important}
+[hidden]{display:none!important}
+dialog{max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overscroll-behavior:contain}
+.skm-session-payment{padding-bottom:max(20px,env(safe-area-inset-bottom));overflow-y:auto}
+.skm-session-payment button,.skm-session-payment a{min-height:44px}
+.skm-session-payment p,.skm-session-payment small{overflow-wrap:anywhere}
+body:has(#skm-earth-preview){min-height:0;height:100dvh}
+#skm-earth-preview,.earth-app{height:100dvh!important;min-height:0!important}
+.bm-overlay,.video-player-overlay{height:100dvh;max-height:100dvh}
+iframe{max-width:100%}
+@media(max-width:600px){
+ .earth-header{padding-top:max(12px,env(safe-area-inset-top))}
+ .earth-city-title{max-width:100%}
+ .earth-city-title h2{overflow-wrap:anywhere}
+ .skm-session-payment{width:calc(100vw - 24px);margin:auto}
+ .skm-session-payment dl{column-gap:12px}
+ .session-card,.request-card{min-width:0;overflow-wrap:anywhere}
+ .session-card button,.request-card button{min-height:44px}
+ main{max-width:100%}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important}}

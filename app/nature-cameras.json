@@ -1,0 +1,524 @@
+[
+  {
+    "id": "kilauea",
+    "name": "Kīlauea · West crater",
+    "lat": 19.42,
+    "lon": -155.29,
+    "video": "HggWKlZv9yk",
+    "publisher": "USGS",
+    "source": "https://www.usgs.gov/volcanoes/kilauea/summit-webcams"
+  },
+  {
+    "id": "kilauea-east-crater",
+    "name": "Kīlauea · East crater",
+    "lat": 19.42,
+    "lon": -155.29,
+    "video": "f9-oSpYpubg",
+    "publisher": "USGS",
+    "source": "https://www.youtube.com/watch?v=f9-oSpYpubg"
+  },
+  {
+    "id": "kilauea-south-crater",
+    "name": "Kīlauea · South crater",
+    "lat": 19.42,
+    "lon": -155.29,
+    "video": "gXKuUyKt8mc",
+    "publisher": "USGS",
+    "source": "https://www.youtube.com/watch?v=gXKuUyKt8mc"
+  },
+  {
+    "id": "brooks-river",
+    "name": "Brooks River · River watch",
+    "lat": 58.555,
+    "lon": -155.78,
+    "video": "wkVLYfU-Kew",
+    "publisher": "NPS / explore.org",
+    "source": "https://www.nps.gov/katm/learn/photosmultimedia/river-watch-cam.htm"
+  },
+  {
+    "id": "brooks-underwater-salmon",
+    "name": "Brooks River · Underwater salmon",
+    "lat": 58.555,
+    "lon": -155.78,
+    "video": "vu7I315gQpU",
+    "publisher": "Explore Bears",
+    "source": "https://www.youtube.com/watch?v=vu7I315gQpU"
+  },
+  {
+    "id": "brooks-river-bend",
+    "name": "Brooks River · River bend",
+    "lat": 58.555,
+    "lon": -155.78,
+    "video": "cTsjMtjRLCo",
+    "publisher": "Explore Bears",
+    "source": "https://www.youtube.com/watch?v=cTsjMtjRLCo"
+  },
+  {
+    "id": "brooks-falls-brown-bears",
+    "name": "Brooks Falls · Brown bears",
+    "lat": 58.554,
+    "lon": -155.791,
+    "video": "J7ZrIDvqlic",
+    "publisher": "Explore Live Nature Cams",
+    "source": "https://www.youtube.com/watch?v=J7ZrIDvqlic"
+  },
+  {
+    "id": "brooks-falls-low-view",
+    "name": "Brooks Falls · Low view",
+    "lat": 58.554,
+    "lon": -155.791,
+    "video": "EwTH5yY7Mks",
+    "publisher": "Explore Bears",
+    "source": "https://www.youtube.com/watch?v=EwTH5yY7Mks"
+  },
+  {
+    "id": "brooks-falls-riffles",
+    "name": "Brooks Falls · Riffles",
+    "lat": 58.554,
+    "lon": -155.791,
+    "video": "z7_GhJeFxQI",
+    "publisher": "Explore Bears",
+    "source": "https://www.youtube.com/watch?v=z7_GhJeFxQI"
+  },
+  {
+    "id": "katmai-katmai",
+    "name": "Dumpling Mountain · Katmai",
+    "lat": 58.58,
+    "lon": -155.8,
+    "video": "uLgdUiT9WZQ",
+    "publisher": "Explore Northern Lights & Nature Meditation Cams",
+    "source": "https://www.youtube.com/watch?v=uLgdUiT9WZQ"
+  },
+  {
+    "id": "juneau-glacier-lake",
+    "name": "Mendenhall Glacier · Glacier lake",
+    "lat": 58.42,
+    "lon": -134.55,
+    "video": "jJI5w_RVGtQ",
+    "publisher": "Explore Northern Lights & Nature Meditation Cams",
+    "source": "https://www.youtube.com/watch?v=jJI5w_RVGtQ"
+  },
+  {
+    "id": "fairbanks-aurora",
+    "name": "Fairbanks · Aurora",
+    "lat": 64.84,
+    "lon": -147.72,
+    "video": "O52zDyxg5QI",
+    "publisher": "Explore Northern Lights & Nature Meditation Cams",
+    "source": "https://www.youtube.com/watch?v=O52zDyxg5QI"
+  },
+  {
+    "id": "churchill-northern-lights",
+    "name": "Churchill · Northern lights",
+    "lat": 58.74,
+    "lon": -93.82,
+    "video": "a0i1Kg6fROg",
+    "publisher": "Explore Northern Lights & Nature Meditation Cams",
+    "source": "https://www.youtube.com/watch?v=a0i1Kg6fROg"
+  },
+  {
+    "id": "ontario-boreal-birds",
+    "name": "Manitouwadge · Boreal birds",
+    "lat": 49.12,
+    "lon": -85.83,
+    "video": "wTVDrtShk7Y",
+    "publisher": "Cornell Lab Bird Cams",
+    "source": "https://www.youtube.com/watch?v=wTVDrtShk7Y"
+  },
+  {
+    "id": "montana-ospreys",
+    "name": "Hellgate Canyon · Ospreys",
+    "lat": 46.88,
+    "lon": -113.93,
+    "video": "J7HO0dkkomE",
+    "publisher": "Cornell Lab Bird Cams",
+    "source": "https://www.youtube.com/watch?v=J7HO0dkkomE"
+  },
+  {
+    "id": "ninepipes-mission-mountains",
+    "name": "Ninepipes · Mission Mountains",
+    "lat": 47.45,
+    "lon": -114.1,
+    "video": "wDgZkzkOP-s",
+    "publisher": "Explore Northern Lights & Nature Meditation Cams",
+    "source": "https://www.youtube.com/watch?v=wDgZkzkOP-s"
+  },
+  {
+    "id": "ithaca-red-tailed-hawks",
+    "name": "Ithaca · Red-tailed hawks",
+    "lat": 42.45,
+    "lon": -76.48,
+    "video": "afsaYKQ3vac",
+    "publisher": "Cornell Lab Bird Cams",
+    "source": "https://www.youtube.com/watch?v=afsaYKQ3vac"
+  },
+  {
+    "id": "sapsucker-woodland-birds",
+    "name": "Sapsucker Woods · Woodland birds",
+    "lat": 42.48,
+    "lon": -76.45,
+    "video": "x10vL6_47Dw",
+    "publisher": "Cornell Lab Bird Cams",
+    "source": "https://www.youtube.com/watch?v=x10vL6_47Dw"
+  },
+  {
+    "id": "ely-international-wolf-center",
+    "name": "Ely · International Wolf Center",
+    "lat": 47.94,
+    "lon": -91.83,
+    "video": "5e4lsEe4Vew",
+    "publisher": "Explore Live Nature Cams",
+    "source": "https://www.youtube.com/watch?v=5e4lsEe4Vew"
+  },
+  {
+    "id": "decorah-north-nest",
+    "name": "Decorah · North nest",
+    "lat": 43.3,
+    "lon": -91.78,
+    "video": "GGIE1E-kaMQ",
+    "publisher": "Explore Live Nature Cams",
+    "source": "https://www.youtube.com/watch?v=GGIE1E-kaMQ"
+  },
+  {
+    "id": "decorah-bald-eagles",
+    "name": "Decorah · Bald eagles",
+    "lat": 43.3,
+    "lon": -91.78,
+    "video": "IVmL3diwJuw",
+    "publisher": "Explore Eagle Nest Cams",
+    "source": "https://www.youtube.com/watch?v=IVmL3diwJuw"
+  },
+  {
+    "id": "monterey-monterey-bay",
+    "name": "Monterey Bay Aquarium · Monterey Bay",
+    "lat": 36.618,
+    "lon": -121.901,
+    "video": "fVa6-zCBR7A",
+    "publisher": "Monterey Bay Aquarium",
+    "source": "https://www.youtube.com/watch?v=fVa6-zCBR7A"
+  },
+  {
+    "id": "monterey-kelp-forest",
+    "name": "Monterey Bay Aquarium · Kelp forest",
+    "lat": 36.618,
+    "lon": -121.901,
+    "video": "w3LjpFhySTg",
+    "publisher": "Monterey Bay Aquarium",
+    "source": "https://www.youtube.com/watch?v=w3LjpFhySTg"
+  },
+  {
+    "id": "monterey-sea-otters",
+    "name": "Monterey Bay Aquarium · Sea otters",
+    "lat": 36.618,
+    "lon": -121.901,
+    "video": "abbR-Ttd-cA",
+    "publisher": "Monterey Bay Aquarium",
+    "source": "https://www.youtube.com/watch?v=abbR-Ttd-cA"
+  },
+  {
+    "id": "monterey-moon-jellies",
+    "name": "Monterey Bay Aquarium · Moon jellies",
+    "lat": 36.618,
+    "lon": -121.901,
+    "video": "zL68biE6wAs",
+    "publisher": "Monterey Bay Aquarium",
+    "source": "https://www.youtube.com/watch?v=zL68biE6wAs"
+  },
+  {
+    "id": "monterey-sharks",
+    "name": "Monterey Bay Aquarium · Sharks",
+    "lat": 36.618,
+    "lon": -121.901,
+    "video": "tEtg5Kg3voQ",
+    "publisher": "Monterey Bay Aquarium",
+    "source": "https://www.youtube.com/watch?v=tEtg5Kg3voQ"
+  },
+  {
+    "id": "monterey-spider-crabs",
+    "name": "Monterey Bay Aquarium · Spider crabs",
+    "lat": 36.618,
+    "lon": -121.901,
+    "video": "dzmJXWmA2EM",
+    "publisher": "Monterey Bay Aquarium",
+    "source": "https://www.youtube.com/watch?v=dzmJXWmA2EM"
+  },
+  {
+    "id": "monterey-open-sea",
+    "name": "Monterey Bay Aquarium · Open sea",
+    "lat": 36.618,
+    "lon": -121.901,
+    "video": "n_GpVsz4nHU",
+    "publisher": "Monterey Bay Aquarium",
+    "source": "https://www.youtube.com/watch?v=n_GpVsz4nHU"
+  },
+  {
+    "id": "monterey-penguins",
+    "name": "Monterey Bay Aquarium · Penguins",
+    "lat": 36.618,
+    "lon": -121.901,
+    "video": "QWGYS9IOqYc",
+    "publisher": "Monterey Bay Aquarium",
+    "source": "https://www.youtube.com/watch?v=QWGYS9IOqYc"
+  },
+  {
+    "id": "monterey-aviary",
+    "name": "Monterey Bay Aquarium · Aviary",
+    "lat": 36.618,
+    "lon": -121.901,
+    "video": "AWJi0LgyA28",
+    "publisher": "Monterey Bay Aquarium",
+    "source": "https://www.youtube.com/watch?v=AWJi0LgyA28"
+  },
+  {
+    "id": "monterey-coral-reef",
+    "name": "Monterey Bay Aquarium · Coral reef",
+    "lat": 36.618,
+    "lon": -121.901,
+    "video": "1VBPxAkaNDU",
+    "publisher": "Monterey Bay Aquarium",
+    "source": "https://www.youtube.com/watch?v=1VBPxAkaNDU"
+  },
+  {
+    "id": "monterey-jellyfish",
+    "name": "Monterey Bay Aquarium · Jellyfish",
+    "lat": 36.618,
+    "lon": -121.901,
+    "video": "eQ_foBERmzA",
+    "publisher": "Monterey Bay Aquarium",
+    "source": "https://www.youtube.com/watch?v=eQ_foBERmzA"
+  },
+  {
+    "id": "catalina-marine-reserve",
+    "name": "Catalina Island · Marine reserve",
+    "lat": 33.46,
+    "lon": -118.52,
+    "video": "JH_NzhSsqis",
+    "publisher": "Explore Oceans",
+    "source": "https://www.youtube.com/watch?v=JH_NzhSsqis"
+  },
+  {
+    "id": "catalina-two-harbors-eagles",
+    "name": "Catalina Island · Two Harbors eagles",
+    "lat": 33.46,
+    "lon": -118.52,
+    "video": "E5T2eHM8tcI",
+    "publisher": "Explore Eagle Nest Cams",
+    "source": "https://www.youtube.com/watch?v=E5T2eHM8tcI"
+  },
+  {
+    "id": "catalina-west-end-eagles",
+    "name": "Catalina Island · West End eagles",
+    "lat": 33.46,
+    "lon": -118.52,
+    "video": "aT1adgYSfbc",
+    "publisher": "Explore Eagle Nest Cams",
+    "source": "https://www.youtube.com/watch?v=aT1adgYSfbc"
+  },
+  {
+    "id": "santa-cruz-sauces-eagles",
+    "name": "Santa Cruz Island · Sauces eagles",
+    "lat": 34.0,
+    "lon": -119.8,
+    "video": "rnTsOesC6hE",
+    "publisher": "Explore Eagle Nest Cams",
+    "source": "https://www.youtube.com/watch?v=rnTsOesC6hE"
+  },
+  {
+    "id": "santa-cruz-fraser-point",
+    "name": "Santa Cruz Island · Fraser Point",
+    "lat": 34.0,
+    "lon": -119.8,
+    "video": "OY4V_AppZ6s",
+    "publisher": "Explore Eagle Nest Cams",
+    "source": "https://www.youtube.com/watch?v=OY4V_AppZ6s"
+  },
+  {
+    "id": "homosassa-manatees",
+    "name": "Homosassa Springs · Manatees",
+    "lat": 28.8,
+    "lon": -82.59,
+    "video": "Fz6sl9YJZE0",
+    "publisher": "Explore Live Nature Cams",
+    "source": "https://www.youtube.com/watch?v=Fz6sl9YJZE0"
+  },
+  {
+    "id": "silver-springs-underwater",
+    "name": "Silver Springs · Underwater",
+    "lat": 29.22,
+    "lon": -82.05,
+    "video": "uWiJ9qCYxoo",
+    "publisher": "Explore Oceans",
+    "source": "https://www.youtube.com/watch?v=uWiJ9qCYxoo"
+  },
+  {
+    "id": "silver-springs-river-surface",
+    "name": "Silver Springs · River surface",
+    "lat": 29.22,
+    "lon": -82.05,
+    "video": "jxnehowX-9Y",
+    "publisher": "Explore Oceans",
+    "source": "https://www.youtube.com/watch?v=jxnehowX-9Y"
+  },
+  {
+    "id": "utila-reef-wall",
+    "name": "Útila · Reef wall",
+    "lat": 16.08,
+    "lon": -86.97,
+    "video": "Sq-X4Ga1oyc",
+    "publisher": "Explore Oceans",
+    "source": "https://www.youtube.com/watch?v=Sq-X4Ga1oyc"
+  },
+  {
+    "id": "utila-shallow-reef",
+    "name": "Útila · Shallow reef",
+    "lat": 16.08,
+    "lon": -86.97,
+    "video": "Kf-x20Yq0_A",
+    "publisher": "Explore Oceans",
+    "source": "https://www.youtube.com/watch?v=Kf-x20Yq0_A"
+  },
+  {
+    "id": "utila-sand-channel",
+    "name": "Útila · Sand channel",
+    "lat": 16.08,
+    "lon": -86.97,
+    "video": "jzx_n25g3kA",
+    "publisher": "Explore Oceans",
+    "source": "https://www.youtube.com/watch?v=jzx_n25g3kA"
+  },
+  {
+    "id": "utila-reef-crest",
+    "name": "Útila · Reef crest",
+    "lat": 16.08,
+    "lon": -86.97,
+    "video": "1zcIUk66HX4",
+    "publisher": "Explore Oceans",
+    "source": "https://www.youtube.com/watch?v=1zcIUk66HX4"
+  },
+  {
+    "id": "canopy-tower-hummingbirds",
+    "name": "Soberanía · Hummingbirds",
+    "lat": 9.08,
+    "lon": -79.66,
+    "video": "0xFARCdZ3vA",
+    "publisher": "Cornell Lab Bird Cams",
+    "source": "https://www.youtube.com/watch?v=0xFARCdZ3vA"
+  },
+  {
+    "id": "canopy-lodge-tropical-birds",
+    "name": "El Valle de Antón · Tropical birds",
+    "lat": 8.61,
+    "lon": -80.13,
+    "video": "WtoxxHADnGk",
+    "publisher": "Cornell Lab Bird Cams",
+    "source": "https://www.youtube.com/watch?v=WtoxxHADnGk"
+  },
+  {
+    "id": "otago-royal-albatross",
+    "name": "Taiaroa Head · Royal albatross",
+    "lat": -45.78,
+    "lon": 170.73,
+    "video": "Mm_zVDDUeNA",
+    "publisher": "Cornell Lab Bird Cams",
+    "source": "https://www.youtube.com/watch?v=Mm_zVDDUeNA"
+  },
+  {
+    "id": "mindanao-philippine-eagles",
+    "name": "Davao · Philippine eagles",
+    "lat": 7.0,
+    "lon": 125.39,
+    "video": "QoKy-rn66og",
+    "publisher": "Explore Eagle Nest Cams",
+    "source": "https://www.youtube.com/watch?v=QoKy-rn66og"
+  },
+  {
+    "id": "namib-desert-waterhole",
+    "name": "Gondwana Namib Park · Desert waterhole",
+    "lat": -24.11,
+    "lon": 15.89,
+    "video": "ydYDqZQpim8",
+    "publisher": "NamibiaCam",
+    "source": "https://www.youtube.com/watch?v=ydYDqZQpim8"
+  },
+  {
+    "id": "kalahari-kalahari-desert",
+    "name": "Gondwana Kalahari Park · Kalahari Desert",
+    "lat": -24.4,
+    "lon": 17.96,
+    "video": "ME0dPuBtzug",
+    "publisher": "NamibiaCam",
+    "source": "https://www.youtube.com/watch?v=ME0dPuBtzug"
+  },
+  {
+    "id": "etosha-etosha-waterhole",
+    "name": "Okaukuejo · Etosha waterhole",
+    "lat": -19.18,
+    "lon": 15.92,
+    "video": "AeMUdOPFcXI",
+    "publisher": "NamibiaCam",
+    "source": "https://www.youtube.com/watch?v=AeMUdOPFcXI"
+  },
+  {
+    "id": "tembe-elephants",
+    "name": "Tembe Elephant Park · Elephants",
+    "lat": -27.04,
+    "lon": 32.42,
+    "video": "0P_LBKqVbfs",
+    "publisher": "Explore Live Nature Cams",
+    "source": "https://www.youtube.com/watch?v=0P_LBKqVbfs"
+  },
+  {
+    "id": "selati-black-eagles",
+    "name": "Selati Game Reserve · Black eagles",
+    "lat": -23.95,
+    "lon": 30.72,
+    "video": "_xhLV-TJpd8",
+    "publisher": "Explore Eagle Nest Cams",
+    "source": "https://www.youtube.com/watch?v=_xhLV-TJpd8"
+  },
+  {
+    "id": "lisbon-waterfall",
+    "name": "Lisbon Falls · Waterfall",
+    "lat": -24.86,
+    "lon": 30.83,
+    "video": "-qwXenyHDN4",
+    "publisher": "Explore Northern Lights & Nature Meditation Cams",
+    "source": "https://www.youtube.com/watch?v=-qwXenyHDN4"
+  },
+  {
+    "id": "loch-garten",
+    "name": "Loch Garten · Ospreys",
+    "lat": 57.24,
+    "lon": -3.7,
+    "video": "1UByY8ca7qs",
+    "publisher": "RSPB",
+    "source": "https://www.youtube.com/watch?v=1UByY8ca7qs"
+  },
+  {
+    "id": "loch-leven",
+    "name": "Loch Leven · Red squirrels",
+    "lat": 56.2,
+    "lon": -3.38,
+    "video": "FhMFae-SZME",
+    "publisher": "RSPB",
+    "source": "https://www.youtube.com/watch?v=FhMFae-SZME"
+  },
+  {
+    "id": "lorton-meadows",
+    "name": "Lorton Meadows",
+    "lat": 50.65,
+    "lon": -2.46,
+    "video": "UVeaxLRI83I",
+    "publisher": "Dorset Wildlife Trust",
+    "source": "https://www.youtube.com/watch?v=UVeaxLRI83I"
+  },
+  {
+    "id": "utsjoki",
+    "name": "Utsjoki · Aurora",
+    "lat": 69.91,
+    "lon": 27.03,
+    "video": "Iw5VhekzbxE",
+    "publisher": "Aurora Borealis (LIVE!)",
+    "source": "https://www.youtube.com/watch?v=Iw5VhekzbxE"
+  }
+]
